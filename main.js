@@ -67,7 +67,13 @@ async function getVerseImage(query) {
     return "https://images.unsplash.com/photo-1451187580459-43490279c0fa"; // Default image
 }
 
-async function getRandomVerse() {
+async function getRandomVerse(retryCount = 0) {
+    if (retryCount >= 5) {
+        verseText.textContent = "구절을 불러오는 데 실패했습니다.";
+        verseReference.textContent = "";
+        return;
+    }
+
     const koreanBook = getRandomBook();
     const englishBook = koreanToEnglish[koreanBook];
     const chapter = Math.floor(Math.random() * bibleBooks[koreanBook]) + 1;
@@ -77,8 +83,14 @@ async function getRandomVerse() {
     try {
         const response = await fetch(url);
         const data = await response.json();
-        const verse = data.verses[Math.floor(Math.random() * data.verses.length)];
-        displayVerse(verse.text, data.reference);
+
+        if (data && data.verses && data.verses.length > 0) {
+            const verse = data.verses[Math.floor(Math.random() * data.verses.length)];
+            displayVerse(verse.text, data.reference);
+        } else {
+            console.warn("Invalid verse data, retrying...", data);
+            getRandomVerse(retryCount + 1);
+        }
     } catch (error) {
         console.error("Error fetching verse:", error);
         verseText.textContent = "구절을 불러오는 데 실패했습니다.";
