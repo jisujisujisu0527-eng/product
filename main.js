@@ -1,3 +1,5 @@
+console.log("Running version 1.2");
+
 // WARNING: Do not expose this key in a public repository.
 // For this exercise, we are storing it here for simplicity.
 const UNSPLASH_API_KEY = '875932';
