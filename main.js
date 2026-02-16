@@ -77,7 +77,7 @@ async function getRandomVerse(retryCount = 0) {
     const koreanBook = getRandomBook();
     const englishBook = koreanToEnglish[koreanBook];
     const chapter = Math.floor(Math.random() * bibleBooks[koreanBook]) + 1;
-    const url = `https://corsproxy.io/?https://bible-api.com/${englishBook}+${chapter}?translation=ko`;
+    const url = `https://bible-api.com/${englishBook}+${chapter}?translation=ko`;
     console.log("Fetching verse from URL:", url);
 
     try {
