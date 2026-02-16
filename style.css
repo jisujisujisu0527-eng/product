@@ -5,6 +5,13 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+    background-color: #fff;
+    color: #000;
+}
+
+body.dark-mode {
+    background-color: #333;
+    color: #fff;
 }
 
 .container {
@@ -12,6 +19,13 @@ body {
 }
 
 #new-verse-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#theme-toggle-btn {
     margin-top: 20px;
     padding: 10px 20px;
     font-size: 16px;
