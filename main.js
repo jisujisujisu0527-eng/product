@@ -54,6 +54,7 @@ function getRandomBook() {
 
 async function getVerseImage(query) {
     const url = `https://api.unsplash.com/search/photos?query=${query}&client_id=${UNSPLASH_API_KEY}`;
+    console.log("Fetching image from URL:", url);
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -70,7 +71,8 @@ async function getRandomVerse() {
     const koreanBook = getRandomBook();
     const englishBook = koreanToEnglish[koreanBook];
     const chapter = Math.floor(Math.random() * bibleBooks[koreanBook]) + 1;
-    const url = `https://bible-api.com/${englishBook}+${chapter}?translation=ko`;
+    const url = `https://corsproxy.io/?https://bible-api.com/${englishBook}+${chapter}?translation=ko`;
+    console.log("Fetching verse from URL:", url);
 
     try {
         const response = await fetch(url);
