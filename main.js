@@ -82,19 +82,15 @@ async function getVerseImage(query) {
     return "https://images.unsplash.com/photo-1451187580459-43490279c0fa"; // Default image
 }
 
-async function getRandomVerse(retryCount = 0) {
-    if (retryCount >= 5) {
-        verseText.textContent = "구절을 불러오는 데 실패했습니다.";
-        verseReference.textContent = "";
-        return;
-    }
-
+async function getRandomVerse() {
+    // 50% chance to display a popular verse
     if (Math.random() < 0.5) {
         const verse = popularVerses[Math.floor(Math.random() * popularVerses.length)];
         displayVerse(verse.text, verse.reference);
         return;
     }
 
+    // Fetch a random verse from the API
     const koreanBook = getRandomBook();
     const englishBook = koreanToEnglish[koreanBook];
     const chapter = Math.floor(Math.random() * bibleBooks[koreanBook]) + 1;
@@ -109,13 +105,14 @@ async function getRandomVerse(retryCount = 0) {
             const verse = data.verses[Math.floor(Math.random() * data.verses.length)];
             displayVerse(verse.text, data.reference);
         } else {
-            console.warn("Invalid verse data, retrying...", data);
-            getRandomVerse(retryCount + 1);
+            console.warn("Invalid verse data, falling back to popular verses.", data);
+            const verse = popularVerses[Math.floor(Math.random() * popularVerses.length)];
+            displayVerse(verse.text, verse.reference);
         }
     } catch (error) {
-        console.error("Error fetching verse:", error);
-        verseText.textContent = "구절을 불러오는 데 실패했습니다.";
-        verseReference.textContent = "";
+        console.error("Error fetching verse, falling back to popular verses:", error);
+        const verse = popularVerses[Math.floor(Math.random() * popularVerses.length)];
+        displayVerse(verse.text, verse.reference);
     }
 }
 
