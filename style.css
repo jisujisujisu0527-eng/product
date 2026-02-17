@@ -374,6 +374,57 @@ body.dark-mode .verse-item .verse-reference {
     color: #bbb;
 }
 
+    }
+}
+
+/* Styles for additional verse sections on index.html */
+.additional-verse-section {
+    margin-top: 40px;
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+}
+
+body.dark-mode .additional-verse-section {
+    border-color: #555;
+    background-color: #383838;
+}
+
+.additional-verse-heading {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+body.dark-mode .additional-verse-heading {
+    color: #f0f0f0;
+}
+
+.additional-verse-item .verse-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+body.dark-mode .additional-verse-item .verse-text {
+    color: #f0f0f0;
+}
+
+.additional-verse-item .verse-reference {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #666;
+    text-align: right;
+}
+
+body.dark-mode .additional-verse-item .verse-reference {
+    color: #bbb;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .main-content-layout {

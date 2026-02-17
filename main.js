@@ -17,6 +17,21 @@ const popularVerses = [
     { text: "아무 것도 염려하지 말고 다만 모든 일에 기도와 간구로, 너희 구할 것을 감사함으로 하나님께 아뢰라", reference: "빌립보서 4:6" }
 ];
 
+const prayerVerses = [
+    { text: "쉬지 말고 기도하라, 너희의 필요를 주께 아뢰고 감사함으로 간구하라. 그리하면 평강이 너희 마음을 지키리라.", reference: "빌립보서 4:6-7 변형" },
+    { text: "주님을 찾으라, 그를 부를 때 그는 가까이 계시니, 의인의 기도는 역사하는 힘이 많으니라.", reference: "야고보서 5:16 변형" },
+    { text: "너희 중에 고난당하는 자가 있느냐 그는 기도할 것이요 즐거워하는 자가 있느냐 그는 찬송할지니라.", reference: "야고보서 5:13 변형" },
+    { text: "구하라 그러면 너희에게 주실 것이요 찾으라 그러면 찾을 것이요 문을 두드리라 그러면 너희에게 열릴 것이니.", reference: "마태복음 7:7 변형" }
+];
+
+const evangelismVerses = [
+    { text: "온 천하에 다니며 모든 피조물에게 복음을 전파하라. 믿고 세례를 받는 자는 구원을 얻으리라.", reference: "마가복음 16:15-16 변형" },
+    { text: "내가 곧 길이요 진리요 생명이니 나로 말미암지 않고는 아버지께 올 자가 없느느리라. 주 예수를 믿으라 그리하면 너와 네 집이 구원을 받으리라.", reference: "요한복음 14:6, 사도행전 16:31 변형" },
+    { text: "너희는 세상의 빛이라 산 위에 있는 동네가 숨겨지지 못할 것이요.", reference: "마태복음 5:14 변형" },
+    { text: "하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니 이는 그를 믿는 자마다 멸망하지 않고 영생을 얻게 하려 하심이라.", reference: "요한복음 3:16 변형" }
+];
+
+
 const bibleBooks = {
     "창세기": 50, "출애굽기": 40, "레위기": 27, "민수기": 36, "신명기": 34,
     "여호수아": 24, "사사기": 21, "룻기": 4, "사무엘상": 31, "사무엘하": 24,
@@ -61,6 +76,10 @@ const verseReference = document.getElementById('verse-reference');
 const verseImage = document.getElementById('verse-image');
 const newVerseBtn = document.getElementById('new-verse-btn');
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
+const prayerVerseText = document.getElementById('prayer-verse-text');
+const prayerVerseReference = document.getElementById('prayer-verse-reference');
+const evangelismVerseText = document.getElementById('evangelism-verse-text');
+const evangelismVerseReference = document.getElementById('evangelism-verse-reference');
 
 function getRandomBook() {
     const books = Object.keys(bibleBooks);
@@ -123,6 +142,18 @@ async function displayVerse(text, reference) {
     verseImage.src = imageUrl;
 }
 
+function displayRandomPrayerVerse() {
+    const verse = prayerVerses[Math.floor(Math.random() * prayerVerses.length)];
+    prayerVerseText.textContent = `\"${verse.text}\"`;
+    prayerVerseReference.textContent = verse.reference;
+}
+
+function displayRandomEvangelismVerse() {
+    const verse = evangelismVerses[Math.floor(Math.random() * evangelismVerses.length)];
+    evangelismVerseText.textContent = `\"${verse.text}\"`;
+    evangelismVerseReference.textContent = verse.reference;
+}
+
 newVerseBtn.addEventListener('click', getRandomVerse);
 
 themeToggleBtn.addEventListener('click', () => {
@@ -130,3 +161,5 @@ themeToggleBtn.addEventListener('click', () => {
 });
 
 getRandomVerse();
+displayRandomPrayerVerse();
+displayRandomEvangelismVerse();
