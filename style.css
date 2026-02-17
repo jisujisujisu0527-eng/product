@@ -299,6 +299,81 @@ body.dark-mode footer {
     text-decoration: underline;
 }
 
+/* Styles for About Page (about.html) */
+.site-purpose {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    color: #444;
+}
+
+body.dark-mode .site-purpose {
+    color: #ccc;
+}
+
+.verse-section {
+    margin-bottom: 40px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+}
+
+body.dark-mode .verse-section {
+    border-color: #555;
+    background-color: #383838;
+}
+
+.verse-section h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+body.dark-mode .verse-section h2 {
+    color: #f0f0f0;
+}
+
+.verse-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-left: 5px solid #ccc;
+    background-color: #ffffff;
+    border-radius: 4px;
+}
+
+body.dark-mode .verse-item {
+    border-left-color: #777;
+    background-color: #444;
+}
+
+.verse-item:last-child {
+    margin-bottom: 0;
+}
+
+.verse-item .verse-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+body.dark-mode .verse-item .verse-text {
+    color: #f0f0f0;
+}
+
+.verse-item .verse-reference {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #666;
+    text-align: right;
+}
+
+body.dark-mode .verse-item .verse-reference {
+    color: #bbb;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .main-content-layout {
