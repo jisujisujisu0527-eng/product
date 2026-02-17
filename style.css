@@ -447,6 +447,188 @@ body.dark-mode .additional-verse-item .verse-reference {
     margin-top: 15px;
 }
 
+body.dark-mode .result-box button:hover {
+    background-color: #C19A00; /* 호버 시 더 진한 금색 */
+    border-color: #A0938C;
+}
+
+/* Styles for Faith Checkup Page (faith-checkup.html) */
+.test-page-container h1 {
+    margin-bottom: 25px;
+}
+
+.card {
+    background-color: #FFF8E1; /* 밝은 크림색 배경 */
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    border: 1px solid #E0DEDC; /* 따뜻한 밝은 회색 테두리 */
+}
+
+body.dark-mode .card {
+    background-color: #3A2F2B; /* 어두운 갈색 배경 */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-color: #5D544F;
+}
+
+.card h2 {
+    color: #4E342E;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+body.dark-mode .card h2 {
+    color: #FBE9E7;
+}
+
+.question {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #E0DEDC; /* 따뜻한 밝은 회색 구분선 */
+    text-align: left;
+}
+
+body.dark-mode .question {
+    border-color: #5D544F;
+}
+
+.question h4 {
+    margin-bottom: 15px;
+    color: #4E342E;
+    font-size: 1.2rem;
+}
+
+body.dark-mode .question h4 {
+    color: #FBE9E7;
+}
+
+.question label {
+    display: inline-flex; /* Align radio/checkbox with text */
+    align-items: center;
+    margin-right: 20px;
+    color: #4E342E;
+    font-size: 1rem;
+}
+
+body.dark-mode .question label {
+    color: #FBE9E7;
+}
+
+.question input[type="radio"],
+.question input[type="range"] {
+    margin-right: 8px;
+    accent-color: #FFAB40; /* 따뜻한 주황색 액센트 */
+}
+
+input[type="range"] {
+    width: 100%;
+    margin-top: 10px;
+}
+
+#surveyArea button[type="submit"],
+#resultArea button {
+    width: 100%;
+    padding: 15px;
+    background-color: #FFAB40; /* 따뜻한 주황색 */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#surveyArea button[type="submit"]:hover,
+#resultArea button:hover {
+    background-color: #FF9800; /* 호버 시 더 진한 주황색 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-mode #surveyArea button[type="submit"],
+body.dark-mode #resultArea button {
+    background-color: #D4AF37; /* 다크 모드: 따뜻한 금색 */
+    color: #4A3C32;
+}
+
+body.dark-mode #surveyArea button[type="submit"]:hover,
+body.dark-mode #resultArea button:hover {
+    background-color: #C19A00;
+}
+
+#resultArea {
+    margin-top: 20px;
+}
+
+#faithChart {
+    background-color: rgba(255, 255, 255, 0.8); /* 차트 배경 투명도 */
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+body.dark-mode #faithChart {
+    background-color: rgba(58, 47, 43, 0.8);
+}
+
+#typeDescription {
+    margin-top: 25px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #4E342E;
+}
+
+body.dark-mode #typeDescription {
+    color: #FBE9E7;
+}
+
+.result-box { /* From faith-test.js for summary display */
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #E0DEDC;
+    border-radius: 12px;
+    background-color: #FFF8E1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    text-align: left;
+}
+
+body.dark-mode .result-box {
+    border-color: #5D544F;
+    background-color: #3A2F2B;
+}
+
+.result-box h3 {
+    color: #4E342E;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+body.dark-mode .result-box h3 {
+    color: #FBE9E7;
+}
+
+.result-box p {
+    white-space: pre-wrap;
+    background-color: #FDF7E4; /* Light background for text */
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #E0DEDC;
+    color: #4E342E;
+    font-size: 1rem;
+}
+
+body.dark-mode .result-box p {
+    background-color: #4A3C32;
+    border-color: #6E5B53;
+    color: #FBE9E7;
+}
+
+.result-box button {
+    margin-top: 20px;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .main-content-layout {

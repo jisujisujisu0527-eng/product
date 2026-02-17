@@ -3,54 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>영적 생명력 자가진단</title>
-    <meta name="description" content="자신의 영적 생명력을 자가 진단하고 말씀과 기도로 성장하는 테스트입니다.">
+    <title>신앙 점검 테스트</title>
+    <meta name="description" content="나의 영적 밸런스를 확인하고 신앙 성장을 위한 지표를 점검합니다.">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-8260879821489900">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <main>
         <div class="container test-page-container">
-            <h1>영적 생명력 자가진단</h1>
+            <h1>신앙 점검 테스트</h1>
 
-            <div id="test-container">
-                <div id="step-1" class="test-step">
-                    <h2>1. 일상의 성찰</h2>
-                    <input type="text" id="userName" placeholder="성함이 어떻게 되시나요?">
-                    <p>이번 한 주 마음은 어떠셨나요?</p>
-                    <label><input type="radio" name="mood" value="평안"> 평안</label>
-                    <label><input type="radio" name="mood" value="감사"> 감사</label>
-                    <label><input type="radio" name="mood" value="고민"> 고민</label>
-                    <br><br>
-                    <button onclick="nextStep(2)">다음으로 (말씀 적용) ➔</button>
-                </div>
+            <div id="surveyArea" class="card">
+                <h2>📋 신앙 점검 (9가지 질문)</h2>
+                <form id="faithForm">
+                    <div class="question">
+                        <h4>1. 이번 주 나의 마음 기상도는?</h4>
+                        <label><input type="radio" name="q1" value="5" required> 맑음</label>
+                        <label><input type="radio" name="q1" value="3"> 흐림</label>
+                        <label><input type="radio" name="q1" value="1"> 비/태풍</label>
+                    </div>
+                    <div class="question">
+                        <h4>2. 일상 속 주님의 일하심을 느꼈나요?</h4>
+                        <label><input type="radio" name="q2" value="5" required> 매우 그렇다</label>
+                        <label><input type="radio" name="q2" value="3"> 보통이다</label>
+                        <label><input type="radio" name="q2" value="1"> 잘 모르겠다</label>
+                    </div>
+                    <div class="question">
+                        <h4>3. 이번 주 나의 우선순위 1번은?</h4>
+                        <label><input type="radio" name="q3" value="5" required> 하나님</label>
+                        <label><input type="radio" name="q3" value="3"> 가족/업무</label>
+                        <label><input type="radio" name="q3" value="1"> 개인적 휴식</label>
+                    </div>
 
-                <div id="step-2" class="test-step hidden">
-                    <h2>2. 말씀의 적용</h2>
-                    <p>주일 설교 중 가장 기억에 남는 단어는?</p>
-                    <input type="text" id="sermonKeyword" placeholder="예: 하나님의 사랑, 인내">
-                    <br><br>
-                    <button onclick="nextStep(3)">다음으로 (공동체 연합) ➔</button>
-                </div>
+                    <div class="question">
+                        <h4>4. 설교 말씀 중 기억나는 단어가 있나요?</h4>
+                        <label><input type="radio" name="q4" value="5" required> 명확히 기억남</label>
+                        <label><input type="radio" name="q4" value="3"> 어렴풋함</label>
+                        <label><input type="radio" name="q4" value="1"> 기억 안 남</label>
+                    </div>
+                    <div class="question">
+                        <h4>5. 말씀을 삶에 적용하려고 노력했나요? (1~5점)</h4>
+                        <input type="range" name="q5" min="1" max="5" value="3">
+                    </div>
+                    <div class="question">
+                        <h4>6. 실천을 방해하는 요소가 있었나요?</h4>
+                        <label><input type="radio" name="q6" value="1" required> 매우 많았음</label>
+                        <label><input type="radio" name="q6" value="3"> 조금 있었음</label>
+                        <label><input type="radio" name="q6" value="5"> 거의 없었음</label>
+                    </div>
 
-                <div id="step-3" class="test-step hidden">
-                    <h2>3. 공동체 연합</h2>
-                    <p>지금 나에게 가장 필요한 영적 양식은?</p>
-                    <select id="spiritualNeeds">
-                        <option value="중보기도">중보기도 (합심해서 기도하기)</option>
-                        <option value="성경공부">성경공부 (말씀 더 깊이 알기)</option>
-                        <option value="교제">성도의 교제 (삶 나누기)</option>
-                    </select>
-                    <br><br>
-                    <button onclick="submitTest()">신앙 성찰 완료하기</button>
-                </div>
+                    <div class="question">
+                        <h4>7. 공동체의 돌봄이 필요하다고 느끼나요?</h4>
+                        <label><input type="radio" name="q7" value="5" required> 매우 필요/감사함</label>
+                        <label><input type="radio" name="q7" value="3"> 가끔 느낌</label>
+                        <label><input type="radio" name="q7" value="1"> 혼자가 편함</label>
+                    </div>
+                    <div class="question">
+                        <h4>8. 다른 지체를 위해 기도나 섬김을 했나요?</h4>
+                        <label><input type="radio" name="q8" value="5" required> 실천함</label>
+                        <label><input type="radio" name="q8" value="3"> 마음만 먹음</label>
+                        <label><input type="radio" name="q8" value="1"> 못 함</label>
+                    </div>
+                    <div class="question">
+                        <h4>9. 교회가 나에게 생명을 공급하나요?</h4>
+                        <label><input type="radio" name="q9" value="5" required> 매우 그렇다</label>
+                        <label><input type="radio" name="q9" value="3"> 보통이다</label>
+                        <label><input type="radio" name="q9" value="1"> 잘 모르겠다</label>
+                    </div>
+
+                    <button type="submit">결과 확인 및 저장</button>
+                </form>
+            </div>
+
+            <div id="resultArea" class="card" style="display: none;">
+                <h2>📊 나의 신앙 밸런스</h2>
+                <canvas id="faithChart"></canvas>
+                <div id="typeDescription" style="margin-top:20px; font-weight:bold; text-align:center;"></div>
+                <button onclick="location.reload()" style="margin-top:20px; background:#666;">다시 하기</button>
             </div>
         </div>
     </main>
     <footer>
         <div class="footer-content">
-            <p>&copy; 2026 영적 생명력 자가진단. All rights reserved.</p>
+            <p>&copy; 2026 신앙 점검 테스트. All rights reserved.</p>
             <nav class="footer-nav">
                 <a href="#">개인정보처리방침</a>
                 <a href="#">이용약관</a>
