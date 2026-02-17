@@ -196,6 +196,43 @@ body.dark-mode #image-display-container {
     object-fit: contain;
 }
 
+#loading-indicator {
+    color: #666;
+    font-style: italic;
+    font-size: 1.1rem;
+}
+
+body.dark-mode #loading-indicator {
+    color: #aaa;
+}
+
+.prediction-result-item {
+    padding: 8px;
+    margin-bottom: 5px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    font-size: 1.1rem;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+body.dark-mode .prediction-result-item {
+    border-color: #444;
+    background-color: #333;
+    color: #f0f0f0;
+}
+
+.prediction-result-item strong {
+    color: #007bff; /* Highlight percentage */
+}
+
+body.dark-mode .prediction-result-item strong {
+    color: #88aaff;
+}
+
 .test-start-button,
 .test-page-link-button { /* Apply existing button styles */
     padding: 12px 25px;

@@ -14,6 +14,7 @@
             <img id="uploaded-image" src="#" alt="업로드된 이미지" style="display: none;">
         </div>
         <button type="button" id="predict-button" class="test-start-button" style="display: none;">판단하기</button>
+        <div id="loading-indicator" style="display: none; margin-top: 20px;">분석 중...</div>
         <div id="label-container"></div>
     </div>
 
@@ -27,37 +28,74 @@
         const uploadedImage = document.getElementById('uploaded-image');
         const predictButton = document.getElementById('predict-button');
         const labelContainer = document.getElementById('label-container');
+        const loadingIndicator = document.getElementById('loading-indicator');
 
         async function init() {
-            const modelURL = URL + "model.json";
-            const metadataURL = URL + "metadata.json";
+            try {
+                const modelURL = URL + "model.json";
+                const metadataURL = URL + "metadata.json";
 
-            // load the model and metadata
-            model = await tmImage.load(modelURL, metadataURL);
-            maxPredictions = model.getTotalClasses();
+                loadingIndicator.style.display = 'block'; // Show loading during model load
+                predictButton.disabled = true; // Disable button while loading
 
-            // create initial prediction result divs
-            labelContainer.innerHTML = '';
-            for (let i = 0; i < maxPredictions; i++) {
-                labelContainer.appendChild(document.createElement("div"));
+                model = await tmImage.load(modelURL, metadataURL);
+                maxPredictions = model.getTotalClasses();
+
+                loadingIndicator.style.display = 'none'; // Hide loading after model load
+                predictButton.disabled = false; // Enable button
+
+                labelContainer.innerHTML = '<div style="color: #666;">이미지를 업로드하고 \'판단하기\' 버튼을 눌러주세요.</div>';
+
+            } catch (error) {
+                console.error("모델 로드 중 오류 발생:", error);
+                labelContainer.innerHTML = '<div style="color: red;">모델 로드에 실패했습니다. 페이지를 새로고침 해주세요.</div>';
+                loadingIndicator.style.display = 'none';
             }
         }
 
         async function predict() {
+            if (!model) {
+                labelContainer.innerHTML = '<div style="color: red;">모델이 로드되지 않았습니다.</div>';
+                return;
+            }
+
             if (uploadedImage.src && uploadedImage.style.display !== 'none') {
-                // predict can take in an image, video or canvas html element
-                const prediction = await model.predict(uploadedImage);
-                for (let i = 0; i < maxPredictions; i++) {
-                    const classPrediction =
-                        prediction[i].className + ": " + (prediction[i].probability * 100).toFixed(1) + "%";
-                    labelContainer.childNodes[i].innerHTML = classPrediction;
+                labelContainer.innerHTML = ''; // Clear previous predictions
+                loadingIndicator.style.display = 'block'; // Show loading during prediction
+                predictButton.disabled = true; // Disable button during prediction
+
+                try {
+                    const prediction = await model.predict(uploadedImage);
+                    loadingIndicator.style.display = 'none'; // Hide loading after prediction
+                    predictButton.disabled = false; // Enable button
+
+                    // Sort predictions by probability in descending order
+                    prediction.sort((a, b) => b.probability - a.probability);
+
+                    // Display results
+                    for (let i = 0; i < maxPredictions; i++) {
+                        const classPrediction = document.createElement("div");
+                        classPrediction.className = 'prediction-result-item'; // Add class for styling
+                        const probability = (prediction[i].probability * 100).toFixed(1);
+                        classPrediction.innerHTML = `${prediction[i].className}: <strong>${probability}%</strong>`;
+                        labelContainer.appendChild(classPrediction);
+                    }
+                    if (prediction.length === 0) {
+                        labelContainer.innerHTML = '<div>예측 결과를 찾을 수 없습니다.</div>';
+                    }
+
+                } catch (error) {
+                    console.error("예측 중 오류 발생:", error);
+                    labelContainer.innerHTML = '<div style="color: red;">이미지 예측 중 오류가 발생했습니다.</div>';
+                    loadingIndicator.style.display = 'none';
+                    predictButton.disabled = false;
                 }
             } else {
-                labelContainer.innerHTML = '<div>이미지를 업로드해주세요.</div>';
+                labelContainer.innerHTML = '<div style="color: orange;">먼저 이미지를 업로드해야 합니다.</div>';
             }
         }
 
-        fileInput.addEventListener('change', (event) => {
+        fileInput.addEventListener('change', async (event) => {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -65,7 +103,7 @@
                     uploadedImage.src = e.target.result;
                     uploadedImage.style.display = 'block'; // Show the image
                     predictButton.style.display = 'block'; // Show the predict button
-                    labelContainer.innerHTML = ''; // Clear previous predictions
+                    labelContainer.innerHTML = '<div style="color: #666;">\'판단하기\' 버튼을 눌러 분석하세요.</div>'; // Prompt user to predict
                 };
                 reader.readAsDataURL(file);
             } else {
