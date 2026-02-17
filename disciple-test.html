@@ -9,8 +9,11 @@
 <body>
     <div class="test-container">
         <h2>예수님 제자상 테스트</h2>
-        <button type="button" onclick="init()" class="test-start-button">테스트 시작</button>
-        <div id="webcam-container"></div>
+        <input type="file" id="file-input" accept="image/*" class="file-input-button">
+        <div id="image-display-container">
+            <img id="uploaded-image" src="#" alt="업로드된 이미지" style="display: none;">
+        </div>
+        <button type="button" id="predict-button" class="test-start-button" style="display: none;">판단하기</button>
         <div id="label-container"></div>
     </div>
 
@@ -18,56 +21,65 @@
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
     <script type="text/javascript">
         const URL = "https://teachablemachine.withgoogle.com/models/7BGS6hJC2/";
-        let model, webcam, labelContainer, maxPredictions;
+        let model, maxPredictions;
+
+        const fileInput = document.getElementById('file-input');
+        const uploadedImage = document.getElementById('uploaded-image');
+        const predictButton = document.getElementById('predict-button');
+        const labelContainer = document.getElementById('label-container');
 
         async function init() {
             const modelURL = URL + "model.json";
             const metadataURL = URL + "metadata.json";
 
+            // load the model and metadata
             model = await tmImage.load(modelURL, metadataURL);
             maxPredictions = model.getTotalClasses();
 
-            const flip = true;
-            webcam = new tmImage.Webcam(200, 200, flip);
-            await webcam.setup();
-            await webcam.play();
-            window.requestAnimationFrame(loop);
-
-            document.getElementById("webcam-container").innerHTML = ''; // Clear previous content
-            document.getElementById("webcam-container").appendChild(webcam.canvas);
-            
-            labelContainer = document.getElementById("label-container");
-            labelContainer.innerHTML = ''; // Clear previous content
+            // create initial prediction result divs
+            labelContainer.innerHTML = '';
             for (let i = 0; i < maxPredictions; i++) {
                 labelContainer.appendChild(document.createElement("div"));
             }
         }
 
-        async function loop() {
-            if (webcam) { // Only update if webcam is active
-                webcam.update();
-                await predict();
-            }
-            window.requestAnimationFrame(loop);
-        }
-
         async function predict() {
-            if (webcam) { // Only predict if webcam is active
-                const prediction = await model.predict(webcam.canvas);
+            if (uploadedImage.src && uploadedImage.style.display !== 'none') {
+                // predict can take in an image, video or canvas html element
+                const prediction = await model.predict(uploadedImage);
                 for (let i = 0; i < maxPredictions; i++) {
                     const classPrediction =
-                        prediction[i].className + ": " + (prediction[i].probability * 100).toFixed(1) + "%"; // Display as percentage
+                        prediction[i].className + ": " + (prediction[i].probability * 100).toFixed(1) + "%";
                     labelContainer.childNodes[i].innerHTML = classPrediction;
                 }
+            } else {
+                labelContainer.innerHTML = '<div>이미지를 업로드해주세요.</div>';
             }
         }
 
-        // Stop webcam when navigating away or closing
-        window.addEventListener('beforeunload', () => {
-            if (webcam) {
-                webcam.stop();
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedImage.src = e.target.result;
+                    uploadedImage.style.display = 'block'; // Show the image
+                    predictButton.style.display = 'block'; // Show the predict button
+                    labelContainer.innerHTML = ''; // Clear previous predictions
+                };
+                reader.readAsDataURL(file);
+            } else {
+                uploadedImage.src = '#';
+                uploadedImage.style.display = 'none';
+                predictButton.style.display = 'none';
+                labelContainer.innerHTML = '';
             }
         });
+
+        predictButton.addEventListener('click', predict);
+
+        // Initialize the model when the page loads
+        init();
     </script>
 </body>
 </html>
