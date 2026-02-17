@@ -21,14 +21,22 @@ const prayerVerses = [
     { text: "쉬지 말고 기도하라, 너희의 필요를 주께 아뢰고 감사함으로 간구하라. 그리하면 평강이 너희 마음을 지키리라.", reference: "빌립보서 4:6-7 변형" },
     { text: "주님을 찾으라, 그를 부를 때 그는 가까이 계시니, 의인의 기도는 역사하는 힘이 많으니라.", reference: "야고보서 5:16 변형" },
     { text: "너희 중에 고난당하는 자가 있느냐 그는 기도할 것이요 즐거워하는 자가 있느냐 그는 찬송할지니라.", reference: "야고보서 5:13 변형" },
-    { text: "구하라 그러면 너희에게 주실 것이요 찾으라 그러면 찾을 것이요 문을 두드리라 그러면 너희에게 열릴 것이니.", reference: "마태복음 7:7 변형" }
+    { text: "구하라 그러면 너희에게 주실 것이요 찾으라 그러면 찾을 것이요 문을 두드리라 그러면 너희에게 열릴 것이니.", reference: "마태복음 7:7 변형" },
+    { text: "아무것도 염려하지 말고 오직 모든 일에 기도와 간구로, 너희 구할 것을 감사함으로 하나님께 아뢰라.", reference: "빌립보서 4:6-7" },
+    { text: "너희는 마음에 근심하지 말라 하나님을 믿으니 또 나를 믿으라.", reference: "요한복음 14:1" },
+    { text: "내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라.", reference: "빌립보서 4:13" },
+    { text: "여호와는 나의 목자시니 내게 부족함이 없으리로다.", reference: "시편 23:1" }
 ];
 
 const evangelismVerses = [
     { text: "온 천하에 다니며 모든 피조물에게 복음을 전파하라. 믿고 세례를 받는 자는 구원을 얻으리라.", reference: "마가복음 16:15-16 변형" },
     { text: "내가 곧 길이요 진리요 생명이니 나로 말미암지 않고는 아버지께 올 자가 없느느리라. 주 예수를 믿으라 그리하면 너와 네 집이 구원을 받으리라.", reference: "요한복음 14:6, 사도행전 16:31 변형" },
     { text: "너희는 세상의 빛이라 산 위에 있는 동네가 숨겨지지 못할 것이요.", reference: "마태복음 5:14 변형" },
-    { text: "하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니 이는 그를 믿는 자마다 멸망하지 않고 영생을 얻게 하려 하심이라.", reference: "요한복음 3:16 변형" }
+    { text: "하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니 이는 그를 믿는 자마다 멸망하지 않고 영생을 얻게 하려 하심이라.", reference: "요한복음 3:16 변형" },
+    { text: "오직 성령이 너희에게 임하시면 너희가 권능을 받고 예루살렘과 온 유대와 사마리아와 땅 끝까지 이르러 내 증인이 되리라 하시니라.", reference: "사도행전 1:8" },
+    { text: "내가 너희에게 분부한 모든 것을 가르쳐 지키게 하라 볼지어다 내가 세상 끝날까지 너희와 항상 함께 있으리라 하시니라.", reference: "마태복음 28:20" },
+    { text: "그들이 평안하다, 안전하다 할 그 때에 임신한 여자에게 해산의 고통이 이름과 같이 멸망이 갑자기 그들에게 이르리니 결코 피하지 못하리라.", reference: "데살로니가전서 5:3" },
+    { text: "그 후에 주께서 달리 칠십 인을 세우사 친히 가시려는 각 동네와 각 지역으로 둘씩 앞서 보내시며.", reference: "누가복음 10:1" }
 ];
 
 
@@ -78,8 +86,12 @@ const newVerseBtn = document.getElementById('new-verse-btn');
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
 const prayerVerseText = document.getElementById('prayer-verse-text');
 const prayerVerseReference = document.getElementById('prayer-verse-reference');
+const prayerVerseImage = document.getElementById('prayer-verse-image'); // NEW
+const newPrayerVerseBtn = document.getElementById('new-prayer-verse-btn'); // NEW
 const evangelismVerseText = document.getElementById('evangelism-verse-text');
 const evangelismVerseReference = document.getElementById('evangelism-verse-reference');
+const evangelismVerseImage = document.getElementById('evangelism-verse-image'); // NEW
+const newEvangelismVerseBtn = document.getElementById('new-evangelism-verse-btn'); // NEW
 
 function getRandomBook() {
     const books = Object.keys(bibleBooks);
@@ -142,19 +154,26 @@ async function displayVerse(text, reference) {
     verseImage.src = imageUrl;
 }
 
-function displayRandomPrayerVerse() {
+async function displayRandomPrayerVerse() {
     const verse = prayerVerses[Math.floor(Math.random() * prayerVerses.length)];
     prayerVerseText.textContent = `\"${verse.text}\"`;
     prayerVerseReference.textContent = verse.reference;
+    const imageUrl = await getVerseImage(verse.reference); // Fetch image for prayer verse
+    prayerVerseImage.src = imageUrl;
 }
 
-function displayRandomEvangelismVerse() {
+async function displayRandomEvangelismVerse() {
     const verse = evangelismVerses[Math.floor(Math.random() * evangelismVerses.length)];
     evangelismVerseText.textContent = `\"${verse.text}\"`;
     evangelismVerseReference.textContent = verse.reference;
+    const imageUrl = await getVerseImage(verse.reference); // Fetch image for evangelism verse
+    evangelismVerseImage.src = imageUrl;
 }
 
 newVerseBtn.addEventListener('click', getRandomVerse);
+
+newPrayerVerseBtn.addEventListener('click', displayRandomPrayerVerse);
+newEvangelismVerseBtn.addEventListener('click', displayRandomEvangelismVerse);
 
 themeToggleBtn.addEventListener('click', () => {
     document.body.classList.toggle('dark-mode');
