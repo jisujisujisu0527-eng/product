@@ -131,13 +131,13 @@ async function getVerseImage(referenceQuery, category = '') {
     let imageUrl = "https://images.unsplash.com/photo-1451187580459-43490279c0fa"; // Default image
 
     for (const q of queriesToTry) {
-        const url = `https://api.unsplash.com/search/photos?query=${q}&client_id=${UNSPLASH_API_KEY}`;
+        const url = `https://api.unsplash.com/search/photos?query=${q}&orientation=landscape&per_page=30&client_id=${UNSPLASH_API_KEY}`;
         console.log("Fetching image from URL:", url);
-        try {
+        try { {
             const response = await fetch(url);
             const data = await response.json();
             if (data.results.length > 0) {
-                return data.results[0].urls.regular;
+                return data.results[Math.floor(Math.random() * data.results.length)].urls.regular;
             }
         } catch (error) {
             console.error(`Error fetching image for query "${q}" from Unsplash:`, error);
