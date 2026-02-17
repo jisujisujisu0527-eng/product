@@ -1,8 +1,6 @@
 console.log("Running version 1.2");
 
-// WARNING: Do not expose this key in a public repository.
-// For this exercise, we are storing it here for simplicity.
-const UNSPLASH_API_KEY = '875932';
+
 
 const popularVerses = [
     { text: "태초에 하나님이 천지를 창조하시니라", reference: "창세기 1:1" },
@@ -81,70 +79,21 @@ const koreanToEnglish = {
 
 const verseText = document.getElementById('verse-text');
 const verseReference = document.getElementById('verse-reference');
-const verseImage = document.getElementById('verse-image');
 const newVerseBtn = document.getElementById('new-verse-btn');
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
 const prayerVerseText = document.getElementById('prayer-verse-text');
 const prayerVerseReference = document.getElementById('prayer-verse-reference');
-const prayerVerseImage = document.getElementById('prayer-verse-image'); // NEW
-const newPrayerVerseBtn = document.getElementById('new-prayer-verse-btn'); // NEW
+const newPrayerVerseBtn = document.getElementById('new-prayer-verse-btn');
 const evangelismVerseText = document.getElementById('evangelism-verse-text');
 const evangelismVerseReference = document.getElementById('evangelism-verse-reference');
-const evangelismVerseImage = document.getElementById('evangelism-verse-image'); // NEW
-const newEvangelismVerseBtn = document.getElementById('new-evangelism-verse-btn'); // NEW
+const newEvangelismVerseBtn = document.getElementById('new-evangelism-verse-btn');
 
 function getRandomBook() {
     const books = Object.keys(bibleBooks);
     return books[Math.floor(Math.random() * books.length)];
 }
 
-async function getVerseImage(referenceQuery, category = '') {
-    // Prioritize Christian-specific terms, avoid explicitly Catholic ones
-    const baseQueries = {
-        'bible': ['Christian Bible', 'Protestant bible', 'Gospel', 'Jesus Christ', 'Christian church'],
-        'prayer': ['Christian prayer', 'Jesus prayer', 'hands praying Christian', 'Christian worship'],
-        'evangelism': ['Christian evangelism', 'spreading gospel', 'Jesus outreach', 'Christian community']
-    };
-    
-    // Combine base queries with referenceQuery
-    let queriesToTry = [];
-    if (category && baseQueries[category]) {
-        for (const baseQ of baseQueries[category]) {
-            queriesToTry.push(`${baseQ} ${referenceQuery}`);
-        }
-    }
-    queriesToTry.push(referenceQuery); // Always try with just the reference
-    
-    // Fallback if specific queries fail
-    const genericFallbacks = {
-        'bible': ['bible verse Christian', 'scripture Christian', 'Christian cross', 'Christian faith'],
-        'prayer': ['Christian meditation', 'Christian hope', 'spiritual moment Christian'],
-        'evangelism': ['Christian mission', 'sharing faith Christian', 'Christian fellowship']
-    };
-    if (category && genericFallbacks[category]) {
-        queriesToTry = queriesToTry.concat(genericFallbacks[category]);
-    }
-    
-    // Ensure uniqueness
-    queriesToTry = [...new Set(queriesToTry)];
 
-    let imageUrl = "https://images.unsplash.com/photo-1451187580459-43490279c0fa"; // Default image
-
-    for (const q of queriesToTry) {
-        const url = `https://api.unsplash.com/search/photos?query=${q}&orientation=landscape&per_page=30&client_id=${UNSPLASH_API_KEY}`;
-        console.log("Fetching image from URL:", url);
-        try { {
-            const response = await fetch(url);
-            const data = await response.json();
-            if (data.results.length > 0) {
-                return data.results[Math.floor(Math.random() * data.results.length)].urls.regular;
-            }
-        } catch (error) {
-            console.error(`Error fetching image for query "${q}" from Unsplash:`, error);
-        }
-    }
-    return imageUrl; // Return default image if no results found for any query
-}
 
 async function getRandomVerse() {
     // 50% chance to display a popular verse
@@ -183,24 +132,18 @@ async function getRandomVerse() {
 async function displayVerse(text, reference) {
     verseText.textContent = `\"${text}\"`;
     verseReference.textContent = reference;
-    const imageUrl = await getVerseImage(reference, 'bible'); // Pass 'bible' category
-    verseImage.src = imageUrl;
 }
 
 async function displayRandomPrayerVerse() {
     const verse = prayerVerses[Math.floor(Math.random() * prayerVerses.length)];
     prayerVerseText.textContent = `\"${verse.text}\"`;
     prayerVerseReference.textContent = verse.reference;
-    const imageUrl = await getVerseImage(verse.reference, 'prayer'); // Pass 'prayer' category
-    prayerVerseImage.src = imageUrl;
 }
 
 async function displayRandomEvangelismVerse() {
     const verse = evangelismVerses[Math.floor(Math.random() * evangelismVerses.length)];
     evangelismVerseText.textContent = `\"${verse.text}\"`;
     evangelismVerseReference.textContent = verse.reference;
-    const imageUrl = await getVerseImage(verse.reference, 'evangelism'); // Pass 'evangelism' category
-    evangelismVerseImage.src = imageUrl;
 }
 
 newVerseBtn.addEventListener('click', getRandomVerse);
