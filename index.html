@@ -9,13 +9,23 @@
 <body>
     <div class="container">
         <h1>오늘의 성경 구절</h1>
-        <div class="verse-container">
-            <img id="verse-image" src="" alt="Verse Image">
-            <p id="verse-text"></p>
-            <p id="verse-reference"></p>
+        <div class="main-content-layout">
+            <div class="verse-text-section">
+                <p id="verse-text"></p>
+                <p id="verse-reference"></p>
+            </div>
+            <div class="verse-image-section">
+                <img id="verse-image" src="" alt="Verse Image">
+            </div>
+            <div class="empty-space-section">
+                <!-- 빈 공간 -->
+            </div>
         </div>
-        <button id="new-verse-btn">새로운 구절</button>
-        <button id="theme-toggle-btn">테마 변경</button>
+
+        <div class="button-container">
+            <button id="new-verse-btn">새로운 구절</button>
+            <button id="theme-toggle-btn">테마 변경</button>
+        </div>
 
         <div class="contact-form-section">
             <h2>제휴 문의</h2>
