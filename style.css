@@ -269,6 +269,73 @@ body.dark-mode .test-page-link-button:hover {
     border-color: #999;
 }
 
+/* Footer Styles */
+footer {
+    background-color: #333;
+    color: #f0f0f0;
+    padding: 20px 0;
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.9rem;
+}
+
+body.dark-mode footer {
+    background-color: #1a1a1a;
+}
+
+.footer-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-nav a {
+    color: #f0f0f0;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.footer-nav a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .main-content-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .verse-text-section,
+    .verse-image-section,
+    .empty-space-section {
+        flex: none; /* Remove flex sizing */
+        width: 90%; /* Take full width on small screens */
+    }
+
+    .verse-image-section img {
+        max-height: 250px; /* Adjust image height for smaller screens */
+    }
+
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .contact-form-section {
+        padding: 15px;
+    }
+
+    footer {
+        padding: 15px 0;
+    }
+
+    .footer-nav a {
+        display: block;
+        margin: 5px 0;
+    }
+}
+
 .button-container {
     margin-top: 20px;
     margin-bottom: 40px; /* 버튼과 제휴 섹션 사이 간격 */

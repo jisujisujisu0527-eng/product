@@ -4,22 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>예수님 제자상 테스트</title>
+    <meta name="description" content="Google Teachable Machine 모델을 활용하여 예수님의 제자상을 테스트해보세요.">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-8260879821489900">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="test-container">
-        <h2>예수님 제자상 테스트</h2>
-        <input type="file" id="file-input" accept="image/*" class="file-input-button">
-        <div id="image-display-container">
-            <img id="uploaded-image" src="#" alt="업로드된 이미지" style="display: none;">
+    <main>
+        <div class="test-container">
+            <h2>예수님 제자상 테스트</h2>
+            <input type="file" id="file-input" accept="image/*" class="file-input-button">
+            <div id="image-display-container">
+                <img id="uploaded-image" src="#" alt="업로드된 이미지" style="display: none;">
+            </div>
+            <button type="button" id="predict-button" class="test-start-button" style="display: none;">판단하기</button>
+            <div id="loading-indicator" style="display: none; margin-top: 20px;">분석 중...</div>
+            <div id="label-container"></div>
         </div>
-        <button type="button" id="predict-button" class="test-start-button" style="display: none;">판단하기</button>
-        <div id="loading-indicator" style="display: none; margin-top: 20px;">분석 중...</div>
-        <div id="label-container"></div>
-    </div>
-
+    </main>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 오늘의 성경 구절. All rights reserved.</p>
+            <nav class="footer-nav">
+                <a href="#">개인정보처리방침</a>
+                <a href="#">이용약관</a>
+            </nav>
+        </div>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
     <script type="text/javascript">

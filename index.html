@@ -4,62 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>오늘의 성경 구절</title>
+    <meta name="description" content="매일 새로운 성경 구절과 아름다운 이미지를 만나보세요.">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-8260879821489900">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>오늘의 성경 구절</h1>
-        <div class="main-content-layout">
-            <div class="verse-text-section">
-                <p id="verse-text"></p>
-                <p id="verse-reference"></p>
+    <main>
+        <div class="container">
+            <h1>오늘의 성경 구절</h1>
+            <div class="main-content-layout">
+                <div class="verse-text-section">
+                    <p id="verse-text"></p>
+                    <p id="verse-reference"></p>
+                </div>
+                <div class="verse-image-section">
+                    <img id="verse-image" src="" alt="Verse Image">
+                </div>
+                <div class="empty-space-section">
+                    <!-- 빈 공간 -->
+                </div>
             </div>
-            <div class="verse-image-section">
-                <img id="verse-image" src="" alt="Verse Image">
+
+            <div class="button-container">
+                <button id="new-verse-btn">새로운 구절</button>
+                <button id="theme-toggle-btn">테마 변경</button>
+                <a href="disciple-test.html" class="test-page-link-button">제자상 테스트</a>
             </div>
-            <div class="empty-space-section">
-                <!-- 빈 공간 -->
+
+            <div class="contact-form-section">
+                <h2>제휴 문의</h2>
+                <form action="https://formspree.io/f/mnjbvgdq" method="POST" class="contact-form">
+                    <div class="form-group">
+                        <label for="company-name">회사명:</label>
+                        <input type="text" id="company-name" name="회사명" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-person">담당자:</label>
+                        <input type="text" id="contact-person" name="담당자" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">이메일:</label>
+                        <input type="email" id="email" name="이메일" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone-number">연락처:</label>
+                        <input type="tel" id="phone-number" name="연락처">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">문의 내용:</label>
+                        <textarea id="message" name="문의 내용" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">보내기</button>
+                </form>
             </div>
-        </div>
 
-        <div class="button-container">
-            <button id="new-verse-btn">새로운 구절</button>
-            <button id="theme-toggle-btn">테마 변경</button>
-            <a href="disciple-test.html" class="test-page-link-button">제자상 테스트</a>
+            <h2 style="margin-top: 40px; margin-bottom: 20px; color: #333; font-size: 1.5rem;">댓글</h2>
+            <div id="disqus_thread"></div>
         </div>
-
-        <div class="contact-form-section">
-            <h2>제휴 문의</h2>
-            <form action="https://formspree.io/f/mnjbvgdq" method="POST" class="contact-form">
-                <div class="form-group">
-                    <label for="company-name">회사명:</label>
-                    <input type="text" id="company-name" name="회사명" required>
-                </div>
-                <div class="form-group">
-                    <label for="contact-person">담당자:</label>
-                    <input type="text" id="contact-person" name="담당자" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">이메일:</label>
-                    <input type="email" id="email" name="이메일" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone-number">연락처:</label>
-                    <input type="tel" id="phone-number" name="연락처">
-                </div>
-                <div class="form-group">
-                    <label for="message">문의 내용:</label>
-                    <textarea id="message" name="문의 내용" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="submit-btn">보내기</button>
-            </form>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 오늘의 성경 구절. All rights reserved.</p>
+            <nav class="footer-nav">
+                <a href="#">개인정보처리방침</a>
+                <a href="#">이용약관</a>
+            </nav>
         </div>
-
-        <h2 style="margin-top: 40px; margin-bottom: 20px; color: #333; font-size: 1.5rem;">댓글</h2>
-        <div id="disqus_thread"></div>
-    </div>
+    </footer>
     <script src="main.js"></script>
     <script>
         var disqus_config = function () {
