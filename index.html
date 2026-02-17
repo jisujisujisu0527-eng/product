@@ -53,9 +53,11 @@
                 <button type="submit" class="submit-btn">보내기</button>
             </form>
         </div>
+
+        <h2 style="margin-top: 40px; margin-bottom: 20px; color: #333; font-size: 1.5rem;">댓글</h2>
+        <div id="disqus_thread"></div>
     </div>
     <script src="main.js"></script>
-    <div id="disqus_thread"></div>
     <script>
         var disqus_config = function () {
             this.page.url = window.location.href;  // Use current page URL
@@ -68,5 +70,6 @@
             (d.head || d.body).appendChild(s);
         })();
     </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </body>
 </html>

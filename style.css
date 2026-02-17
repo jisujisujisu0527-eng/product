@@ -105,6 +105,21 @@ body.dark-mode #verse-reference {
     color: #ccc;
 }
 
+#disqus_thread {
+    margin-top: 40px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+    min-height: 200px; /* Ensure it's visible */
+    text-align: left; /* Align text within disqus frame */
+}
+
+body.dark-mode #disqus_thread {
+    border-color: #555;
+    background-color: #383838;
+}
+
 .button-container {
     margin-top: 20px;
     margin-bottom: 40px; /* 버튼과 제휴 섹션 사이 간격 */
