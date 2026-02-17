@@ -43,19 +43,19 @@ body.dark-mode h1 {
 
 .main-content-layout {
     display: flex;
-    justify-content: center; /* 중앙 정렬 */
-    align-items: flex-start; /* 상단 정렬 */
-    gap: 20px; /* 섹션 간 간격 */
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
     margin-bottom: 30px;
 }
 
 .verse-text-section {
-    flex: 1; /* 왼쪽 섹션 */
+    flex: 1;
     text-align: left;
-    padding: 20px; /* 패딩 증가 */
+    padding: 20px;
     background-color: #FFF8E1; /* 밝은 크림색 배경 */
-    border-radius: 10px; /* 둥근 모서리 */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* 부드러운 그림자 */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 body.dark-mode .verse-text-section {
@@ -64,31 +64,31 @@ body.dark-mode .verse-text-section {
 
 /* empty-space-section to balance layout */
 .empty-space-section {
-    flex: 1; /* 오른쪽 빈 공간 */
+    flex: 1;
     padding: 15px;
 }
 
 #verse-text {
     font-size: 1.3rem;
     font-weight: normal;
-    color: #4E342E; /* 따뜻한 어두운 갈색 */
+    color: #4E342E;
     margin-bottom: 10px;
     font-style: italic;
     line-height: 1.6;
 }
 
 body.dark-mode #verse-text {
-    color: #FBE9E7; /* 밝은 크림색 */
+    color: #FBE9E7;
 }
 
 #verse-reference {
     font-size: 1rem;
-    color: #8D6E63; /* 따뜻한 중간 갈색 */
+    color: #8D6E63;
     font-weight: bold;
 }
 
 body.dark-mode #verse-reference {
-    color: #C0B7B1; /* 따뜻한 밝은 회색 */
+    color: #C0B7B1;
 }
 
 .button-container {
@@ -96,13 +96,15 @@ body.dark-mode #verse-reference {
     margin-bottom: 40px;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
     gap: 15px;
 }
 
-/* Buttons */
+/* Common Button Styles */
 #new-verse-btn, #theme-toggle-btn,
 .test-start-button, .test-page-link-button,
-.additional-verse-btn {
+.additional-verse-btn,
+.test-step button, .result-box button {
     padding: 12px 25px;
     font-size: 1rem;
     cursor: pointer;
@@ -121,7 +123,8 @@ body.dark-mode #verse-reference {
 
 #new-verse-btn:hover, #theme-toggle-btn:hover,
 .test-start-button:hover, .test-page-link-button:hover,
-.additional-verse-btn:hover {
+.additional-verse-btn:hover,
+.test-step button:hover, .result-box button:hover {
     background-color: #FF9800; /* 호버 시 더 진한 주황색 */
     border-color: #9C675C;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
@@ -129,7 +132,8 @@ body.dark-mode #verse-reference {
 
 body.dark-mode #new-verse-btn, body.dark-mode #theme-toggle-btn,
 body.dark-mode .test-start-button, body.dark-mode .test-page-link-button,
-body.dark-mode .additional-verse-btn {
+body.dark-mode .additional-verse-btn,
+body.dark-mode .test-step button, body.dark-mode .result-box button {
     background-color: #D4AF37; /* 다크 모드: 따뜻한 금색 */
     color: #4A3C32; /* 어두운 갈색 텍스트 */
     border-color: #C0B7B1; /* 밝은 회색 테두리 */
@@ -137,7 +141,8 @@ body.dark-mode .additional-verse-btn {
 
 body.dark-mode #new-verse-btn:hover, body.dark-mode #theme-toggle-btn:hover,
 body.dark-mode .test-start-button:hover, body.dark-mode .test-page-link-button:hover,
-body.dark-mode .additional-verse-btn:hover {
+body.dark-mode .additional-verse-btn:hover,
+body.dark-mode .test-step button:hover, body.dark-mode .result-box button:hover {
     background-color: #C19A00; /* 호버 시 더 진한 금색 */
     border-color: #A0938C;
 }
@@ -438,38 +443,8 @@ body.dark-mode .additional-verse-item .verse-reference {
 }
 
 .additional-verse-btn {
+    padding: 12px 25px; /* Use common button styles */
     margin-top: 15px;
-    padding: 10px 20px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    border: 1px solid #B07C6F; /* 따뜻한 테라코타 테두리 */
-    border-radius: 8px; /* 더 둥근 모서리 */
-    background-color: #FFAB40; /* 따뜻한 주황색 버튼 */
-    color: white; /* 흰색 텍스트 */
-    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-    margin-top: 0; /* Align with other buttons in button-container */
-    text-decoration: none;
-    display: inline-block;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.additional-verse-btn:hover {
-    background-color: #FF9800; /* 호버 시 더 진한 주황색 */
-    border-color: #9C675C;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-body.dark-mode .additional-verse-btn {
-    background-color: #D4AF37; /* 다크 모드: 따뜻한 금색 */
-    color: #4A3C32; /* 어두운 갈색 텍스트 */
-    border-color: #C0B7B1; /* 밝은 회색 테두리 */
-}
-
-body.dark-mode .additional-verse-btn:hover {
-    background-color: #C19A00; /* 호버 시 더 진한 금색 */
-    border-color: #A0938C;
 }
 
 /* Responsive Adjustments */

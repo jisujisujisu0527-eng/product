@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영적 생명력 자가진단</title>
+    <meta name="description" content="자신의 영적 생명력을 자가 진단하고 말씀과 기도로 성장하는 테스트입니다.">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-8260879821489900">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <div class="container test-page-container">
+            <h1>영적 생명력 자가진단</h1>
+
+            <div id="test-container">
+                <div id="step-1" class="test-step">
+                    <h2>1. 일상의 성찰</h2>
+                    <input type="text" id="userName" placeholder="성함이 어떻게 되시나요?">
+                    <p>이번 한 주 마음은 어떠셨나요?</p>
+                    <label><input type="radio" name="mood" value="평안"> 평안</label>
+                    <label><input type="radio" name="mood" value="감사"> 감사</label>
+                    <label><input type="radio" name="mood" value="고민"> 고민</label>
+                    <br><br>
+                    <button onclick="nextStep(2)">다음으로 (말씀 적용) ➔</button>
+                </div>
+
+                <div id="step-2" class="test-step hidden">
+                    <h2>2. 말씀의 적용</h2>
+                    <p>주일 설교 중 가장 기억에 남는 단어는?</p>
+                    <input type="text" id="sermonKeyword" placeholder="예: 하나님의 사랑, 인내">
+                    <br><br>
+                    <button onclick="nextStep(3)">다음으로 (공동체 연합) ➔</button>
+                </div>
+
+                <div id="step-3" class="test-step hidden">
+                    <h2>3. 공동체 연합</h2>
+                    <p>지금 나에게 가장 필요한 영적 양식은?</p>
+                    <select id="spiritualNeeds">
+                        <option value="중보기도">중보기도 (합심해서 기도하기)</option>
+                        <option value="성경공부">성경공부 (말씀 더 깊이 알기)</option>
+                        <option value="교제">성도의 교제 (삶 나누기)</option>
+                    </select>
+                    <br><br>
+                    <button onclick="submitTest()">신앙 성찰 완료하기</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 영적 생명력 자가진단. All rights reserved.</p>
+            <nav class="footer-nav">
+                <a href="#">개인정보처리방침</a>
+                <a href="#">이용약관</a>
+            </nav>
+        </div>
+    </footer>
+    <script type="module" src="./faith-test.js"></script>
+</body>
+</html>
