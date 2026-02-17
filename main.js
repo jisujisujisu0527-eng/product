@@ -98,19 +98,36 @@ function getRandomBook() {
     return books[Math.floor(Math.random() * books.length)];
 }
 
-async function getVerseImage(query) {
-    const url = `https://api.unsplash.com/search/photos?query=${query}&client_id=${UNSPLASH_API_KEY}`;
-    console.log("Fetching image from URL:", url);
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        if (data.results.length > 0) {
-            return data.results[0].urls.regular;
+async function getVerseImage(referenceQuery, category = '') {
+    let query = category ? `${category} ${referenceQuery}` : referenceQuery;
+    // Add Korean translation of categories to the query for better results
+    if (category === 'bible') query = `성경 ${query}`;
+    if (category === 'prayer') query = `기도 ${query}`;
+    if (category === 'evangelism') query = `전도 ${query}`;
+    
+    // Fallback categories if initial query yields no results or is too specific
+    const fallbackCategories = {
+        'bible': ['bible verse', '성경', 'cross', 'faith'],
+        'prayer': ['prayer', '기도', 'hope', 'meditation'],
+        'evangelism': ['evangelism', '전도', 'outreach', 'community']
+    };
+
+    let imageUrl = "https://images.unsplash.com/photo-1451187580459-43490279c0fa"; // Default image
+
+    for (const q of [query, ...(fallbackCategories[category] || [])]) {
+        const url = `https://api.unsplash.com/search/photos?query=${q}&client_id=${UNSPLASH_API_KEY}`;
+        console.log("Fetching image from URL:", url);
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data.results.length > 0) {
+                return data.results[0].urls.regular;
+            }
+        } catch (error) {
+            console.error(`Error fetching image for query "${q}" from Unsplash:`, error);
         }
-    } catch (error) {
-        console.error("Error fetching image from Unsplash:", error);
     }
-    return "https://images.unsplash.com/photo-1451187580459-43490279c0fa"; // Default image
+    return imageUrl; // Return default image if no results found for any query
 }
 
 async function getRandomVerse() {
@@ -150,7 +167,7 @@ async function getRandomVerse() {
 async function displayVerse(text, reference) {
     verseText.textContent = `\"${text}\"`;
     verseReference.textContent = reference;
-    const imageUrl = await getVerseImage(reference);
+    const imageUrl = await getVerseImage(reference, 'bible'); // Pass 'bible' category
     verseImage.src = imageUrl;
 }
 
@@ -158,7 +175,7 @@ async function displayRandomPrayerVerse() {
     const verse = prayerVerses[Math.floor(Math.random() * prayerVerses.length)];
     prayerVerseText.textContent = `\"${verse.text}\"`;
     prayerVerseReference.textContent = verse.reference;
-    const imageUrl = await getVerseImage(verse.reference); // Fetch image for prayer verse
+    const imageUrl = await getVerseImage(verse.reference, 'prayer'); // Pass 'prayer' category
     prayerVerseImage.src = imageUrl;
 }
 
@@ -166,7 +183,7 @@ async function displayRandomEvangelismVerse() {
     const verse = evangelismVerses[Math.floor(Math.random() * evangelismVerses.length)];
     evangelismVerseText.textContent = `\"${verse.text}\"`;
     evangelismVerseReference.textContent = verse.reference;
-    const imageUrl = await getVerseImage(verse.reference); // Fetch image for evangelism verse
+    const imageUrl = await getVerseImage(verse.reference, 'evangelism'); // Pass 'evangelism' category
     evangelismVerseImage.src = imageUrl;
 }
 
