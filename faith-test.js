@@ -1,19 +1,6 @@
-// Firebase SDK 직접 로드 (가장 최신 안정화 버전)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// firebase-test.js
 
-// [중요] 이 부분을 Firebase 콘솔에서 복사한 값으로 반드시 교체하세요!
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import { db, collection, addDoc, serverTimestamp } from "./firebase-firestore-service.js"; // Import from our service file
 
 const form = document.getElementById('faithForm');
 const surveyArea = document.getElementById('surveyArea');
@@ -116,4 +103,10 @@ function showResult(scores) {
     const maxIdx = scores.indexOf(maxScore);
     const types = ["민감한 동행자", "충성된 일꾼", "말씀의 사람", "행동하는 제자", "교회의 기둥", "사랑의 통로"];
     document.getElementById('typeDescription').innerText = `성도님은 현재 [${types[maxIdx]}] 유형에 가깝습니다!`;
+    
+    // 추가: 대시보드 링크 추가
+    const resultButtons = document.querySelector('#resultArea button');
+    resultButtons.insertAdjacentHTML('afterend', `
+        <button onclick="window.location.href='faith-dashboard.html'" style="margin-top:10px; background:#B07C6F;">전체 결과 보기</button>
+    `);
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신앙 점검 대시보드</title>
+    <meta name="description" content="성도들의 신앙 점검 결과를 모아보고 전반적인 영적 상태를 파악합니다.">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-8260879821489900">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <div class="container dashboard-container">
+            <h1>신앙 점검 대시보드</h1>
+            <p>최근 성도들의 신앙 점검 결과입니다. (최대 100개)</p>
+            <div id="data-table-container">
+                <table id="faithResultsTable">
+                    <thead>
+                        <tr>
+                            <th>이름</th>
+                            <th>영적 민감성</th>
+                            <th>우선순위</th>
+                            <th>말씀 수용성</th>
+                            <th>실천적 순종</th>
+                            <th>공동체 의식</th>
+                            <th>사랑의 나눔</th>
+                            <th>제출일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+                <p id="loadingMessage">데이터를 불러오는 중...</p>
+                <p id="errorMessage" style="color: red; display: none;">데이터를 불러오지 못했습니다. Firebase 설정을 확인해주세요.</p>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 신앙 점검 대시보드. All rights reserved.</p>
+            <nav class="footer-nav">
+                <a href="#">개인정보처리방침</a>
+                <a href="#">이용약관</a>
+            </nav>
+        </div>
+    </footer>
+    <script type="module" src="./faith-dashboard.js"></script>
+</body>
+</html>
