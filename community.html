@@ -117,7 +117,7 @@
     <script src="main.js"></script>
     <script type="module">
         import { db, collection, addDoc, serverTimestamp, query, orderBy, limit } from "./firebase-firestore-service.js";
-        import { onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { onSnapshot, updateDoc, increment, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         window.savePost = async function(type) {
             const nameEl = document.getElementById(type + '-name');
@@ -136,7 +136,8 @@
                     name: name,
                     content: content,
                     timestamp: serverTimestamp(),
-                    lang: currentLang
+                    lang: currentLang,
+                    prayCount: 0
                 });
                 nameEl.value = '';
                 contentEl.value = '';
@@ -155,15 +156,22 @@
             qnaList.innerHTML = "";
             churchList.innerHTML = "";
 
-            snapshot.forEach((doc) => {
-                const data = doc.data();
+            snapshot.forEach((snapshotDoc) => {
+                const data = snapshotDoc.data();
+                const id = snapshotDoc.id;
                 const date = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString(currentLang) : "";
+                const prayCount = data.prayCount || 0;
                 
                 const postHtml = `
                     <div class="post-card">
                         <div class="post-author">${data.name}</div>
                         <div class="post-content">${data.content}</div>
-                        <div class="post-time">${date}</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                            <div class="post-time">${date}</div>
+                            <button id="btn-${id}" class="secondary-btn" style="padding: 5px 15px; font-size: 0.8rem;" onclick="iPrayedForThis('${id}')">
+                                <i class="fas fa-praying-hands"></i> ${translations[currentLang].btn_i_prayed || 'Pray'} (${prayCount})
+                            </button>
+                        </div>
                     </div>
                 `;
 
@@ -177,6 +185,21 @@
             if (qnaList.innerHTML === "") qnaList.innerHTML = `<p>${currentLang === 'ko' ? '게시글이 없습니다.' : 'No posts yet.'}</p>`;
             if (churchList.innerHTML === "") churchList.innerHTML = `<p>${currentLang === 'ko' ? '게시글이 없습니다.' : 'No posts yet.'}</p>`;
         });
+
+        // Prayer Wall Logic
+        window.iPrayedForThis = async function(postId) {
+            const postRef = doc(db, "posts", postId);
+            const btn = document.getElementById(`btn-${postId}`);
+            try {
+                await updateDoc(postRef, { prayCount: increment(1) });
+                if (btn) {
+                    btn.innerHTML = `<i class="fas fa-check"></i> Prayed!`;
+                    btn.disabled = true;
+                }
+            } catch (error) {
+                console.error("Error updating pray count: ", error);
+            }
+        };
 
         // User Requests Logic
         window.submitRequest = async function() {

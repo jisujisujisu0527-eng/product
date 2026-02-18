@@ -1,57 +1,5 @@
-// Global Daily Bible - Comprehensive JS (i18n, Daily Content, Utilities)
-
+// Global Daily Bible - Comprehensive JS (i18n, Daily Content, Streaks, AI, Card)
 let currentLang = localStorage.getItem('lang') || (navigator.language.startsWith('ko') ? 'ko' : 'en');
-
-// Fallback pools for Prayer and Mission (since APIs for these are not common)
-const prayerPool = {
-    ko: [
-        "오늘 하루도 주님의 은혜 안에서 평강을 누리게 하소서.",
-        "우리 삶의 모든 순간이 하나님의 영광을 드러내는 예배가 되게 하소서.",
-        "어려움 속에서도 주님의 선하심을 신뢰하는 믿음을 주소서.",
-        "이웃을 내 몸과 같이 사랑하며 주님의 사랑을 실천하게 하소서."
-    ],
-    en: [
-        "May the grace of the Lord bring you peace throughout this day.",
-        "Let every moment of our lives be worship that reveals God's glory.",
-        "Give us faith to trust in your goodness even in difficulties.",
-        "Help us love our neighbors as ourselves and practice Your love."
-    ],
-    es: [
-        "Que la gracia del Señor te traiga paz durante este día.",
-        "Que cada momento sea adoración para la gloria de Dios.",
-        "Danos fe para confiar en Tu bondad."
-    ],
-    fr: [
-        "Que la grâce du Seigneur vous apporte la paix aujourd'hui.",
-        "Que chaque instant soit une louange à la gloire de Dieu.",
-        "Donne-nous la foi pour avoir confiance en Ta bonté."
-    ]
-};
-
-const missionPool = {
-    ko: [
-        "오늘 만나는 사람에게 따뜻한 미소와 함께 주님의 사랑을 전해보세요.",
-        "삶의 현장에서 정직과 성실로 그리스도의 향기를 드러내세요.",
-        "가까운 친구나 가족에게 감사의 마음을 담은 성경 구절을 공유해보세요.",
-        "어려움을 겪는 이웃에게 먼저 다가가 위로의 말을 건네보세요."
-    ],
-    en: [
-        "Share the Lord's love with a warm smile to those you meet today.",
-        "Reveal the fragrance of Christ through honesty and integrity in your life.",
-        "Share a Bible verse with gratitude to a close friend or family member.",
-        "Reach out to a neighbor in need with words of comfort first."
-    ],
-    es: [
-        "Comparte el amor del Señor con una sonrisa hoy.",
-        "Muestra la fragancia de Cristo a través de tu integridad.",
-        "Comparte un versículo bíblico con un amigo cercano."
-    ],
-    fr: [
-        "Partagez l'amour du Seigneur avec un sourire aujourd'hui.",
-        "Révélez le parfum du Christ par votre intégrité.",
-        "Partagez un verset biblique avec un ami proche."
-    ]
-};
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
@@ -59,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadDailyContent();
     setupEventListeners();
     checkSystemTheme();
+    updateFaithStreak(); // Handle Streak
 });
 
 function setupEventListeners() {
@@ -66,6 +15,117 @@ function setupEventListeners() {
     document.getElementById('share-verse-btn')?.addEventListener('click', shareDailyContent);
 }
 
+// 1. Faith Journey Streaks (Simple Storage-based for now)
+function updateFaithStreak() {
+    const today = new Date().toDateString();
+    const lastLogin = localStorage.getItem('last_visit');
+    let streak = parseInt(localStorage.getItem('faith_streak')) || 0;
+
+    if (lastLogin === today) {
+        showStreak(streak);
+        return;
+    }
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (lastLogin === yesterday.toDateString()) {
+        streak += 1;
+    } else {
+        streak = 1;
+    }
+
+    localStorage.setItem('last_visit', today);
+    localStorage.setItem('faith_streak', streak);
+    showStreak(streak);
+
+    if (streak === 7) {
+        alert("🎉 " + (translations[currentLang].faithful_witness || "Faithful Witness (7 Day Streak!)"));
+    }
+}
+
+function showStreak(count) {
+    const badge = document.getElementById('streak-badge');
+    const countEl = document.getElementById('streak-count');
+    if (badge && countEl) {
+        badge.style.display = 'inline-block';
+        countEl.textContent = count;
+    }
+}
+
+// 2. AI Faith Companion (Simulation)
+window.askFaithCompanion = function() {
+    const input = document.getElementById('user-worry');
+    const responseEl = document.getElementById('ai-response');
+    const worry = input?.value.trim();
+    if (!worry) return;
+
+    const bibleText = localStorage.getItem('daily_bible_text') || "";
+    const response = currentLang === 'ko' ? 
+        `"주님께서 오늘의 말씀을 통해 당신의 '${worry}'에 대해 말씀하십니다: '${bibleText}'. 주님은 항상 당신과 함께 계십니다."` :
+        `"Dear child, remember today's Word regarding your concern about '${worry}': '${bibleText}'. God is with you always."`;
+    
+    if (responseEl) {
+        responseEl.style.opacity = 0;
+        setTimeout(() => {
+            responseEl.textContent = response;
+            responseEl.style.transition = 'opacity 1s';
+            responseEl.style.opacity = 1;
+        }, 500);
+    }
+};
+
+// 3. Shareable Verse Card (Canvas)
+window.generateVerseCard = function() {
+    const text = localStorage.getItem('daily_bible_text');
+    const ref = localStorage.getItem('daily_bible_ref');
+    
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 1080;
+    canvas.height = 1080;
+
+    // Background Gradient
+    const grad = ctx.createLinearGradient(0, 0, 0, 1080);
+    grad.addColorStop(0, '#2C3E50');
+    grad.addColorStop(1, '#B08968');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 1080, 1080);
+
+    // Text Rendering
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.font = "italic 48px 'Lora'";
+    
+    // Simple word wrapping for Canvas
+    const words = text.split(' ');
+    let line = '';
+    let y = 450;
+    for(let n = 0; n < words.length; n++) {
+        let testLine = line + words[n] + ' ';
+        if (ctx.measureText(testLine).width > 800 && n > 0) {
+            ctx.fillText(line, 540, y);
+            line = words[n] + ' ';
+            y += 70;
+        } else {
+            line = testLine;
+        }
+    }
+    ctx.fillText(line, 540, y);
+    
+    ctx.font = "bold 36px 'Inter'";
+    ctx.fillText(ref, 540, y + 100);
+    
+    ctx.font = "30px 'Inter'";
+    ctx.fillText("dailybible.uk", 540, 1000);
+
+    const link = document.createElement('a');
+    link.download = 'daily-verse-card.png';
+    link.href = canvas.toDataURL();
+    link.click();
+};
+
+// ... (Existing applyTranslations, loadDailyContent, etc.)
 function applyTranslations() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -84,119 +144,54 @@ window.changeLanguage = function(lang) {
     currentLang = lang;
     localStorage.setItem('lang', lang);
     applyTranslations();
-    loadDailyContent(true); // Re-fetch or re-render for new language
+    loadDailyContent(true);
     window.dispatchEvent(new CustomEvent('languageChanged', { detail: lang }));
 };
 
-// Logic for "Once a Day" update based on local timezone midnight
 async function loadDailyContent(forceRefresh = false) {
-    const today = new Date().toDateString(); // User's local date
+    const today = new Date().toDateString();
     const storedDate = localStorage.getItem('daily_date');
-    const storedLang = localStorage.getItem('daily_lang');
-
-    if (!forceRefresh && storedDate === today && storedLang === currentLang) {
+    if (!forceRefresh && storedDate === today) {
         renderStoredData();
     } else {
-        await fetchNewDailyData(today);
-    }
-}
-
-async function fetchNewDailyData(today) {
-    // 1. Fetch Bible Verse (API)
-    // For demo/stability, we use a seed based on date to pick from a list or use a stable API
-    // bible-api.com is good but has limited translations.
-    try {
-        let bibleData = { text: "", ref: "" };
-        
-        // For English, we can use the API
-        if (currentLang === 'en') {
-            const res = await fetch('https://bible-api.com/john+3:16');
-            const data = await res.json();
-            bibleData.text = data.text.trim();
-            bibleData.ref = data.reference;
-        } else {
-            // For other languages, use internal rotation to ensure quality
-            const fallbackVerses = {
-                ko: [
-                    { text: "여호와는 나의 목자시니 내게 부족함이 없으리로다", ref: "시편 23:1" },
-                    { text: "너희는 먼저 그의 나라와 그의 의를 구하라", ref: "마태복음 6:33" }
-                ],
-                es: [
-                    { text: "El Señor es mi pastor, nada me falta.", ref: "Salmo 23:1" },
-                    { text: "Busquen primero el reino de Dios.", ref: "Mateo 6:33" }
-                ],
-                fr: [
-                    { text: "L'Éternel est mon berger: je ne manquerai de rien.", ref: "Psaume 23:1" },
-                    { text: "Cherchez premièrement le royaume de Dieu.", ref: "Matthieu 6:33" }
-                ]
-            };
-            const list = fallbackVerses[currentLang] || fallbackVerses['ko'];
-            const seed = new Date().getDate() % list.length;
-            bibleData = list[seed];
-        }
-
-        // 2. Get Prayer and Mission based on date seed
-        const dayOfMonth = new Date().getDate();
-        const prayerList = prayerPool[currentLang] || prayerPool['en'];
-        const missionList = missionPool[currentLang] || missionPool['en'];
-        
-        const prayer = prayerList[dayOfMonth % prayerList.length];
-        const mission = missionList[dayOfMonth % missionList.length];
-
-        // Store
+        // Simple Internal Rotation for stability
+        const fallbackVerses = {
+            ko: [{ text: "여호와는 나의 목자시니 내게 부족함이 없으리로다", ref: "시편 23:1" }],
+            en: [{ text: "The Lord is my shepherd; I shall not want.", ref: "Psalm 23:1" }]
+        };
+        const list = fallbackVerses[currentLang] || fallbackVerses['en'];
+        const item = list[0];
         localStorage.setItem('daily_date', today);
-        localStorage.setItem('daily_lang', currentLang);
-        localStorage.setItem('daily_bible_text', bibleData.text);
-        localStorage.setItem('daily_bible_ref', bibleData.ref);
-        localStorage.setItem('daily_prayer', prayer);
-        localStorage.setItem('daily_mission', mission);
-
+        localStorage.setItem('daily_bible_text', item.text);
+        localStorage.setItem('daily_bible_ref', item.ref);
         renderStoredData();
-    } catch (e) {
-        console.error("Failed to fetch daily data", e);
     }
 }
 
 function renderStoredData() {
     const bText = document.getElementById('bible-text');
     const bRef = document.getElementById('bible-ref');
-    const pText = document.getElementById('prayer-text');
-    const mText = document.getElementById('mission-text');
-
     if (bText) bText.textContent = `"${localStorage.getItem('daily_bible_text')}"`;
     if (bRef) bRef.textContent = localStorage.getItem('daily_bible_ref');
-    if (pText) pText.textContent = localStorage.getItem('daily_prayer');
-    if (mText) mText.textContent = localStorage.getItem('daily_mission');
 }
 
 function toggleTheme() {
     document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
 }
 
 function checkSystemTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') document.body.classList.add('dark-mode');
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
 }
 
 async function shareDailyContent() {
-    const bText = localStorage.getItem('daily_bible_text');
-    const bRef = localStorage.getItem('daily_bible_ref');
-    const shareText = `[Today's Word]\n${bText}\n- ${bRef}\n\nShared via British Daily Bible`;
-
+    const text = localStorage.getItem('daily_bible_text');
+    const ref = localStorage.getItem('daily_bible_ref');
+    const shareText = `${text}\n- ${ref}\ndailybible.uk`;
     if (navigator.share) {
-        try {
-            await navigator.share({
-                title: 'Daily Spiritual Food',
-                text: shareText,
-                url: window.location.href
-            });
-        } catch (err) {
-            console.log('Share failed', err);
-        }
+        await navigator.share({ title: 'Daily Bible', text: shareText, url: window.location.href });
     } else {
         navigator.clipboard.writeText(shareText);
-        alert(currentLang === 'ko' ? '클립보드에 복사되었습니다!' : 'Copied to clipboard!');
+        alert('Copied!');
     }
 }

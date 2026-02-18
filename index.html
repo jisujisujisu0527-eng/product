@@ -34,6 +34,10 @@
                 <div class="nav-logo">
                     <a href="index.html" data-i18n="site_logo">British Daily Bible</a>
                 </div>
+                <!-- Faith Streak Badge -->
+                <div id="streak-badge" class="streak-badge" style="display:none; padding: 5px 15px; background: #FFF3E0; border-radius: 20px; color: #E65100; font-size: 0.8rem; font-weight: bold; margin: 0 10px;">
+                    <i class="fas fa-fire"></i> <span id="streak-count">0</span> <span data-i18n="streak_text">Day Streak</span>
+                </div>
                 <ul class="nav-links">
                     <li><a href="index.html" class="active" data-i18n="nav_home">Home</a></li>
                     <li><a href="disciple-test.html" data-i18n="nav_test">AI Disciple</a></li>
@@ -75,12 +79,25 @@
                 </div>
 
                 <div class="button-container">
+                    <button onclick="generateVerseCard()" class="primary-btn">
+                        <i class="fas fa-image"></i> <span data-i18n="btn_generate_card">Generate Card</span>
+                    </button>
                     <button id="share-verse-btn" class="secondary-btn">
                         <i class="fas fa-share-alt"></i> <span data-i18n="btn_share">Share Verse</span>
                     </button>
                     <button id="theme-toggle-btn" class="mini-btn">
                         <i class="fas fa-adjust"></i>
                     </button>
+                </div>
+            </section>
+
+            <!-- AI Faith Companion -->
+            <section class="card" style="margin-top: 40px; text-align: center; border: 1px solid var(--accent-color);">
+                <h2 data-i18n="ai_companion_title" style="margin-bottom: 20px;">🕊️ AI Faith Companion</h2>
+                <div style="max-width: 600px; margin: 0 auto;">
+                    <input type="text" id="user-worry" class="input-box" data-i18n="ai_companion_placeholder" placeholder="What is on your heart today?">
+                    <button onclick="askFaithCompanion()" class="primary-btn" style="width: 100%; margin-top: 10px;" data-i18n="ai_companion_btn">Seek Guidance</button>
+                    <p id="ai-response" style="margin-top: 20px; font-style: italic; color: var(--text-muted); min-height: 50px;"></p>
                 </div>
             </section>
 
