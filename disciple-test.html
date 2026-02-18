@@ -1,149 +1,136 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5NEGEVBDK8"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-5NEGEVBDK8');
-    </script>
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "vj2cbfxdgz");
-    </script>
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>예수님 제자상 테스트 - AI 영적 성향 분석</title>
-    <meta name="description" content="인공지능(AI)을 활용하여 성경 속 인물들과 나의 영적 성향을 비교해보는 예수님 제자상 테스트입니다.">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
-    <meta name="google-adsense-account" content="ca-pub-8260879821489900">
+    <title>AI 제자상 테스트 - 인공지능 관상 분석</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-models/speech-commands@latest/dist/speech-commands.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 </head>
 <body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-logo"><a href="index.html">Daily Bible</a></div>
+            <ul class="nav-links">
+                <li><a href="index.html">홈</a></li>
+                <li><a href="faith-checkup.html">신앙 점검</a></li>
+                <li><a href="disciple-test.html" class="active">제자상 테스트</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <main>
         <div class="container">
-            <div class="test-container">
-                <h2>예수님 제자상 테스트 (AI 분석)</h2>
+            <section class="test-header card">
+                <h1>AI 제자상 분석기</h1>
+                <p>당신의 모습 속에 담긴 주님의 제자 모습을 인공지능이 분석합니다.</p>
+                <div class="alert-info" style="font-size: 0.8rem; color: #666; margin-top: 10px;">
+                    * 카메라 권한이 필요합니다. 분석된 이미지는 서버에 저장되지 않습니다.
+                </div>
+            </section>
+
+            <div class="test-container card">
+                <div id="webcam-container" style="margin-bottom: 20px; border-radius: 15px; overflow: hidden; background: #000; min-height: 200px; display: flex; align-items: center; justify-content: center;">
+                    <button type="button" class="primary-btn" onclick="init()">카메라 시작하기 (Start AI)</button>
+                </div>
                 
-                <section class="test-intro-text" style="margin-bottom: 30px; text-align: left; line-height: 1.7; color: #444; background: #fdfdfd; padding: 20px; border-left: 5px solid #007bff;">
-                    <h3>나의 영적 성향은 누구와 닮았을까요?</h3>
-                    <p>본 테스트는 Google의 Teachable Machine 인공지능 기술을 활용하여 사용자의 이미지(또는 업로드한 사진)를 분석하고, 성경 속 주요 제자들의 특성과 비교해 봅니다. 열정적인 베드로, 사랑의 사도 요한, 의심 많지만 정직했던 도마 등 당신이 가진 고유한 영적 에너지를 확인해 보세요.</p>
-                    <p style="font-size: 0.85rem; color: #777;">* 업로드된 사진은 서버에 저장되지 않으며 오직 브라우저 내 인공지능 판단용으로만 사용됩니다.</p>
-                </section>
-
-                <div class="upload-area" style="padding: 20px; border: 2px dashed #ddd; border-radius: 10px; margin-bottom: 20px;">
-                    <p>분석할 이미지를 선택해 주세요</p>
-                    <input type="file" id="file-input" accept="image/*" class="file-input-button">
-                </div>
-
-                <div id="image-display-container">
-                    <img id="uploaded-image" src="#" alt="업로드된 이미지" style="display: none; max-width: 100%; border-radius: 8px; margin: 0 auto;">
-                </div>
-                <button type="button" id="predict-button" class="test-start-button" style="display: none; width: 100%;">AI 판단 시작하기</button>
-                <div id="loading-indicator" style="display: none; margin-top: 20px; font-weight: bold; color: #007bff;">인공지능이 분석 중입니다...</div>
                 <div id="label-container" style="margin-top: 20px;"></div>
-
-                <section class="test-meaning-section" style="margin-top: 50px; text-align: left; border-top: 1px solid #eee; padding-top: 30px;">
-                    <h3>제자도란 무엇인가?</h3>
-                    <p style="line-height: 1.6; color: #555;">예수님의 제자가 된다는 것은 단순히 지식을 얻는 것이 아니라, 그분의 삶의 태도를 닮아가는 과정입니다. 각기 다른 성격과 배경을 가진 12제자가 한 팀이 되었듯, 우리 모두는 각자의 고유한 모습으로 부르심을 받았습니다. 이 테스트를 통해 자신의 장점을 발견하고 부족한 영역을 기도로 채워가는 계기가 되길 바랍니다.</p>
-                </section>
+                
+                <div id="ai-result" class="result-box" style="display: none; margin-top: 30px; padding: 20px; border: 2px solid #FFAB40; border-radius: 10px; background: #FFF8E1;">
+                    <h2 id="disciple-name" style="color: #D84315;">분석 중...</h2>
+                    <p id="disciple-desc" style="line-height: 1.6; margin-top: 10px;"></p>
+                </div>
             </div>
         </div>
     </main>
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2026 오늘의 성경 구절. All rights reserved.</p>
-            <nav class="footer-nav">
-                <a href="#">개인정보처리방침</a>
-                <a href="#">이용약관</a>
-            </nav>
-        </div>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
-    <script type="text/javascript">
-        const URL = "https://teachablemachine.withgoogle.com/models/7BGS6hJC2/";
-        let model, maxPredictions;
 
-        const fileInput = document.getElementById('file-input');
-        const uploadedImage = document.getElementById('uploaded-image');
-        const predictButton = document.getElementById('predict-button');
-        const labelContainer = document.getElementById('label-container');
-        const loadingIndicator = document.getElementById('loading-indicator');
+    <script type="text/javascript">
+        // 모델 URL (Teachable Machine에서 업로드 후 생성된 URL을 여기에 넣으세요)
+        let URL = ""; // 예: "https://teachablemachine.withgoogle.com/models/xxxx/"
+
+        let model, webcam, labelContainer, maxPredictions;
 
         async function init() {
-            try {
-                const modelURL = URL + "model.json";
-                const metadataURL = URL + "metadata.json";
-
-                loadingIndicator.style.display = 'block'; 
-                predictButton.disabled = true; 
-
-                model = await tmImage.load(modelURL, metadataURL);
-                maxPredictions = model.getTotalClasses();
-
-                loadingIndicator.style.display = 'none'; 
-                predictButton.disabled = false; 
-
-                labelContainer.innerHTML = '<div style="color: #666;">준비가 되었습니다. 이미지를 업로드하세요.</div>';
-
-            } catch (error) {
-                console.error("모델 로드 중 오류 발생:", error);
-                labelContainer.innerHTML = '<div style="color: red;">모델 로드에 실패했습니다.</div>';
-                loadingIndicator.style.display = 'none';
+            if (!URL) {
+                alert("Teachable Machine 모델 URL을 설정해주세요! 현재는 데모 모드입니다.");
+                return;
             }
+
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+
+            document.getElementById('webcam-container').innerHTML = "모델 로딩 중...";
+
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+
+            const flip = true;
+            webcam = new tmImage.Webcam(300, 300, flip);
+            await webcam.setup();
+            await webcam.play();
+            window.requestAnimationFrame(loop);
+
+            document.getElementById("webcam-container").innerHTML = "";
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+            
+            labelContainer = document.getElementById("label-container");
+            for (let i = 0; i < maxPredictions; i++) {
+                labelContainer.appendChild(document.createElement("div"));
+            }
+        }
+
+        async function loop() {
+            webcam.update();
+            await predict();
+            window.requestAnimationFrame(loop);
         }
 
         async function predict() {
-            if (!model) return;
-            if (uploadedImage.src && uploadedImage.style.display !== 'none') {
-                labelContainer.innerHTML = ''; 
-                loadingIndicator.style.display = 'block'; 
-                predictButton.disabled = true; 
+            const prediction = await model.predict(webcam.canvas);
+            let highestProb = 0;
+            let bestMatch = "";
 
-                try {
-                    const prediction = await model.predict(uploadedImage);
-                    loadingIndicator.style.display = 'none'; 
-                    predictButton.disabled = false; 
-                    prediction.sort((a, b) => b.probability - a.probability);
+            for (let i = 0; i < maxPredictions; i++) {
+                const classPrediction = prediction[i].className + ": " + (prediction[i].probability * 100).toFixed(0) + "%";
+                labelContainer.childNodes[i].innerHTML = `
+                    <div style="margin-bottom: 5px;">
+                        <span style="display:inline-block; width:100px;">${prediction[i].className}</span>
+                        <div style="display:inline-block; width:200px; background:#eee; height:10px; border-radius:5px;">
+                            <div style="width:${(prediction[i].probability * 100)}%; background:#FFAB40; height:100%; border-radius:5px;"></div>
+                        </div>
+                    </div>
+                `;
 
-                    for (let i = 0; i < maxPredictions; i++) {
-                        const classPrediction = document.createElement("div");
-                        classPrediction.className = 'prediction-result-item'; 
-                        const probability = (prediction[i].probability * 100).toFixed(1);
-                        classPrediction.innerHTML = `${prediction[i].className}: <strong>${probability}%</strong>`;
-                        labelContainer.appendChild(classPrediction);
-                    }
-                } catch (error) {
-                    loadingIndicator.style.display = 'none';
-                    predictButton.disabled = false;
+                if (prediction[i].probability > highestProb) {
+                    highestProb = prediction[i].probability;
+                    bestMatch = prediction[i].className;
                 }
+            }
+
+            if (highestProb > 0.8) {
+                showResult(bestMatch);
             }
         }
 
-        fileInput.addEventListener('change', async (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    uploadedImage.src = e.target.result;
-                    uploadedImage.style.display = 'block'; 
-                    predictButton.style.display = 'block'; 
-                    labelContainer.innerHTML = '<div style="color: #666;">준비 완료! 판단 시작 버튼을 눌러주세요.</div>';
-                };
-                reader.readAsDataURL(file);
-            }
-        });
+        const discipleInfo = {
+            "개척하는 바울": "당신은 복음의 불모지를 개척하는 용기를 가졌습니다. 새로운 도전을 두려워하지 마세요.",
+            "지혜로운 솔로몬": "당신에게는 하나님의 지혜가 머물러 있습니다. 분별력 있게 세상을 이끌어갈 것입니다.",
+            "위로하는 바나바": "당신은 사람을 세우는 은사가 있습니다. 당신의 격려가 한 영혼을 살릴 것입니다.",
+            "충성된 다윗": "당신은 예배의 기쁨을 아는 사람입니다. 하나님을 향한 당신의 찬양을 기뻐하십니다.",
+            "담대한 에스더": "당신은 위기의 시대에 부름받은 사람입니다. 당신의 결단이 공동체를 구할 것입니다.",
+            "섬기는 마르다": "당신의 수고로운 손길을 주님께서 알고 계십니다. 봉사를 통해 하나님의 나라가 확장됩니다.",
+            "기도의 다니엘": "당신은 기도로 승부하는 영적 용사입니다. 무릎으로 세상을 이기는 삶을 사세요.",
+            "전하는 베드로": "당신은 사람을 낚는 어부입니다. 당신의 입술을 통해 복음의 능력이 나타날 것입니다."
+        };
 
-        predictButton.addEventListener('click', predict);
-        init();
+        function showResult(name) {
+            const resBox = document.getElementById('ai-result');
+            resBox.style.display = 'block';
+            document.getElementById('disciple-name').innerText = "결과: " + name;
+            document.getElementById('disciple-desc').innerText = discipleInfo[name] || "당신은 소중한 주님의 제자입니다.";
+        }
     </script>
 </body>
 </html>

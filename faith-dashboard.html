@@ -24,34 +24,48 @@
     <meta name="description" content="성도들의 신앙 점검 결과를 모아보고 전반적인 영적 상태를 파악합니다.">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-8260879821489900">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <main>
         <div class="container dashboard-container">
             <h1>신앙 점검 대시보드</h1>
-            <p>최근 성도들의 신앙 점검 결과입니다. (최대 100개)</p>
-            <div id="data-table-container">
-                <table id="faithResultsTable">
-                    <thead>
-                        <tr>
-                            <th>이름</th>
-                            <th>영적 민감성</th>
-                            <th>우선순위</th>
-                            <th>말씀 수용성</th>
-                            <th>실천적 순종</th>
-                            <th>공동체 의식</th>
-                            <th>사랑의 나눔</th>
-                            <th>제출일</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Data will be inserted here by JavaScript -->
-                    </tbody>
-                </table>
+            
+            <section class="summary-section card" style="margin-bottom: 30px;">
+                <h2>📊 공동체 영적 건강도 (평균)</h2>
+                <div style="max-width: 500px; margin: 0 auto;">
+                    <canvas id="averageFaithChart"></canvas>
+                </div>
+                <p id="totalCount" style="text-align: center; margin-top: 15px; color: #666; font-weight: bold;"></p>
+            </section>
+
+            <div id="data-table-container" class="card">
+                <h2>📋 최근 점검 기록</h2>
+                <div style="overflow-x: auto;">
+                    <table id="faithResultsTable">
+                        <thead>
+                            <tr>
+                                <th>이름</th>
+                                <th>영적 민감성</th>
+                                <th>우선순위</th>
+                                <th>말씀 수용성</th>
+                                <th>실천적 순종</th>
+                                <th>공동체 의식</th>
+                                <th>사랑의 나눔</th>
+                                <th>제출일</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
                 <p id="loadingMessage">데이터를 불러오는 중...</p>
                 <p id="errorMessage" style="color: red; display: none;">데이터를 불러오지 못했습니다. Firebase 설정을 확인해주세요.</p>
             </div>
+            
+            <button onclick="window.location.href='faith-checkup.html'" style="margin-top:20px; width: 100%;">나도 점검하기</button>
         </div>
     </main>
     <footer>

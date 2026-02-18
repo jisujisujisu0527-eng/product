@@ -98,11 +98,50 @@ function showResult(scores) {
         }
     });
 
-    // 간단한 유형 분석
+    // 간단한 유형 분석 및 결론 도출
     const maxScore = Math.max(...scores);
     const maxIdx = scores.indexOf(maxScore);
-    const types = ["민감한 동행자", "충성된 일꾼", "말씀의 사람", "행동하는 제자", "교회의 기둥", "사랑의 통로"];
-    document.getElementById('typeDescription').innerText = `성도님은 현재 [${types[maxIdx]}] 유형에 가깝습니다!`;
+    const minScore = Math.min(...scores);
+    const minIdx = scores.indexOf(minScore);
+
+    const types = {
+        ko: ["민감한 동행자", "충성된 일꾼", "말씀의 사람", "행동하는 제자", "교회의 기둥", "사랑의 통로"],
+        en: ["Sensitive Companion", "Faithful Worker", "Person of the Word", "Acting Disciple", "Pillar of the Church", "Channel of Love"]
+    };
+
+    const feedbacks = {
+        ko: [
+            "주님의 세밀한 음성에 귀 기울이는 모습이 아름답습니다. 그 평안을 주변에 흘려보내 보세요.",
+            "하나님 나라를 위해 헌신하는 당신의 손길이 귀합니다. 때로는 주님 안에서 참된 안식을 누리시기 바랍니다.",
+            "말씀을 사랑하는 당신, 깊은 묵상이 삶의 능력이 될 것입니다. 읽은 말씀을 하나씩 실천해 보세요.",
+            "행함이 있는 믿음을 가진 당신은 세상의 빛입니다. 그 열정이 식지 않도록 기도로 기둥을 세우세요.",
+            "공동체를 아끼는 당신의 마음이 교회를 든든히 세웁니다. 소외된 지체에게 먼저 다가가 주세요.",
+            "그리스도의 사랑을 실천하는 당신을 통해 주님이 기뻐하십니다. 더 넓은 세상을 향해 나아가세요."
+        ],
+        en: [
+            "Your attentiveness to God's still small voice is beautiful. Share that peace with those around you.",
+            "Your dedication to God's kingdom is precious. Remember to find true rest in the Lord as well.",
+            "As a lover of the Word, deep meditation will be your strength. Try practicing what you read one by one.",
+            "You are the light of the world with faith that acts. Build a pillar of prayer so your passion stays bright.",
+            "Your love for the community strengthens the church. Reach out to those who might feel left out.",
+            "The Lord rejoices through you as you practice Christ's love. Step out towards a wider world."
+        ]
+    };
+
+    const currentLang = localStorage.getItem('lang') || 'ko';
+    const typeTitle = types[currentLang][maxIdx];
+    const feedbackMsg = feedbacks[currentLang][maxIdx];
+    const weakArea = currentLang === 'ko' ? 
+        ['영적 민감성', '우선순위', '말씀 수용성', '실천적 순종', '공동체 의식', '사랑의 나눔'][minIdx] :
+        ['Spiritual Sensitivity', 'Priority', 'Word Receptivity', 'Practical Obedience', 'Community Awareness', 'Channel of Love'][minIdx];
+
+    document.getElementById('typeDescription').innerHTML = `
+        <div style="font-size:1.4rem; color:#D84315; margin-bottom:10px;">[${typeTitle}]</div>
+        <p style="font-weight:normal; color:#333;">${feedbackMsg}</p>
+        <p style="margin-top:15px; font-size:0.9rem; color:#666;">
+            ${currentLang === 'ko' ? '집중 보완 필요 영역:' : 'Area for Growth:'} <span style="color:#D84315; font-weight:bold;">${weakArea}</span>
+        </p>
+    `;
     
     // 추가: 대시보드 링크 추가
     const resultButtons = document.querySelector('#resultArea button');

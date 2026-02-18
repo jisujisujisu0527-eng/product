@@ -37,9 +37,13 @@
             </section>
 
             <div id="surveyArea" class="card">
-                <h2>📋 주간 신앙 자가진단 (9문항)</h2>
-                <p style="font-size: 0.9rem; color: #888; margin-bottom: 20px;">각 질문에 솔직하게 답해 주세요. 결과는 개인의 영적 여정을 위한 참고 자료로 활용됩니다.</p>
+                <h2 data-i18n="checkup_title">📋 주간 신앙 자가진단 (9문항)</h2>
+                <p style="font-size: 0.9rem; color: #888; margin-bottom: 20px;" data-i18n="checkup_subtitle">각 질문에 솔직하게 답해 주세요. 결과는 개인의 영적 여정을 위한 참고 자료로 활용됩니다.</p>
                 <form id="faithForm">
+                    <div class="input-group" style="margin-bottom: 20px;">
+                        <label for="userName" style="display: block; margin-bottom: 5px; font-weight: bold;" data-i18n="label_name">이름 (또는 닉네임)</label>
+                        <input type="text" id="userName" name="userName" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" placeholder="이름을 입력하세요">
+                    </div>
                     <div class="question-group">
                         <h3 style="color: #007bff; border-bottom: 1px solid #eee; padding-bottom: 5px;">[영역 1] 내면의 평안과 우선순위</h3>
                         <div class="question">
