@@ -3,121 +3,182 @@ const blogPosts = [
         id: 1, 
         date: "2026-02-18",
         videoId: "CoJki7bCgYU",
+        hasVideo: true,
         ko: {
             title: "AI와 영성: 기계가 기도할 수 있을까?",
             excerpt: "인공지능의 발전이 인간 고유의 영역인 기도와 묵상에 던지는 질문들을 살펴봅니다.",
-            content: `
-                <p>인공지능(AI)이 설교문을 쓰고 기도를 대신해주는 시대, 우리는 '영성'의 본질이 무엇인지 다시 묻게 됩니다.</p>
-                <h3>영혼 없는 지능의 한계</h3>
-                <p>AI는 수억 개의 문장을 학습하여 완벽한 문법의 기도문을 낼 수 있지만, 하나님과의 '인격적 관계'는 모방할 수 없습니다. 성경은 우리가 '마음을 다해' 기도하라고 가르칩니다.</p>
-            `
+            content: `<p>AI가 기도를 대신해주는 시대, 기도의 본질은 언어가 아니라 '관계'에 있음을 잊지 말아야 합니다.</p>`
         },
         en: {
             title: "AI and Spirituality: Can a Machine Pray?",
-            excerpt: "Exploring the questions that AI advancement poses to the unique human realms of prayer and meditation.",
-            content: `
-                <p>In an era where AI writes sermons and prayers, we must ask: What is the essence of spirituality?</p>
-                <h3>Limitations of Soulless Intelligence</h3>
-                <p>AI can learn millions of sentences to produce grammatically perfect prayers, but it cannot mimic a "personal relationship" with God. The Bible teaches us to pray with all our hearts.</p>
-                <p>Technology cannot cry out to God as "Father". The guidance of the Holy Spirit is a blessing reserved only for humanity.</p>
-            `
+            excerpt: "Exploring the questions that AI advancement poses to the unique human realms of prayer.",
+            content: `<p>In an era of AI-generated prayers, we must remember that the essence of prayer is 'relationship,' not just words.</p>`
         }
     },
     { 
         id: 2, 
         date: "2026-02-17",
-        videoId: "vP_6-8WI9os",
+        hasVideo: false,
+        type: "guide",
         ko: {
             title: "챗GPT를 활용한 성경 공부 가이드",
-            excerpt: "대규모 언어 모델을 활용하여 성경의 역사적 배경을 깊이 있게 연구하는 방법을 소개합니다.",
-            content: `<p>챗GPT는 성경의 복잡한 역사적 배경이나 원어의 의미를 빠르게 찾아주는 훌륭한 조수가 될 수 있습니다.</p>`
+            alternateContent: `
+                <div class="letter-box">
+                    <h3>📖 AI를 성경 공부의 '조수'로 삼는 법</h3>
+                    <p>안녕하세요! 성경 공부가 막막할 때 챗GPT에게 이렇게 물어보세요.</p>
+                    <ul>
+                        <li><strong>배경 질문:</strong> "빌립보서가 기록될 당시 사도 바울의 상황은 어땠나요?"</li>
+                        <li><strong>단어 탐구:</strong> "이 구절에서 '사랑'이라는 단어의 헬라어 원형 '아가페'의 의미를 설명해줘."</li>
+                        <li><strong>적용 돕기:</strong> "이 말씀을 오늘날 직장인들이 어떻게 실천할 수 있을까?"</li>
+                    </ul>
+                    <p class="tip">주의: AI는 훌륭한 조수이지만, 최종 판단은 항상 성경과 기도 속에 하셔야 합니다!</p>
+                </div>
+            `
         },
         en: {
             title: "A Guide to Bible Study Using ChatGPT",
-            excerpt: "Introducing ways to use Large Language Models for in-depth research into the historical background of the Bible.",
-            content: `
-                <p>ChatGPT can be an excellent assistant for quickly finding the complex historical context of the Bible or the meanings of original Greek and Hebrew words.</p>
-                <h3>Wise Usage</h3>
-                <p>Instead of just looking for answers, ask questions. "How did the Jewish purity laws of the time affect this passage?" Such questions add depth to your meditation.</p>
+            alternateContent: `
+                <div class="letter-box">
+                    <h3>📖 How to use AI as your Bible Study Assistant</h3>
+                    <p>Stuck in your study? Try asking ChatGPT these questions:</p>
+                    <ul>
+                        <li><strong>Context:</strong> "What was Paul's situation when he wrote Philippians?"</li>
+                        <li><strong>Word Study:</strong> "Explain the Greek word 'Agape' used in this verse."</li>
+                        <li><strong>Application:</strong> "How can young professionals apply this teaching today?"</li>
+                    </ul>
+                    <p class="tip">Note: AI is an assistant; the Holy Spirit is your Teacher!</p>
+                </div>
             `
         }
     },
     { 
         id: 3, 
         date: "2026-02-16",
-        videoId: "Ka9Xbt6AtkY",
+        hasVideo: false,
+        type: "comic",
         ko: {
             title: "AI 시대, 인간의 고유성은 어디에 있는가?",
-            excerpt: "하나님의 형상(Imago Dei)으로 창조된 인간이 기계와 구별되는 지점을 탐구합니다.",
-            content: `<p>우리는 지능이 뛰어난 생물로서가 아니라, 하나님의 형상으로서 창조되었습니다.</p>`
+            alternateContent: `
+                <div class="comic-strip">
+                    <div class="comic-panel"><strong>[장면 1]</strong> AI가 완벽한 설교를 작성함. "와, 정말 논리적이야!"</div>
+                    <div class="comic-panel"><strong>[장면 2]</strong> 하지만 한 성도가 슬픔에 잠겼을 때, AI는 차가운 텍스트만 보냄.</div>
+                    <div class="comic-panel"><strong>[장면 3]</strong> 곁에서 함께 울어주는 친구. "이게 바로 하나님의 형상(Imago Dei)이야."</div>
+                    <p class="message">AI는 지능을 가졌지만, 우리는 '심장'과 '하나님의 영'을 가졌습니다.</p>
+                </div>
+            `
         },
         en: {
             title: "Where is Human Uniqueness in the AI Era?",
-            excerpt: "Exploring how humans, created in the Image of God (Imago Dei), are distinguished from machines.",
-            content: `
-                <p>We were created not just as highly intelligent biological beings, but in the Image of God (Imago Dei).</p>
-                <p>No matter how sophisticated an AI's ethical judgment may be, it is merely the result of processed data. Humans have received a special calling to participate in God's rule and care for creation.</p>
+            alternateContent: `
+                <div class="comic-strip">
+                    <div class="comic-panel"><strong>[Panel 1]</strong> AI writes a perfect sermon. "So logical!"</div>
+                    <div class="comic-panel"><strong>[Panel 2]</strong> A member is crying. AI sends a structured text.</div>
+                    <div class="comic-panel"><strong>[Panel 3]</strong> A friend sits and cries with them. "This is Imago Dei."</div>
+                    <p class="message">AI has Intelligence; we have the Breath of Life.</p>
+                </div>
             `
         }
     },
     { 
         id: 4, 
         date: "2026-02-15",
-        videoId: "v7bcY_f_ExA",
+        hasVideo: false,
+        type: "letter",
         ko: {
             title: "디지털 사막에서 만나는 하나님",
-            excerpt: "침묵의 영성을 회복하고 하나님께 집중하는 기술적 금식 방법을 나눕니다.",
-            content: `<p>현대인의 스마트폰은 새로운 우상이 되기 쉽습니다. 디지털 금식은 결단입니다.</p>`
+            alternateContent: `
+                <div class="meditation-card">
+                    <p>"스마트폰 소리를 잠재우고, 영혼의 귀를 여십시오."</p>
+                    <p>오늘의 영적 훈련: <strong>'기술적 금식'</strong></p>
+                    <ol>
+                        <li>오전 9시까지 스마트폰을 켜지 않습니다.</li>
+                        <li>식사 중에는 기기를 멀리합니다.</li>
+                        <li>침실에는 성경책만 둡니다.</li>
+                    </ol>
+                    <p>사막은 고독한 곳이 아니라, 하나님과 단둘이 만나는 지성소입니다.</p>
+                </div>
+            `
         },
         en: {
             title: "Meeting God in the Digital Wilderness",
-            excerpt: "Sharing methods of 'technical fasting' to restore the spirituality of silence and focus on God.",
-            content: `
-                <p>The modern smartphone easily becomes a new idol. Digital fasting is not a simple rejection of technology, but a decision to make space for God.</p>
-                <p>Try setting a specific time of day as your 'digital wilderness'. In that silence, you will finally begin to hear the still, small voice of God.</p>
+            alternateContent: `
+                <div class="meditation-card">
+                    <p>"Silence the notifications, open the ears of your soul."</p>
+                    <p>Spiritual Discipline: <strong>'Tech Fasting'</strong></p>
+                    <ol>
+                        <li>No phone until 9:00 AM.</li>
+                        <li>No devices at the table.</li>
+                        <li>Only the Bible in the bedroom.</li>
+                    </ol>
+                    <p>The wilderness is not a lonely place; it is a sanctuary for you and God.</p>
+                </div>
             `
         }
     },
     { 
         id: 5, 
         date: "2026-02-14", 
-        videoId: "1pX9Z_L2Xsc",
-        ko: { title: "예배의 본질과 온라인 환경", excerpt: "온라인 환경에서의 참된 예배를 고민합니다.", content: "<p>예배는 참여하는 것입니다.</p>" },
-        en: { title: "The Essence of Worship and the Online Environment", excerpt: "Contemplating true worship in a digital setting.", content: "<p>Worship is not just watching; it is participating. The anointing of the Holy Spirit happens in our hearts, beyond the screen.</p>" }
+        hasVideo: false,
+        type: "guide",
+        ko: {
+            title: "예배의 본질과 온라인 환경",
+            alternateContent: `
+                <div class="letter-box">
+                    <h3>💌 성도님께 드리는 편지</h3>
+                    <p>스크린 앞에서 예배를 드릴 때, 우리는 종종 관람자가 되곤 합니다. 하지만 주님은 우리의 '참여'를 원하십니다.</p>
+                    <p>온라인 예배 팁: 옷을 갖춰 입고, 성경책을 펼치고, 소리 내어 찬양하세요. 주님은 거실 한가운데에도 계십니다.</p>
+                </div>
+            `
+        },
+        en: {
+            title: "The Essence of Worship and the Online Environment",
+            alternateContent: `
+                <div class="letter-box">
+                    <h3>💌 A Letter to You</h3>
+                    <p>In front of a screen, we often become spectators. But God wants our 'participation'.</p>
+                    <p>Tip: Dress up, open your Bible, and sing out loud. The Lord is in your living room too.</p>
+                </div>
+            `
+        }
     },
     { 
         id: 6, 
         date: "2026-02-13", 
-        videoId: "X_K6Z9XOnXY",
-        ko: { title: "메타버스와 선교의 새로운 지평", excerpt: "가상 현실 공간에서의 복음 전파 가능성.", content: "<p>온라인 공간도 주님의 영역입니다.</p>" },
-        en: { title: "Metaverse and the New Horizon of Mission", excerpt: "Possibilities of proclaiming the Gospel in virtual reality spaces.", content: "<p>The online space is also a realm ruled by the Lord. We need a perspective that sees the Metaverse as a fertile ground for missions.</p>" }
+        hasVideo: false,
+        type: "guide",
+        ko: { title: "메타버스와 선교의 새로운 지평", alternateContent: "<div class='letter-box'><p>가상 세계도 하나님이 통치하시는 영역입니다. 아바타 뒤에 숨겨진 영혼을 향해 복음의 빛을 비춰야 합니다.</p></div>" },
+        en: { title: "Metaverse and the New Horizon of Mission", alternateContent: "<div class='letter-box'><p>The virtual world is also under God's sovereignty. Shine the light of Christ on the souls behind the avatars.</p></div>" }
     },
     { 
         id: 7, 
         date: "2026-02-12", 
-        videoId: "v8WdBZ6fy68",
-        ko: { title: "알고리즘과 영적 형성", excerpt: "편향된 신앙관의 위험성을 경계합니다.", content: "<p>말씀을 골고루 섭취해야 합니다.</p>" },
-        en: { title: "Algorithms and Spiritual Formation", excerpt: "Guarding against the danger of a biased faith perspective.", content: "<p>We must beware of algorithms that only let us hear what we want to hear, and instead, consume the entirety of God's Word.</p>" }
+        hasVideo: false,
+        type: "guide",
+        ko: { title: "알고리즘과 영적 형성", alternateContent: "<div class='letter-box'><p>알고리즘이 주는 편안함에 안주하지 마세요. 쓴 소리도 달게 받는 영적 분별력이 필요한 때입니다.</p></div>" },
+        en: { title: "Algorithms and Spiritual Formation", alternateContent: "<div class='letter-box'><p>Don't settle for the comfort of algorithms. We need spiritual discernment to embrace challenging truths.</p></div>" }
     },
     { 
         id: 8, 
         date: "2026-02-11", 
-        videoId: "kb_IdZOf9iw",
-        ko: { title: "AI 시대의 기독교 윤리관", excerpt: "기술 발전 속에서 지켜야 할 가치.", content: "<p>생명 존중과 정의가 중요합니다.</p>" },
-        en: { title: "Christian Ethics in the AI Era", excerpt: "Values to uphold amidst technological advancement.", content: "<p>What is more important than the convenience of technology is the respect for life and the realization of justice.</p>" }
+        hasVideo: false,
+        type: "guide",
+        ko: { title: "AI 시대의 기독교 윤리관", alternateContent: "<div class='letter-box'><p>효율성보다 중요한 것은 '이웃 사랑'입니다. 기술이 사람을 소외시키지 않도록 감시하는 것이 우리의 소명입니다.</p></div>" },
+        en: { title: "Christian Ethics in the AI Era", alternateContent: "<div class='letter-box'><p>Neighborly love is more important than efficiency. It is our calling to ensure technology doesn't isolate humanity.</p></div>" }
     },
     { 
         id: 9, 
         date: "2026-02-10", 
-        videoId: "PZ4VzhIuKCQ",
-        ko: { title: "디지털 디톡스와 참된 안식", excerpt: "안식일 계명을 통한 쉼의 재해석.", content: "<p>진정한 안식은 로그아웃에서 시작됩니다.</p>" },
-        en: { title: "Digital Detox and True Sabbath", excerpt: "Reinterpreting rest through the Sabbath commandment.", content: "<p>True rest begins with logging out. Practice enjoying true peace within the Lord, away from your devices.</p>" }
+        hasVideo: false,
+        type: "guide",
+        ko: { title: "디지털 디톡스와 참된 안식", alternateContent: "<div class='letter-box'><p>진정한 안식은 로그아웃에서 시작됩니다. 기기를 내려놓고 하나님의 창조 세계를 바라보세요.</p></div>" },
+        en: { title: "Digital Detox and True Sabbath", alternateContent: "<div class='letter-box'><p>True Sabbath starts with logging out. Put down your device and behold God's creation.</p></div>" }
     },
     { 
         id: 10, 
         date: "2026-02-09", 
-        videoId: "Z2X5Scaq7TY",
-        ko: { title: "온라인 공동체의 성경적 모델", excerpt: "디지털 시대의 에클레시아 정의.", content: "<p>교회는 사람들의 모임입니다.</p>" },
-        en: { title: "Biblical Model of Online Community", excerpt: "Defining 'Ecclesia' in the digital age.", content: "<p>The Church is not a place, but a gathering of people. If there is sincere love and care online, that is the Body of Christ.</p>" }
+        hasVideo: false,
+        type: "guide",
+        ko: { title: "온라인 공동체의 성경적 모델", alternateContent: "<div class='letter-box'><p>교회는 장소가 아니라 부르심을 받은 사람들의 모임입니다. 디지털 공간에서도 거룩한 연대가 가능합니다.</p></div>" },
+        en: { title: "Biblical Model of Online Community", alternateContent: "<div class='letter-box'><p>The Church is not a place, but a gathering of the called. Holy solidarity is possible even in digital spaces.</p></div>" }
     }
 ];
