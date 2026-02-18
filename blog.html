@@ -63,8 +63,9 @@
     </footer>
 
     <script src="translations.js"></script>
-    <script src="main.js"></script>
     <script src="blog-data.js"></script>
+    <script type="module" src="firebase-firestore-service.js"></script>
+    <script type="module" src="main.js" defer></script>
     <script>
         function renderBlogList() {
             const blogList = document.getElementById('blog-list');

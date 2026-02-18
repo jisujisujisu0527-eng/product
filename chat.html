@@ -75,7 +75,8 @@
     </main>
 
     <script src="translations.js"></script>
-    <script src="main.js"></script>
+    <script type="module" src="firebase-firestore-service.js"></script>
+    <script type="module" src="main.js" defer></script>
     <script type="module">
         const t = (key) => (translations[currentLang] || translations['en'])[key] || key;
 
