@@ -70,10 +70,27 @@ h1, h2, h3, .verse-text { font-family: 'Lora', serif; }
 }
 .mood-btn:hover { background: var(--accent-color); color: white; }
 
-/* Existing Buttons */
-.primary-btn, .secondary-btn {
-    padding: 12px 28px; border-radius: 50px; border: none; cursor: pointer; font-weight: 600;
-    transition: var(--transition); font-family: 'Inter', sans-serif;
+/* Buttons - Expert Feedback: Layout Flexibility */
+.primary-btn, .secondary-btn, .mood-btn {
+    min-width: 120px;
+    width: auto; /* 고정 크기 제거 */
+    padding: 12px 24px; /* 여유 있는 패딩 */
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap; /* 글자 줄바꿈 방지 */
+}
+
+/* Domain-specific Canonical Refinements */
+body::after {
+    content: "dailybible.uk | product-cgy.pages.dev";
+    display: none; /* For metadata check */
 }
 .primary-btn { background-color: var(--primary-color); color: white; }
 .secondary-btn { background-color: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); }

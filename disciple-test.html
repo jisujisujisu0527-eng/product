@@ -27,10 +27,15 @@
                     <li><a href="chat.html" data-i18n="nav_chat">Apostle Chat</a></li>
                 </ul>
                 <div class="lang-switcher">
-                    <button onclick="changeLanguage('ko')" class="lang-btn">KO</button>
-                    <button onclick="changeLanguage('en')" class="lang-btn">EN</button>
-                    <button onclick="changeLanguage('es')" class="lang-btn">ES</button>
-                    <button onclick="changeLanguage('fr')" class="lang-btn">FR</button>
+                    <div id="streak-badge" style="display:none; margin-right: 15px; font-size: 0.8rem; font-weight: bold; color: #E65100;">
+                        <i class="fas fa-fire"></i> <span id="streak-count">0</span>
+                    </div>
+                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 5px 10px; border-radius: 15px; background: var(--bg-light); border: 1px solid var(--accent-color); color: var(--primary-color); font-family: inherit;">
+                        <option value="en">EN</option>
+                        <option value="ko">KO</option>
+                        <option value="fr">FR</option>
+                        <option value="es">ES</option>
+                    </select>
                 </div>
             </nav>
         </div>
