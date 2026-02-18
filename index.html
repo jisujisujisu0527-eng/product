@@ -66,32 +66,39 @@
     <main>
         <div class="container">
             <section class="hero-section">
-                <h1 data-i18n="main_title">Daily Spiritual Food</h1>
+                <h1 data-i18n="main_title">Daily Spiritual Rest</h1>
                 
+                <!-- Mood Curation -->
+                <p data-i18n="mood_title" style="margin-bottom: 15px; font-style: italic; color: var(--accent-color);">How is your heart today?</p>
+                <div class="mood-container">
+                    <button onclick="getVerseByMood('anxious')" class="mood-btn" data-i18n="mood_anxious">😰 Anxious</button>
+                    <button onclick="getVerseByMood('lonely')" class="mood-btn" data-i18n="mood_lonely">🏚️ Lonely</button>
+                    <button onclick="getVerseByMood('grateful')" class="mood-btn" data-i18n="mood_grateful">🙏 Grateful</button>
+                    <button onclick="getVerseByMood('tired')" class="mood-btn" data-i18n="mood_tired">😫 Tired</button>
+                    <button onclick="getVerseByMood('joyful')" class="mood-btn" data-i18n="mood_joyful">✨ Joyful</button>
+                </div>
+
                 <div class="bible-app grid-3">
                     <div id="bible-box" class="card">
-                        <h3 data-i18n="daily_bible">📖 오늘의 말씀</h3>
-                        <p id="bible-text" data-i18n="loading">Loading Holy Scripture...</p>
+                        <h3 data-i18n="daily_bible">📜 Today's Word</h3>
+                        <p id="bible-text" data-i18n="loading">Loading...</p>
                         <small id="bible-ref"></small>
                     </div>
 
                     <div id="prayer-box" class="card">
-                        <h3 data-i18n="daily_prayer">🙏 오늘의 기도</h3>
-                        <p id="prayer-text" data-i18n="loading">Loading Today's Prayer...</p>
+                        <h3 data-i18n="daily_prayer">🙏 Today's Prayer</h3>
+                        <p id="prayer-text" data-i18n="loading">Loading...</p>
                     </div>
 
                     <div id="mission-box" class="card">
-                        <h3 data-i18n="daily_mission">📢 오늘의 전도</h3>
-                        <p id="mission-text" data-i18n="loading">Loading Today's Mission...</p>
+                        <h3 data-i18n="daily_mission">📢 Today's Mission</h3>
+                        <p id="mission-text" data-i18n="loading">Loading...</p>
                     </div>
                 </div>
 
                 <div class="button-container">
-                    <button onclick="generateVerseCard()" class="primary-btn">
-                        <i class="fas fa-image"></i> <span data-i18n="btn_generate_card">Generate Card</span>
-                    </button>
-                    <button id="share-verse-btn" class="secondary-btn">
-                        <i class="fas fa-share-alt"></i> <span data-i18n="btn_share">Share Verse</span>
+                    <button onclick="downloadVerseCard()" class="primary-btn">
+                        <i class="fas fa-file-download"></i> <span data-i18n="btn_generate_card">Save Verse Card</span>
                     </button>
                     <button id="theme-toggle-btn" class="mini-btn">
                         <i class="fas fa-adjust"></i>

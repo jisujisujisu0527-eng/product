@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
 
 :root {
-    --primary-color: #2C3E50; /* British Navy */
-    --accent-color: #B08968;  /* Warm Gold/Oak */
-    --bg-light: #F9F7F2;     /* Off-white paper feel */
-    --text-main: #34495E;
+    --primary-color: #4A3B2A; /* 고전적 브라운 */
+    --accent-color: #B08968;  
+    --bg-light: #FDFAF5;     /* 고전적 종이색 */
+    --text-main: #2C2C2C;
     --text-muted: #7F8C8D;
     --card-bg: #FFFFFF;
     --shadow: 0 10px 30px rgba(0,0,0,0.05);
@@ -15,100 +15,35 @@ body.dark-mode {
     --bg-light: #1A1A1A;
     --card-bg: #2C2C2C;
     --text-main: #E0E0E0;
-    --primary-color: #D4AF37;
+    --primary-color: #D4AF37; /* 금색 포인트 */
     --shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'EB Garamond', serif;
     background-color: var(--bg-light);
     color: var(--text-main);
     line-height: 1.6;
     transition: var(--transition);
 }
 
-h1, h2, h3, .verse-text {
-    font-family: 'Lora', serif;
-}
+h1, h2, h3, .verse-text { font-family: 'Lora', serif; }
 
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+.container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
 
-/* Navbar Upgrade */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+/* Glow Animation for Candles */
+@keyframes glow {
+    0% { box-shadow: 0 0 5px #FFAB40; }
+    50% { box-shadow: 0 0 20px #FFAB40; }
+    100% { box-shadow: 0 0 5px #FFAB40; }
 }
+.glow-animation { animation: glow 1.5s infinite; border-color: #FFAB40 !important; }
 
-.nav-logo a {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    text-decoration: none;
-    letter-spacing: -1px;
-}
-
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 25px;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: var(--text-main);
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: var(--transition);
-}
-
-.nav-links a:hover, .nav-links a.active {
-    color: var(--accent-color);
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.7; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* Hero Section */
-.hero-section {
-    text-align: center;
-    padding: 80px 0;
-}
-
-.hero-section h1 {
-    font-size: 2.8rem;
-    margin-bottom: 40px;
-    color: var(--primary-color);
-}
-
-/* Bible App Daily Content Grid */
-.grid-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-bottom: 40px;
-}
-
-@media (max-width: 900px) {
-    .grid-3 {
-        grid-template-columns: 1fr;
-    }
-}
+/* Grid Layouts */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+@media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr; } }
 
 .bible-app .card {
     background: var(--card-bg);
@@ -116,151 +51,35 @@ h1, h2, h3, .verse-text {
     border-radius: 15px;
     box-shadow: var(--shadow);
     text-align: left;
-    display: flex;
-    flex-direction: column;
+    border: 1px solid rgba(0,0,0,0.03);
 }
 
 .bible-app h3 {
-    font-size: 1.1rem;
-    color: var(--accent-color);
+    font-size: 1.2rem;
+    color: var(--primary-color);
     margin-bottom: 15px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    padding-bottom: 10px;
-    font-weight: 700;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 8px;
 }
 
-.bible-app p {
-    font-size: 1.05rem;
-    line-height: 1.7;
-    color: var(--text-main);
-    flex-grow: 1;
+/* Mood Buttons */
+.mood-container { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 30px; }
+.mood-btn { 
+    padding: 8px 20px; border-radius: 20px; border: 1px solid var(--accent-color);
+    background: transparent; cursor: pointer; transition: var(--transition); font-family: 'EB Garamond', serif;
 }
+.mood-btn:hover { background: var(--accent-color); color: white; }
 
-#bible-ref {
-    display: block;
-    margin-top: 15px;
-    font-weight: 600;
-    color: var(--accent-color);
-    font-size: 0.85rem;
-    text-transform: uppercase;
+/* Existing Buttons */
+.primary-btn, .secondary-btn {
+    padding: 12px 28px; border-radius: 50px; border: none; cursor: pointer; font-weight: 600;
+    transition: var(--transition); font-family: 'Inter', sans-serif;
 }
+.primary-btn { background-color: var(--primary-color); color: white; }
+.secondary-btn { background-color: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); }
 
-/* Verse Card - The Centerpiece */
-.verse-text-section.card {
-    background: var(--card-bg);
-    padding: 60px 40px;
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 40px;
-}
-
-.verse-text-section.card::before {
-    content: '"';
-    position: absolute;
-    top: 20px;
-    left: 40px;
-    font-size: 8rem;
-    color: rgba(176, 137, 104, 0.1);
-    font-family: 'Lora', serif;
-}
-
-#verse-text {
-    font-size: 1.8rem;
-    font-style: italic;
-    color: var(--primary-color);
-    margin-bottom: 25px;
-    position: relative;
-    z-index: 1;
-}
-
-#verse-reference {
-    font-weight: 600;
-    color: var(--accent-color);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-/* Buttons */
-.primary-btn, .secondary-btn, .mini-btn {
-    padding: 12px 28px;
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    transition: var(--transition);
-    font-family: 'Inter', sans-serif;
-}
-
-.primary-btn {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-.primary-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.secondary-btn {
-    background-color: transparent;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-}
-
-/* Grid Layouts */
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin: 40px 0;
-}
-
-.info-card {
-    background: var(--card-bg);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-}
-
-.info-card:hover {
-    transform: translateY(-5px);
-}
-
-.info-card i {
-    font-size: 2rem;
-    color: var(--accent-color);
-    margin-bottom: 20px;
-}
-
-/* Footer */
-footer {
-    padding: 60px 0;
-    margin-top: 80px;
-    background: #fff;
-    border-top: 1px solid #eee;
-}
-
-.footer-content {
-    text-align: center;
-}
-
-.footer-nav {
-    margin-top: 20px;
-}
-
-.footer-nav a {
-    margin: 0 15px;
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: 0.9rem;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .hero-section h1 { font-size: 2rem; }
-    #verse-text { font-size: 1.4rem; }
-    .nav-links { display: none; } /* Mobile menu needed */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
 }
