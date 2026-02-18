@@ -75,6 +75,28 @@
                     <p data-i18n="loading">Loading...</p>
                 </div>
             </div>
+
+            <hr style="margin: 60px 0; border: none; border-top: 1px solid #eee;">
+
+            <!-- Suggestion Board -->
+            <div class="board-container" style="border: 2px dashed var(--accent-color); padding: 30px; border-radius: 20px; background: rgba(176, 137, 104, 0.05);">
+                <div class="board-header">
+                    <i class="fas fa-lightbulb fa-2x" style="color: #FFD700;"></i>
+                    <h2 data-i18n="request_board_title">💡 dailybible.uk에 제안하기</h2>
+                </div>
+                <p style="margin-bottom: 20px; color: #666;" data-i18n="request_board_desc">사이트에 추가되었으면 하는 기능이나 의견을 자유롭게 남겨주세요!</p>
+                
+                <div class="card">
+                    <input type="text" id="req-title" class="input-box" data-i18n="request_title_placeholder" placeholder="제안 제목">
+                    <textarea id="req-content" class="input-box" data-i18n="request_content_placeholder" placeholder="상세 내용을 적어주세요"></textarea>
+                    <button class="primary-btn" onclick="submitRequest()" style="width: 100%;" data-i18n="btn_submit_request">의견 보내기</button>
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <h3 data-i18n="recent_requests_title" style="margin-bottom: 20px;">최근 도착한 제안들</h3>
+                    <div id="request-list"></div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -154,6 +176,59 @@
 
             if (qnaList.innerHTML === "") qnaList.innerHTML = `<p>${currentLang === 'ko' ? '게시글이 없습니다.' : 'No posts yet.'}</p>`;
             if (churchList.innerHTML === "") churchList.innerHTML = `<p>${currentLang === 'ko' ? '게시글이 없습니다.' : 'No posts yet.'}</p>`;
+        });
+
+        // User Requests Logic
+        window.submitRequest = async function() {
+            const titleEl = document.getElementById('req-title');
+            const contentEl = document.getElementById('req-content');
+            const title = titleEl.value.trim();
+            const content = contentEl.value.trim();
+
+            if(!title || !content) {
+                alert(translations[currentLang].request_validation || "Please enter both title and content!");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "user_requests"), {
+                    title: title,
+                    content: content,
+                    status: translations[currentLang].request_status_pending || "Pending",
+                    createdAt: serverTimestamp(),
+                    lang: currentLang
+                });
+                alert(translations[currentLang].request_thanks || "Thank you for your suggestion!");
+                titleEl.value = '';
+                contentEl.value = '';
+            } catch (error) {
+                console.error("Error adding request: ", error);
+                alert("Error sending suggestion.");
+            }
+        };
+
+        const qReq = query(collection(db, "user_requests"), orderBy("createdAt", "desc"), limit(10));
+        onSnapshot(qReq, (snapshot) => {
+            const requestList = document.getElementById('request-list');
+            if (!requestList) return;
+            requestList.innerHTML = "";
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const date = data.createdAt ? new Date(data.createdAt.toDate()).toLocaleDateString(currentLang) : "";
+                
+                const reqHtml = `
+                    <div class="post-card" style="border-left: 4px solid var(--accent-color);">
+                        <div style="font-size: 0.8em; color: #888; margin-bottom: 5px;">${date}</div>
+                        <strong style="display: block; margin-bottom: 8px; color: var(--primary-color);">${data.title}</strong>
+                        <p style="font-size: 0.9rem; color: #444; margin: 0;">${data.content}</p>
+                        <div style="margin-top: 10px; display: inline-block; padding: 2px 10px; background: #f0ede9; border-radius: 15px; font-size: 0.75rem; color: #666;">
+                            ${translations[currentLang].request_status || 'Status'}: ${data.status}
+                        </div>
+                    </div>
+                `;
+                requestList.insertAdjacentHTML('beforeend', reqHtml);
+            });
         });
     </script>
 </body>

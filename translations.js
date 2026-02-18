@@ -10,9 +10,18 @@ const translations = {
         qna_title: "🙏 신앙 Q&A", qna_placeholder: "궁금한 내용을 남겨주세요", qna_btn: "질문하기",
         church_title: "⛪ 어느 교회 다녀요? (익명)", church_placeholder: "다니시는 교회를 자랑해 주세요!", church_btn: "등록하기",
         nickname: "닉네임", anonymous_nickname: "익명 닉네임",
+        request_board_title: "💡 dailybible.uk에 제안하기",
+        request_board_desc: "사이트에 추가되었으면 하는 기능이나 의견을 자유롭게 남겨주세요!",
+        request_title_placeholder: "제안 제목",
+        request_content_placeholder: "상세 내용을 적어주세요 (예: 매일 알림 기능이 있으면 좋겠어요!)",
+        btn_submit_request: "의견 보내기",
+        recent_requests_title: "최근 도착한 제안들",
+        request_status: "상태",
+        request_status_pending: "대기 중",
+        request_thanks: "소중한 의견 감사합니다! 검토 후 반영하도록 노력하겠습니다.",
+        request_validation: "제목과 내용을 모두 입력해주세요!",
         save_success: "저장되었습니다!", save_fail: "저장에 실패했습니다.",
-        growth_area: "집중 보완 필요 영역", chart_label: "나의 신앙 밸런스",
-        // ... (기타 기존 번역 유지)
+        growth_area: "집중 보완 필요 영역", chart_label: "나의 신앙 밸런스"
     },
     en: {
         nav_home: "Home", nav_blog: "Blog", nav_about: "About", nav_test: "AI Disciple", nav_checkup: "Faith Check", nav_dashboard: "Dashboard", nav_community: "Community", nav_privacy: "Privacy", nav_terms: "Terms", site_logo: "British Daily Bible",
@@ -25,6 +34,16 @@ const translations = {
         qna_title: "🙏 Faith Q&A", qna_placeholder: "Leave your questions here", qna_btn: "Ask",
         church_title: "⛪ Which church? (Anon)", church_placeholder: "Share about your church!", church_btn: "Register",
         nickname: "Nickname", anonymous_nickname: "Anon Nickname",
+        request_board_title: "💡 Suggest to dailybible.uk",
+        request_board_desc: "Feel free to leave your suggestions for new features or ideas!",
+        request_title_placeholder: "Suggestion Title",
+        request_content_placeholder: "Please provide details (e.g., I'd love a daily notification!)",
+        btn_submit_request: "Send Suggestion",
+        recent_requests_title: "Recent Suggestions",
+        request_status: "Status",
+        request_status_pending: "Pending",
+        request_thanks: "Thank you for your suggestion! We will try to implement it.",
+        request_validation: "Please enter both title and content!",
         save_success: "Saved!", save_fail: "Save failed.",
         growth_area: "Area for Growth", chart_label: "My Faith Balance"
     },
@@ -35,7 +54,15 @@ const translations = {
         btn_start_test: "Iniciar Prueba",
         qna_title: "🙏 Q&A de Fe", qna_placeholder: "Deja tus preguntas", qna_btn: "Preguntar",
         church_title: "⛪ ¿Qué iglesia? (Anónimo)", church_placeholder: "¡Comparte sobre tu iglesia!", church_btn: "Registrar",
-        nickname: "Apodo", anonymous_nickname: "Apodo Anónimo"
+        nickname: "Apodo", anonymous_nickname: "Apodo Anónimo",
+        request_board_title: "💡 Sugerir a dailybible.uk",
+        request_board_desc: "¡Siéntase libre de dejar sus sugerencias!",
+        request_title_placeholder: "Título de la sugerencia",
+        request_content_placeholder: "Proporcione detalles...",
+        btn_submit_request: "Enviar sugerencia",
+        recent_requests_title: "Sugerencias recientes",
+        request_status: "Estado",
+        request_status_pending: "Pendiente"
     },
     fr: {
         nav_home: "Accueil", nav_blog: "Blog", nav_about: "À propos", nav_test: "Disciple IA", nav_checkup: "Bilan Foi", nav_dashboard: "Tableau", nav_community: "Communauté", nav_privacy: "Confidentialité", nav_terms: "Conditions", site_logo: "Bible Quotidienne Britannique",
@@ -44,6 +71,14 @@ const translations = {
         btn_start_test: "Démarrer Test",
         qna_title: "🙏 Q&A de Foi", qna_placeholder: "Laissez vos questions", qna_btn: "Poser",
         church_title: "⛪ Quelle église ? (Anonyme)", church_placeholder: "Partagez sur votre église !", church_btn: "Enregistrer",
-        nickname: "Surnom", anonymous_nickname: "Surnom Anonyme"
+        nickname: "Surnom", anonymous_nickname: "Surnom Anonyme",
+        request_board_title: "💡 Suggérer à dailybible.uk",
+        request_board_desc: "N'hésitez pas à laisser vos suggestions !",
+        request_title_placeholder: "Titre de la suggestion",
+        request_content_placeholder: "Veuillez donner des détails...",
+        btn_submit_request: "Envoyer la suggestion",
+        recent_requests_title: "Suggestions récentes",
+        request_status: "Statut",
+        request_status_pending: "En attente"
     }
 };
