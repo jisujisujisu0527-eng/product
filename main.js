@@ -7,7 +7,14 @@ const translations = {
         btn_new_verse: "새로운 구절", btn_theme: "테마 변경", btn_share: "말씀 공유",
         guide_title: "영적 성장을 위한 가이드",
         prayer_title: "오늘의 기도구절", evangelism_title: "오늘의 전도구절",
-        footer_rights: "© 2026 British Daily Bible. All rights reserved."
+        footer_rights: "© 2026 영국 데일리 바이블. All rights reserved.",
+        guide_1_title: "아침 묵상",
+        guide_1_desc: "준비된 묵상 플랜과 함께 하나님의 임재 안에서 하루를 시작하세요.",
+        guide_2_title: "글로벌 공동체",
+        guide_2_desc: "한국과 영국의 수만 명의 성도들과 함께 매일 기도와 말씀에 동참하세요.",
+        site_logo: "영국 데일리 바이블",
+        btn_start_test: "테스트 시작하기",
+        checkup_promo_desc: "인공지능이 분석하는 나의 영적 특성, 8가지 성경적 유형으로 확인해보세요."
     },
     en: {
         nav_home: "Home", nav_blog: "Blog", nav_about: "About", nav_test: "AI Disciple", nav_checkup: "Faith Check", nav_dashboard: "Dashboard",
@@ -15,7 +22,14 @@ const translations = {
         btn_new_verse: "New Verse", btn_theme: "Switch Appearance", btn_share: "Share Verse",
         guide_title: "Guides for Spiritual Growth",
         prayer_title: "Prayer Verse", evangelism_title: "Evangelism Verse",
-        footer_rights: "© 2026 British Daily Bible. All rights reserved."
+        footer_rights: "© 2026 British Daily Bible. All rights reserved.",
+        guide_1_title: "Morning Reflection",
+        guide_1_desc: "Start your day in the presence of God with our curated meditation plan.",
+        guide_2_title: "Global Community",
+        guide_2_desc: "Join thousands of believers across the UK and Korea in daily prayer and study.",
+        site_logo: "British Daily Bible",
+        btn_start_test: "Start AI Test",
+        checkup_promo_desc: "Let AI analyze your spiritual traits through 8 biblical archetypes."
     }
 };
 
@@ -74,7 +88,10 @@ function refreshVerses(isRandom = false) {
     const refEl = document.getElementById('verse-reference');
 
     if (textEl) textEl.textContent = `"${item.text}"`;
-    if (refEl) refEl.innerHTML = `${item.ref} <span style="font-size:0.7rem; opacity:0.6;">(${item.version})</span>`;
+    if (refEl) {
+        const versionLabel = currentLang === 'ko' ? "" : ` (${item.version})`;
+        refEl.innerHTML = `${item.ref}${versionLabel}`;
+    }
 }
 
 function toggleTheme() {
@@ -91,12 +108,13 @@ function checkSystemTheme() {
 async function shareVerse() {
     const text = document.getElementById('verse-text').textContent;
     const ref = document.getElementById('verse-reference').textContent;
-    const shareText = `${text}\n- ${ref}\n\nShared via British Daily Bible`;
+    const siteTitle = currentLang === 'ko' ? '영국 데일리 바이블' : 'British Daily Bible';
+    const shareText = `${text}\n- ${ref}\n\nShared via ${siteTitle}`;
 
     if (navigator.share) {
         try {
             await navigator.share({
-                title: 'Daily Bible Verse',
+                title: currentLang === 'ko' ? '오늘의 성경 구절' : 'Daily Bible Verse',
                 text: shareText,
                 url: window.location.href
             });
