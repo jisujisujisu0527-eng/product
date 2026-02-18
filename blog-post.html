@@ -8,64 +8,84 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .blog-detail-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 40px 20px;
         }
         .post-header {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             text-align: center;
         }
         .post-date {
             color: #FFAB40;
             font-weight: bold;
             margin-bottom: 10px;
+            display: block;
         }
         .post-title {
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: #4A3C32;
-            margin-bottom: 20px;
+            line-height: 1.3;
         }
-        .shorts-container {
+        /* Video Player Container */
+        .video-wrapper {
             position: relative;
-            width: 100%;
-            max-width: 360px; /* Shorts Width */
-            height: 640px; /* Shorts Height */
-            margin: 0 auto 40px auto;
-            border-radius: 20px;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 40px;
             background: #000;
         }
-        .shorts-container iframe {
+        /* For Shorts (9:16) */
+        .video-wrapper.shorts {
+            padding-bottom: 177.77%; /* 9:16 Aspect Ratio */
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             border: none;
         }
         .post-content {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #333;
+            font-size: 1.2rem;
+            line-height: 1.9;
+            color: #444;
             text-align: left;
         }
         .post-content h3 {
-            margin-top: 30px;
-            color: #4A3C32;
-            border-left: 4px solid #FFAB40;
-            padding-left: 15px;
+            margin-top: 40px;
+            color: #2c3e50;
+            border-left: 5px solid #FFAB40;
+            padding-left: 20px;
+            font-size: 1.6rem;
+        }
+        .post-content p {
+            margin-bottom: 25px;
+        }
+        .action-bar {
+            margin-top: 60px;
+            border-top: 1px solid #eee;
+            padding-top: 30px;
+            text-align: center;
         }
         .back-btn {
-            display: inline-block;
-            margin-top: 40px;
-            padding: 10px 20px;
-            background: #eee;
-            color: #333;
+            padding: 12px 30px;
+            background: #4A3C32;
+            color: #fff;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 30px;
             font-weight: bold;
+            transition: opacity 0.3s;
         }
         .back-btn:hover {
-            background: #ddd;
+            opacity: 0.9;
         }
         body.dark-mode .post-title, body.dark-mode .post-content {
             color: #fbe9e7;
@@ -92,10 +112,11 @@
     <main>
         <div class="container blog-detail-container">
             <div id="post-content-area">
-                <!-- Content injected via JS -->
                 <p>글을 불러오는 중입니다...</p>
             </div>
-            <a href="blog.html" class="back-btn"><i class="fas fa-arrow-left"></i> 목록으로 돌아가기</a>
+            <div class="action-bar">
+                <a href="blog.html" class="back-btn"><i class="fas fa-arrow-left"></i> 목록으로 돌아가기</a>
+            </div>
         </div>
     </main>
 
@@ -114,19 +135,17 @@
             const container = document.getElementById('post-content-area');
 
             if (post) {
-                // 유튜브 ID가 있으면 임베드, 없으면 플레이스홀더 (예: 성경 낭독 채널 등)
-                // 실제 영상 생성이 불가능하므로, 관련 주제의 고퀄리티 영상 ID를 매칭하거나 기본값 사용
-                const videoId = post.videoId && post.videoId !== 'example' ? post.videoId : 'tgbNymZ7vqY'; // 기본값: The Silence of God (예시)
-
+                const videoId = post.videoId;
+                // BibleProject 등의 고화질 가로형 영상이 많으므로 기본은 16:9, 특정 태그 시 9:16 전환 가능하게 설계
                 container.innerHTML = `
                     <div class="post-header">
-                        <div class="post-date">${post.date}</div>
+                        <span class="post-date">${post.date}</span>
                         <h1 class="post-title">${post.title}</h1>
                     </div>
                     
-                    <div class="shorts-container">
-                        <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1&rel=0&playsinline=1" 
-                                title="YouTube video player" 
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1" 
+                                title="${post.title}" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                                 allowfullscreen></iframe>
                     </div>
