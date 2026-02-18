@@ -44,39 +44,19 @@
         </div>
     </footer>
 
+    <script src="blog-data.js"></script>
     <script>
-        const blogPosts = [
-            { id: 1, title: "AI와 영성: 기계가 기도할 수 있을까?", excerpt: "인공지능의 발전이 인간 고유의 영역인 기도와 묵상에 던지는 질문들을 살펴봅니다.", date: "2026-02-18" },
-            { id: 2, title: "챗GPT를 활용한 성경 공부 가이드", excerpt: "대규모 언어 모델을 활용하여 성경의 역사적 배경을 깊이 있게 연구하는 방법을 소개합니다.", date: "2026-02-17" },
-            { id: 3, title: "AI 시대, 인간의 고유성은 어디에 있는가?", excerpt: "하나님의 형상(Imago Dei)으로 창조된 인간이 기계와 구별되는 근본적인 지점을 탐구합니다.", date: "2026-02-16" },
-            { id: 4, title: "디지털 사막에서 만나는 하나님", excerpt: "끊임없는 알림 속에서 침묵의 영성을 회복하고 하나님께 집중하는 기술적 금식 방법을 나눕니다.", date: "2026-02-15" },
-            { id: 5, title: "AI 설교자? 기술이 바꾸는 예배의 풍경", excerpt: "알고리즘에 의한 설교와 찬양이 가능해진 시대, 우리가 지켜야 할 예배의 본질은 무엇일까요?", date: "2026-02-14" },
-            { id: 6, title: "메타버스와 교회: 새로운 선교의 지평", excerpt: "가상 현실 공간에서의 복음 전파와 온라인 공동체의 성경적 근거를 고찰합니다.", date: "2026-02-13" },
-            { id: 7, title: "알고리즘이 내 영성을 지배할 때", excerpt: "유튜브와 SNS 알고리즘이 형성하는 편향된 신앙관의 위험성과 극복 방안을 제시합니다.", date: "2026-02-12" },
-            { id: 8, title: "AI 시대의 기독교 윤리: 무엇을 고민해야 하나", excerpt: "자율주행, 개인정보, 고용 변화 등 AI가 가져올 사회적 이슈에 대한 기독교적 응답을 모색합니다.", date: "2026-02-11" },
-            { id: 9, title: "디지털 디톡스와 안식일의 의미", excerpt: "현대 기술 사회에서 '쉼'의 진정한 의미를 안식일 계명을 통해 재해석합니다.", date: "2026-02-10" },
-            { id: 10, title: "온라인 공동체도 진짜 '교회'일까?", excerpt: "물리적 공간을 넘어선 성도의 교제와 성례전의 의미를 디지털 시대의 관점에서 논의합니다.", date: "2026-02-09" },
-            { id: 11, title: "데이터로 분석하는 신앙의 패턴", excerpt: "나의 성경 읽기와 기도 생활을 데이터화하여 영적 성장의 지표로 삼는 지혜로운 방법을 소개합니다.", date: "2026-02-08" },
-            { id: 12, title: "인공지능 로봇과 사목적 돌봄", excerpt: "고독한 이들을 위한 AI 반려 로봇이 사목적 돌봄의 보조 도구가 될 수 있는지 분석합니다.", date: "2026-02-07" },
-            { id: 13, title: "스마트폰 너머의 하나님: 기술 중독 극복하기", excerpt: "기술에 종속되지 않고 도구로써 다스리는 크리스천의 자제력에 대해 이야기합니다.", date: "2026-02-06" },
-            { id: 14, title: "AI 기술을 활용한 찬양 작곡의 세계", excerpt: "새로운 기술을 통해 주님을 찬양하는 예술적 시도와 그 한계점을 짚어봅니다.", date: "2026-02-05" },
-            { id: 15, title: "기독교 교육과 AI: 주일학교의 변화", excerpt: "다음 세대를 위한 에듀테크 기반의 신앙 교육 전략과 교사의 역할을 재정의합니다.", date: "2026-02-04" },
-            { id: 16, title: "트랜스휴머니즘과 기독교적 답변", excerpt: "인간 한계 극복을 목표로 하는 기술주의와 부활의 소망이 충돌하는 지점을 분석합니다.", date: "2026-02-03" },
-            { id: 17, title: "소셜 미디어 시대의 '이웃 사랑'", excerpt: "온라인상의 비방과 혐오를 넘어 디지털 이웃에게 그리스도의 사랑을 실천하는 법을 나눕니다.", date: "2026-02-02" },
-            { id: 18, title: "가상 현실(VR) 성지 순례 체험", excerpt: "물리적 한계를 넘어 성경의 배경을 생생하게 체험하는 기술적 유익과 영적 의미를 다룹니다.", date: "2026-02-01" },
-            { id: 19, title: "AI 시대, 변하지 않는 복음의 진리", excerpt: "모든 것이 변하는 시대 속에서 결코 변하지 않는 그리스도의 복음이 가지는 힘을 역설합니다.", date: "2026-01-31" },
-            { id: 20, title: "미래 교회: 기술과 영성의 조화", excerpt: "다가올 10년, 기술과 전통적 영성이 공존하는 건강한 교회의 모델을 그려봅니다.", date: "2026-01-30" }
-        ];
-
         const blogList = document.getElementById('blog-list');
-        blogPosts.forEach(post => {
+        
+        // Reverse order to show newest first
+        [...blogPosts].reverse().forEach(post => {
             const article = document.createElement('article');
             article.className = 'blog-card';
             article.innerHTML = `
                 <div class="blog-date">${post.date}</div>
                 <h2 class="blog-post-title">${post.title}</h2>
                 <p class="blog-excerpt">${post.excerpt}</p>
-                <a href="#" class="read-more">전문 읽기 <i class="fas fa-arrow-right"></i></a>
+                <a href="blog-post.html?id=${post.id}" class="read-more">전문 읽기 & 숏츠 보기 <i class="fas fa-play-circle"></i></a>
             `;
             blogList.appendChild(article);
         });
