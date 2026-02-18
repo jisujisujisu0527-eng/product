@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="nav_community">Daily Bible Community</title>
+    <title data-i18n="nav_community">Community</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Main Loader -->
     <div id="main-loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-light); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;">
         <i class="fas fa-cross fa-3x" style="color: var(--accent-color); margin-bottom: 20px; animation: pulse 2s infinite;"></i>
-        <div style="font-family: 'Lora', serif; color: var(--primary-color); font-size: 1.2rem;">Community</div>
+        <div data-i18n="nav_community" style="font-family: 'Lora', serif; color: var(--primary-color); font-size: 1.2rem;">Community</div>
     </div>
 
     <header>
@@ -32,6 +31,8 @@
                 <div class="lang-switcher">
                     <button onclick="changeLanguage('ko')" class="lang-btn">KO</button>
                     <button onclick="changeLanguage('en')" class="lang-btn">EN</button>
+                    <button onclick="changeLanguage('es')" class="lang-btn">ES</button>
+                    <button onclick="changeLanguage('fr')" class="lang-btn">FR</button>
                 </div>
             </nav>
         </div>
@@ -39,10 +40,11 @@
 
     <main>
         <div class="container" style="padding-top: 40px; padding-bottom: 60px;">
+            <!-- Q&A Section -->
             <div class="board-container">
                 <div class="board-header">
                     <i class="fas fa-praying-hands fa-2x"></i>
-                    <h2 data-i18n="qna_title">🙏 신앙 Q&A</h2>
+                    <h2 data-i18n="qna_title">🙏 Faith Q&A</h2>
                 </div>
                 <div class="card">
                     <input type="text" id="qna-name" class="input-box" data-i18n="nickname" placeholder="Nickname">
@@ -54,10 +56,11 @@
 
             <hr style="margin: 60px 0; border: none; border-top: 1px solid #eee;">
 
+            <!-- Church Board Section -->
             <div class="board-container">
                 <div class="board-header">
                     <i class="fas fa-church fa-2x"></i>
-                    <h2 data-i18n="church_title">⛪ 어느 교회 다녀요?</h2>
+                    <h2 data-i18n="church_title">⛪ Which church?</h2>
                 </div>
                 <div class="card">
                     <input type="text" id="church-name" class="input-box" data-i18n="anonymous_nickname" placeholder="Anon Nickname">
@@ -66,8 +69,41 @@
                 </div>
                 <div id="church-list" style="margin-top: 30px;"></div>
             </div>
+
+            <hr style="margin: 60px 0; border: none; border-top: 1px solid #eee;">
+
+            <!-- Suggestion Board -->
+            <div class="board-container" style="border: 2px dashed var(--accent-color); padding: 30px; border-radius: 20px; background: rgba(176, 137, 104, 0.05);">
+                <div class="board-header">
+                    <i class="fas fa-lightbulb fa-2x" style="color: #FFD700;"></i>
+                    <h2 data-i18n="request_board_title">💡 Suggest to dailybible.uk</h2>
+                </div>
+                <p style="margin-bottom: 20px; color: #666;" data-i18n="request_board_desc">Feel free to leave your suggestions!</p>
+                <div class="card">
+                    <input type="text" id="req-title" class="input-box" data-i18n="request_title_placeholder" placeholder="Title">
+                    <textarea id="req-content" class="input-box" data-i18n="request_content_placeholder" placeholder="Details..."></textarea>
+                    <button class="primary-btn" onclick="submitRequest()" style="width: 100%;" data-i18n="btn_submit_request">Send Suggestion</button>
+                </div>
+                <div style="margin-top: 40px;">
+                    <h3 data-i18n="recent_requests_title" style="margin-bottom: 20px;">Recent Suggestions</h3>
+                    <div id="request-list"></div>
+                </div>
+            </div>
         </div>
     </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p data-i18n="footer_rights">© 2026 British Daily Bible.</p>
+                <nav class="footer-nav">
+                    <a href="privacy.html" data-i18n="nav_privacy">Privacy</a>
+                    <a href="terms.html" data-i18n="nav_terms">Terms</a>
+                    <a href="about.html" data-i18n="nav_about">About</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
 
     <script src="translations.js"></script>
     <script src="main.js"></script>
@@ -75,12 +111,14 @@
         import { db, collection, addDoc, serverTimestamp, query, orderBy, limit } from "./firebase-firestore-service.js";
         import { onSnapshot, updateDoc, increment, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        const t = (key) => (translations[currentLang] || translations['en'])[key] || key;
+
         window.savePost = async function(type) {
             const nameEl = document.getElementById(type + '-name');
             const contentEl = document.getElementById(type + '-content');
-            const name = nameEl.value.trim();
+            const name = nameEl.value.trim() || t('anonymous');
             const content = contentEl.value.trim();
-            if(!name || !content) return;
+            if(!content) return;
             try {
                 await addDoc(collection(db, "posts"), {
                     type, name, content, timestamp: serverTimestamp(), lang: currentLang, prayCount: 0, candles: 0
@@ -93,46 +131,90 @@
             const btn = document.getElementById(`btn-pray-${postId}`);
             try {
                 await updateDoc(doc(db, "posts", postId), { prayCount: increment(1) });
-                if (btn) { btn.innerHTML = `<i class="fas fa-check"></i> Prayed!`; btn.disabled = true; }
+                if (btn) { btn.innerHTML = `<i class="fas fa-check"></i> ${t('btn_i_prayed')}`; btn.disabled = true; }
             } catch (e) { console.error(e); }
         };
 
         window.lightCandle = async function(postId) {
-            const btn = document.getElementById(`btn-candle-${postId}`);
             const card = document.getElementById(`card-${postId}`);
             try {
                 await updateDoc(doc(db, "posts", postId), { candles: increment(1) });
                 if (card) card.classList.add('glow-animation');
-                if (btn) btn.disabled = true;
             } catch (e) { console.error(e); }
         };
 
-        const q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(50));
-        onSnapshot(q, (snapshot) => {
-            const qnaList = document.getElementById('qna-list');
-            const churchList = document.getElementById('church-list');
-            qnaList.innerHTML = ""; churchList.innerHTML = "";
-            snapshot.forEach((sDoc) => {
-                const data = sDoc.data();
-                const id = sDoc.id;
-                const postHtml = `
-                    <div class="post-card" id="card-${id}">
-                        <div class="post-author">${data.name}</div>
-                        <div class="post-content">${data.content}</div>
-                        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
-                            <button id="btn-pray-${id}" class="secondary-btn" style="padding: 5px 12px; font-size: 0.75rem;" onclick="iPrayedForThis('${id}')">
-                                <i class="fas fa-praying-hands"></i> ${data.prayCount || 0}
-                            </button>
-                            <button id="btn-candle-${id}" class="secondary-btn" style="padding: 5px 12px; font-size: 0.75rem; border-color: #FFAB40; color: #E65100;" onclick="lightCandle('${id}')">
-                                <i class="fas fa-seedling"></i> ${data.candles || 0}
-                            </button>
+        window.submitRequest = async function() {
+            const titleEl = document.getElementById('req-title');
+            const contentEl = document.getElementById('req-content');
+            const title = titleEl.value.trim();
+            const content = contentEl.value.trim();
+            if(!title || !content) return;
+            try {
+                await addDoc(collection(db, "user_requests"), {
+                    title, content, status: "pending", createdAt: serverTimestamp(), lang: currentLang
+                });
+                alert(t('save_success'));
+                titleEl.value = ''; contentEl.value = '';
+            } catch (e) { console.error(e); }
+        };
+
+        // Real-time listener updates UI using translations
+        const renderList = () => {
+            const q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(50));
+            onSnapshot(q, (snapshot) => {
+                const qnaList = document.getElementById('qna-list');
+                const churchList = document.getElementById('church-list');
+                if(!qnaList) return;
+                qnaList.innerHTML = ""; churchList.innerHTML = "";
+                
+                snapshot.forEach((sDoc) => {
+                    const data = sDoc.data();
+                    const id = sDoc.id;
+                    const postHtml = `
+                        <div class="post-card ${data.candles > 0 ? 'glow-animation' : ''}" id="card-${id}">
+                            <div class="post-author">${data.name}</div>
+                            <div class="post-content">${data.content}</div>
+                            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
+                                <button id="btn-pray-${id}" class="secondary-btn" style="padding: 5px 12px; font-size: 0.75rem;" onclick="iPrayedForThis('${id}')">
+                                    <i class="fas fa-praying-hands"></i> ${t('btn_i_prayed')} (${data.prayCount || 0})
+                                </button>
+                                <button id="btn-candle-${id}" class="secondary-btn" style="padding: 5px 12px; font-size: 0.75rem; border-color: #FFAB40; color: #E65100;" onclick="lightCandle('${id}')">
+                                    <i class="fas fa-seedling"></i> ${t('btn_light_candle')} (${data.candles || 0})
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                `;
-                if (data.type === 'qna') qnaList.insertAdjacentHTML('beforeend', postHtml);
-                else churchList.insertAdjacentHTML('beforeend', postHtml);
+                    `;
+                    if (data.type === 'qna') qnaList.insertAdjacentHTML('beforeend', postHtml);
+                    else churchList.insertAdjacentHTML('beforeend', postHtml);
+                });
+                if (!qnaList.innerHTML) qnaList.innerHTML = `<p>${t('no_posts')}</p>`;
+                if (!churchList.innerHTML) churchList.innerHTML = `<p>${t('no_posts')}</p>`;
             });
-        });
+        };
+
+        const renderRequests = () => {
+            const qReq = query(collection(db, "user_requests"), orderBy("createdAt", "desc"), limit(10));
+            onSnapshot(qReq, (snapshot) => {
+                const requestList = document.getElementById('request-list');
+                if (!requestList) return;
+                requestList.innerHTML = "";
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const date = data.createdAt ? new Date(data.createdAt.toDate()).toLocaleDateString(currentLang) : "";
+                    requestList.insertAdjacentHTML('beforeend', `
+                        <div class="post-card" style="border-left: 4px solid var(--accent-color);">
+                            <div style="font-size: 0.8em; color: #888; margin-bottom: 5px;">${date}</div>
+                            <strong style="display: block; margin-bottom: 8px; color: var(--primary-color);">${data.title}</strong>
+                            <p style="font-size: 0.9rem; color: #444; margin: 0;">${data.content}</p>
+                        </div>
+                    `);
+                });
+            });
+        };
+
+        renderList();
+        renderRequests();
+        window.addEventListener('languageChanged', () => { renderList(); renderRequests(); });
     </script>
 </body>
 </html>
