@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="nav_community">Community</title>
+    <title data-i18n="nav_community">Community | Daily Bible</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,7 +11,7 @@
 <body>
     <div id="main-loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-light); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;">
         <i class="fas fa-cross fa-3x" style="color: var(--accent-color); margin-bottom: 20px; animation: pulse 2s infinite;"></i>
-        <div data-i18n="nav_community" style="font-family: 'Lora', serif; color: var(--primary-color); font-size: 1.2rem;">Community</div>
+        <div data-i18n="nav_community" style="font-family: 'EB Garamond', serif; color: var(--primary-color); font-size: 1.2rem;">Community</div>
     </div>
 
     <header>
@@ -24,7 +24,7 @@
                     <li><a href="chat.html" data-i18n="nav_chat">Apostle Chat</a></li>
                 </ul>
                 <div class="lang-switcher">
-                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 5px 10px; border-radius: 15px; background: var(--bg-light); border: 1px solid var(--accent-color); color: var(--primary-color);">
+                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
                         <option value="en">EN</option><option value="ko">KO</option>
                     </select>
                 </div>
@@ -32,15 +32,27 @@
         </div>
     </header>
 
-    <main class="container" style="padding: 40px 20px;">
-        <div class="board-container">
-            <h2 data-i18n="qna_title">🙏 Faith Q&A</h2>
-            <div class="card">
-                <input type="text" id="qna-name" class="input-box" data-i18n="nickname" placeholder="Nickname">
-                <textarea id="qna-content" class="input-box" data-i18n="qna_placeholder" placeholder="Your questions..."></textarea>
-                <button class="primary-btn" onclick="savePost('qna')" style="width: 100%;" data-i18n="qna_btn">Ask</button>
+    <main class="container" style="padding: 60px 0;">
+        <div class="prayer-form-area text-center" style="text-align: center; margin-bottom: 80px;">
+            <h1 data-i18n="prayer_request_title" style="font-size: 3rem; margin-bottom: 16px;">🙏 Prayer Requests</h1>
+            <p data-i18n="prayer_request_desc" style="color: var(--text-muted); margin-bottom: 40px;">Bear one another's burdens.</p>
+            
+            <div class="card" style="text-align: left;">
+                <div class="input-group">
+                    <input type="text" id="prayer-name" class="input-box" data-i18n="placeholder_name" placeholder="Name">
+                </div>
+                <div class="input-group">
+                    <textarea id="prayer-content" class="input-box" data-i18n="placeholder_prayer" placeholder="Prayer request..." style="height: 150px; resize: none;"></textarea>
+                </div>
+                <button onclick="submitPrayerRequest()" class="primary-btn" style="width: 100%;" data-i18n="btn_submit_prayer">Submit Request</button>
             </div>
-            <div id="qna-list" style="margin-top: 30px;"></div>
+        </div>
+
+        <div class="prayer-list-area">
+            <h2 data-i18n="recent_prayers" style="margin-bottom: 32px; font-size: 2rem;">Recent Prayer Requests</h2>
+            <div id="prayer-wall-list">
+                <p data-i18n="loading">Loading...</p>
+            </div>
         </div>
     </main>
 
@@ -50,34 +62,57 @@
     <script src="firebase-firestore-service.js"></script>
     <script src="main.js"></script>
     <script>
-        // Community Logic (Non-module)
-        window.savePost = async function(type) {
-            if(!window.db) return;
-            const name = document.getElementById(type + '-name').value.trim();
-            const content = document.getElementById(type + '-content').value.trim();
+        window.submitPrayerRequest = async function() {
+            const name = document.getElementById('prayer-name').value.trim();
+            const content = document.getElementById('prayer-content').value.trim();
             if(!content) return;
 
             try {
-                await window.db.collection("posts").add({
-                    type, name: name || "Anonymous", content, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                await window.db.collection("prayer_requests").add({
+                    name: name || "Anonymous",
+                    content: content,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    prayCount: 0
                 });
-                document.getElementById(type + '-content').value = '';
+                document.getElementById('prayer-content').value = '';
+                alert((translations[currentLang] || translations['en']).save_success);
             } catch (e) { console.error(e); }
         };
 
-        // Real-time listener
         document.addEventListener('DOMContentLoaded', () => {
+            const list = document.getElementById('prayer-wall-list');
             if(!window.db) return;
-            window.db.collection("posts").orderBy("timestamp", "desc").limit(20).onSnapshot((snap) => {
-                const list = document.getElementById('qna-list');
-                if(!list) return;
+            
+            window.db.collection("prayer_requests").orderBy("timestamp", "desc").limit(30).onSnapshot((snap) => {
                 list.innerHTML = "";
                 snap.forEach(doc => {
                     const data = doc.data();
-                    list.innerHTML += `<div class="post-card"><strong>${data.name}</strong><p>${data.content}</p></div>`;
+                    const id = doc.id;
+                    const date = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleDateString() : "";
+                    
+                    list.innerHTML += `
+                        <div class="card prayer-card" id="card-${id}">
+                            <div class="prayer-author">${data.name} • ${date}</div>
+                            <div class="prayer-text">${data.content}</div>
+                            <div style="margin-top: 20px; text-align: right;">
+                                <button class="secondary-btn" id="btn-pray-${id}" onclick="prayForThis('${id}')" style="font-size: 0.85rem; padding: 8px 20px;">
+                                    <i class="fas fa-hands-praying"></i> ${(translations[currentLang] || translations['en']).btn_pray_for_this} (${data.prayCount || 0})
+                                </button>
+                            </div>
+                        </div>
+                    `;
                 });
             });
         });
+
+        window.prayForThis = async function(id) {
+            try {
+                await window.db.collection("prayer_requests").doc(id).update({
+                    prayCount: firebase.firestore.FieldValue.increment(1)
+                });
+                document.getElementById(`card-${id}`).classList.add('glow-animation');
+            } catch (e) { console.error(e); }
+        };
     </script>
 </body>
 </html>

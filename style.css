@@ -1,122 +1,111 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,700&display=swap');
 
 :root {
-    --primary-color: #4A3B2A; /* 고전적 브라운 */
+    --primary-color: #34495E; 
     --accent-color: #B08968;  
-    --bg-light: #FDFAF5;     /* 고전적 종이색 */
-    --text-main: #2C2C2C;
+    --bg-light: #FDFBF7;     /* 더 부드러운 크림색 */
+    --text-main: #2C3E50;
     --text-muted: #7F8C8D;
     --card-bg: #FFFFFF;
-    --shadow: 0 10px 30px rgba(0,0,0,0.05);
-    --transition: all 0.3s ease;
+    --shadow: 0 4px 20px rgba(0,0,0,0.04);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.dark-mode {
-    --bg-light: #1A1A1A;
-    --card-bg: #2C2C2C;
+    --bg-light: #121212;
+    --card-bg: #1E1E1E;
     --text-main: #E0E0E0;
-    --primary-color: #D4AF37; /* 금색 포인트 */
-    --shadow: 0 10px 30px rgba(0,0,0,0.3);
+    --primary-color: #D4AF37;
+    --shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: 'EB Garamond', serif;
+    font-family: 'Inter', sans-serif; /* 본문은 가독성 높은 샌세리프 */
     background-color: var(--bg-light);
     color: var(--text-main);
-    line-height: 1.6;
-    transition: var(--transition);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, .verse-text { font-family: 'Lora', serif; }
+h1, h2, h3, .classic-serif { font-family: 'EB Garamond', serif; font-weight: 500; }
 
-.container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
-/* Glow Animation for Candles */
-@keyframes glow {
-    0% { box-shadow: 0 0 5px #FFAB40; }
-    50% { box-shadow: 0 0 20px #FFAB40; }
-    100% { box-shadow: 0 0 5px #FFAB40; }
+/* Navbar */
+.navbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 24px 0; border-bottom: 1px solid rgba(0,0,0,0.05);
 }
-.glow-animation { animation: glow 1.5s infinite; border-color: #FFAB40 !important; }
+.nav-logo a { font-family: 'EB Garamond', serif; font-size: 1.6rem; font-weight: 700; color: var(--primary-color); text-decoration: none; }
+.nav-links { display: flex; gap: 30px; list-style: none; }
+.nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.95rem; font-weight: 500; transition: var(--transition); }
+.nav-links a:hover { color: var(--accent-color); }
 
-/* Grid Layouts */
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
-@media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr; } }
-
-.bible-app .card {
+/* Card Design */
+.card {
     background: var(--card-bg);
-    padding: 30px;
-    border-radius: 15px;
+    border-radius: 16px;
+    padding: 32px;
     box-shadow: var(--shadow);
-    text-align: left;
-    border: 1px solid rgba(0,0,0,0.03);
-}
-
-.bible-app h3 {
-    font-size: 1.2rem;
-    color: var(--primary-color);
-    margin-bottom: 15px;
-    border-bottom: 2px solid var(--accent-color);
-    padding-bottom: 8px;
-}
-
-/* Mood Buttons */
-.mood-container { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 30px; }
-.mood-btn { 
-    padding: 8px 20px; border-radius: 20px; border: 1px solid var(--accent-color);
-    background: transparent; cursor: pointer; transition: var(--transition); font-family: 'EB Garamond', serif;
-}
-.mood-btn:hover { background: var(--accent-color); color: white; }
-
-/* Buttons - Expert Feedback: Layout Flexibility */
-.primary-btn, .secondary-btn, .mood-btn {
-    min-width: 120px;
-    width: auto; /* 고정 크기 제거 */
-    padding: 12px 24px; /* 여유 있는 패딩 */
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
+    border: 1px solid rgba(0,0,0,0.02);
     transition: var(--transition);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    white-space: nowrap; /* 글자 줄바꿈 방지 */
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+
+/* Hero Section & Moods */
+.hero-section { text-align: center; padding: 60px 0; }
+.hero-section h1 { font-size: 3.2rem; margin-bottom: 16px; color: var(--primary-color); }
+
+.mood-container { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 32px 0; }
+.mood-btn {
+    padding: 10px 24px; border-radius: 30px; border: 1px solid #E0E0E0;
+    background: white; cursor: pointer; transition: var(--transition);
+    font-family: 'Inter', sans-serif; font-size: 0.9rem;
+}
+.mood-btn:hover { border-color: var(--accent-color); background: var(--bg-light); }
+
+/* Daily Food Grid */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin: 40px 0; }
+@media (max-width: 850px) { .grid-3 { grid-template-columns: 1fr; } }
+
+.bible-app .card h3 { 
+    font-size: 1.3rem; color: var(--accent-color); margin-bottom: 16px; 
+    display: flex; align-items: center; gap: 8px;
 }
 
-/* Domain-specific Canonical Refinements */
-body::after {
-    content: "dailybible.uk | product-cgy.pages.dev";
-    display: none; /* For metadata check */
+/* Prayer Request Board */
+.prayer-form-area { max-width: 700px; margin: 0 auto 40px; }
+.input-group { margin-bottom: 16px; }
+.input-box {
+    width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid #E0E0E0;
+    font-family: 'Inter', sans-serif; font-size: 1rem; transition: var(--transition);
 }
-.primary-btn { background-color: var(--primary-color); color: white; }
-.secondary-btn { background-color: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); }
+.input-box:focus { border-color: var(--accent-color); outline: none; box-shadow: 0 0 0 3px rgba(176, 137, 104, 0.1); }
 
-/* Leaderboard & Ranking */
-.rank-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    font-family: 'Inter', sans-serif;
+.prayer-card {
+    border-left: 4px solid var(--accent-color);
+    padding: 24px; margin-bottom: 20px; background: white; border-radius: 12px;
+}
+.prayer-author { font-weight: 600; color: var(--primary-color); font-size: 0.9rem; margin-bottom: 8px; }
+.prayer-text { font-family: 'EB Garamond', serif; font-size: 1.2rem; color: #444; }
+
+/* Buttons */
+.primary-btn {
+    background: var(--primary-color); color: white; padding: 14px 32px;
+    border-radius: 30px; border: none; font-weight: 600; cursor: pointer; transition: var(--transition);
+}
+.primary-btn:hover { opacity: 0.9; transform: scale(1.02); }
+
+/* Stats Badge */
+.global-stats-board {
+    background: #f8f9fa; border: none; padding: 40px; margin-bottom: 60px;
 }
 
-.rank-item .score {
-    font-weight: bold;
-    color: var(--accent-color);
+@keyframes glow {
+    0% { box-shadow: 0 0 5px rgba(176, 137, 104, 0.2); }
+    50% { box-shadow: 0 0 20px rgba(176, 137, 104, 0.5); }
+    100% { box-shadow: 0 0 5px rgba(176, 137, 104, 0.2); }
 }
-
-.streak-badge {
-    align-items: center;
-    gap: 5px;
-}
-
-/* Global Stats Card Override */
-.global-stats-board h2 {
-    font-family: 'Inter', sans-serif;
-    letter-spacing: 1px;
-}
+.glow-animation { animation: glow 2s infinite; }
