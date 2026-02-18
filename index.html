@@ -165,9 +165,14 @@
         </div>
     </footer>
 
+    <!-- Firebase SDK (Compat Version) -->
+    <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    
+    <!-- App Logic -->
     <script src="translations.js"></script>
-    <script type="module" src="firebase-firestore-service.js"></script>
-    <script type="module" src="main.js" defer></script>
+    <script defer src="firebase-firestore-service.js"></script>
+    <script defer src="main.js"></script>
     <script>
         var disqus_config = function () {
             this.page.url = window.location.href;

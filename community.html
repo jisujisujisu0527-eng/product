@@ -17,210 +17,67 @@
     <header>
         <div class="container">
             <nav class="navbar">
-                <div class="nav-logo">
-                    <a href="index.html" data-i18n="site_logo">British Daily Bible</a>
-                </div>
+                <div class="nav-logo"><a href="index.html" data-i18n="site_logo">British Daily Bible</a></div>
                 <ul class="nav-links">
                     <li><a href="index.html" data-i18n="nav_home">Home</a></li>
-                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Disciple</a></li>
-                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Faith Check</a></li>
-                    <li><a href="faith-dashboard.html" data-i18n="nav_dashboard">Dashboard</a></li>
                     <li><a href="community.html" data-i18n="nav_community">Community</a></li>
                     <li><a href="chat.html" data-i18n="nav_chat">Apostle Chat</a></li>
                 </ul>
                 <div class="lang-switcher">
-                    <div id="streak-badge" style="display:none; margin-right: 15px; font-size: 0.8rem; font-weight: bold; color: #E65100;">
-                        <i class="fas fa-fire"></i> <span id="streak-count">0</span>
-                    </div>
-                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 5px 10px; border-radius: 15px; background: var(--bg-light); border: 1px solid var(--accent-color); color: var(--primary-color); font-family: inherit;">
-                        <option value="en">EN</option>
-                        <option value="ko">KO</option>
-                        <option value="fr">FR</option>
-                        <option value="es">ES</option>
+                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 5px 10px; border-radius: 15px; background: var(--bg-light); border: 1px solid var(--accent-color); color: var(--primary-color);">
+                        <option value="en">EN</option><option value="ko">KO</option>
                     </select>
                 </div>
             </nav>
         </div>
     </header>
 
-    <main>
-        <div class="container" style="padding-top: 40px; padding-bottom: 60px;">
-            <!-- Q&A Section -->
-            <div class="board-container">
-                <div class="board-header">
-                    <i class="fas fa-praying-hands fa-2x"></i>
-                    <h2 data-i18n="qna_title">🙏 Faith Q&A</h2>
-                </div>
-                <div class="card">
-                    <input type="text" id="qna-name" class="input-box" data-i18n="nickname" placeholder="Nickname">
-                    <textarea id="qna-content" class="input-box" data-i18n="qna_placeholder" placeholder="Ask your questions..."></textarea>
-                    <button class="primary-btn" onclick="savePost('qna')" style="width: 100%;" data-i18n="qna_btn">Ask</button>
-                </div>
-                <div id="qna-list" style="margin-top: 30px;"></div>
+    <main class="container" style="padding: 40px 20px;">
+        <div class="board-container">
+            <h2 data-i18n="qna_title">🙏 Faith Q&A</h2>
+            <div class="card">
+                <input type="text" id="qna-name" class="input-box" data-i18n="nickname" placeholder="Nickname">
+                <textarea id="qna-content" class="input-box" data-i18n="qna_placeholder" placeholder="Your questions..."></textarea>
+                <button class="primary-btn" onclick="savePost('qna')" style="width: 100%;" data-i18n="qna_btn">Ask</button>
             </div>
-
-            <hr style="margin: 60px 0; border: none; border-top: 1px solid #eee;">
-
-            <!-- Church Board Section -->
-            <div class="board-container">
-                <div class="board-header">
-                    <i class="fas fa-church fa-2x"></i>
-                    <h2 data-i18n="church_title">⛪ Which church?</h2>
-                </div>
-                <div class="card">
-                    <input type="text" id="church-name" class="input-box" data-i18n="anonymous_nickname" placeholder="Anon Nickname">
-                    <input type="text" id="church-content" class="input-box" data-i18n="church_placeholder" placeholder="Share about your church!">
-                    <button class="primary-btn" onclick="savePost('church')" style="width: 100%;" data-i18n="church_btn">Register</button>
-                </div>
-                <div id="church-list" style="margin-top: 30px;"></div>
-            </div>
-
-            <hr style="margin: 60px 0; border: none; border-top: 1px solid #eee;">
-
-            <!-- Suggestion Board -->
-            <div class="board-container" style="border: 2px dashed var(--accent-color); padding: 30px; border-radius: 20px; background: rgba(176, 137, 104, 0.05);">
-                <div class="board-header">
-                    <i class="fas fa-lightbulb fa-2x" style="color: #FFD700;"></i>
-                    <h2 data-i18n="request_board_title">💡 Suggest to dailybible.uk</h2>
-                </div>
-                <p style="margin-bottom: 20px; color: #666;" data-i18n="request_board_desc">Feel free to leave your suggestions!</p>
-                <div class="card">
-                    <input type="text" id="req-title" class="input-box" data-i18n="request_title_placeholder" placeholder="Title">
-                    <textarea id="req-content" class="input-box" data-i18n="request_content_placeholder" placeholder="Details..."></textarea>
-                    <button class="primary-btn" onclick="submitRequest()" style="width: 100%;" data-i18n="btn_submit_request">Send Suggestion</button>
-                </div>
-                <div style="margin-top: 40px;">
-                    <h3 data-i18n="recent_requests_title" style="margin-bottom: 20px;">Recent Suggestions</h3>
-                    <div id="request-list"></div>
-                </div>
-            </div>
+            <div id="qna-list" style="margin-top: 30px;"></div>
         </div>
     </main>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <p data-i18n="footer_rights">© 2026 British Daily Bible.</p>
-                <nav class="footer-nav">
-                    <a href="privacy.html" data-i18n="nav_privacy">Privacy</a>
-                    <a href="terms.html" data-i18n="nav_terms">Terms</a>
-                    <a href="about.html" data-i18n="nav_about">About</a>
-                </nav>
-            </div>
-        </div>
-    </footer>
-
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
     <script src="translations.js"></script>
-    <script type="module" src="firebase-firestore-service.js"></script>
-    <script type="module" src="main.js" defer></script>
-    <script type="module">
-        import { db, collection, addDoc, serverTimestamp, query, orderBy, limit } from "./firebase-firestore-service.js";
-        import { onSnapshot, updateDoc, increment, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        const t = (key) => (translations[currentLang] || translations['en'])[key] || key;
-
+    <script src="firebase-firestore-service.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // Community Logic (Non-module)
         window.savePost = async function(type) {
-            const nameEl = document.getElementById(type + '-name');
-            const contentEl = document.getElementById(type + '-content');
-            const name = nameEl.value.trim() || t('anonymous');
-            const content = contentEl.value.trim();
+            if(!window.db) return;
+            const name = document.getElementById(type + '-name').value.trim();
+            const content = document.getElementById(type + '-content').value.trim();
             if(!content) return;
+
             try {
-                await addDoc(collection(db, "posts"), {
-                    type, name, content, timestamp: serverTimestamp(), lang: currentLang, prayCount: 0, candles: 0
+                await window.db.collection("posts").add({
+                    type, name: name || "Anonymous", content, timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                nameEl.value = ''; contentEl.value = '';
+                document.getElementById(type + '-content').value = '';
             } catch (e) { console.error(e); }
         };
 
-        window.iPrayedForThis = async function(postId) {
-            const btn = document.getElementById(`btn-pray-${postId}`);
-            try {
-                await updateDoc(doc(db, "posts", postId), { prayCount: increment(1) });
-                if (btn) { btn.innerHTML = `<i class="fas fa-check"></i> ${t('btn_i_prayed')}`; btn.disabled = true; }
-            } catch (e) { console.error(e); }
-        };
-
-        window.lightCandle = async function(postId) {
-            const card = document.getElementById(`card-${postId}`);
-            try {
-                await updateDoc(doc(db, "posts", postId), { candles: increment(1) });
-                if (card) card.classList.add('glow-animation');
-            } catch (e) { console.error(e); }
-        };
-
-        window.submitRequest = async function() {
-            const titleEl = document.getElementById('req-title');
-            const contentEl = document.getElementById('req-content');
-            const title = titleEl.value.trim();
-            const content = contentEl.value.trim();
-            if(!title || !content) return;
-            try {
-                await addDoc(collection(db, "user_requests"), {
-                    title, content, status: "pending", createdAt: serverTimestamp(), lang: currentLang
-                });
-                alert(t('save_success'));
-                titleEl.value = ''; contentEl.value = '';
-            } catch (e) { console.error(e); }
-        };
-
-        // Real-time listener updates UI using translations
-        const renderList = () => {
-            const q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(50));
-            onSnapshot(q, (snapshot) => {
-                const qnaList = document.getElementById('qna-list');
-                const churchList = document.getElementById('church-list');
-                if(!qnaList) return;
-                qnaList.innerHTML = ""; churchList.innerHTML = "";
-                
-                snapshot.forEach((sDoc) => {
-                    const data = sDoc.data();
-                    const id = sDoc.id;
-                    const postHtml = `
-                        <div class="post-card ${data.candles > 0 ? 'glow-animation' : ''}" id="card-${id}">
-                            <div class="post-author">${data.name}</div>
-                            <div class="post-content">${data.content}</div>
-                            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
-                                <button id="btn-pray-${id}" class="secondary-btn" style="padding: 5px 12px; font-size: 0.75rem;" onclick="iPrayedForThis('${id}')">
-                                    <i class="fas fa-praying-hands"></i> ${t('btn_i_prayed')} (${data.prayCount || 0})
-                                </button>
-                                <button id="btn-candle-${id}" class="secondary-btn" style="padding: 5px 12px; font-size: 0.75rem; border-color: #FFAB40; color: #E65100;" onclick="lightCandle('${id}')">
-                                    <i class="fas fa-seedling"></i> ${t('btn_light_candle')} (${data.candles || 0})
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    if (data.type === 'qna') qnaList.insertAdjacentHTML('beforeend', postHtml);
-                    else churchList.insertAdjacentHTML('beforeend', postHtml);
-                });
-                if (!qnaList.innerHTML) qnaList.innerHTML = `<p>${t('no_posts')}</p>`;
-                if (!churchList.innerHTML) churchList.innerHTML = `<p>${t('no_posts')}</p>`;
-            });
-        };
-
-        const renderRequests = () => {
-            const qReq = query(collection(db, "user_requests"), orderBy("createdAt", "desc"), limit(10));
-            onSnapshot(qReq, (snapshot) => {
-                const requestList = document.getElementById('request-list');
-                if (!requestList) return;
-                requestList.innerHTML = "";
-                snapshot.forEach((doc) => {
+        // Real-time listener
+        document.addEventListener('DOMContentLoaded', () => {
+            if(!window.db) return;
+            window.db.collection("posts").orderBy("timestamp", "desc").limit(20).onSnapshot((snap) => {
+                const list = document.getElementById('qna-list');
+                if(!list) return;
+                list.innerHTML = "";
+                snap.forEach(doc => {
                     const data = doc.data();
-                    const date = data.createdAt ? new Date(data.createdAt.toDate()).toLocaleDateString(currentLang) : "";
-                    requestList.insertAdjacentHTML('beforeend', `
-                        <div class="post-card" style="border-left: 4px solid var(--accent-color);">
-                            <div style="font-size: 0.8em; color: #888; margin-bottom: 5px;">${date}</div>
-                            <strong style="display: block; margin-bottom: 8px; color: var(--primary-color);">${data.title}</strong>
-                            <p style="font-size: 0.9rem; color: #444; margin: 0;">${data.content}</p>
-                        </div>
-                    `);
+                    list.innerHTML += `<div class="post-card"><strong>${data.name}</strong><p>${data.content}</p></div>`;
                 });
             });
-        };
-
-        renderList();
-        renderRequests();
-        window.addEventListener('languageChanged', () => { renderList(); renderRequests(); });
+        });
     </script>
 </body>
 </html>
