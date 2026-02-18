@@ -14,19 +14,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="site_logo">British Daily Bible</title>
     
-    <!-- SEO & Domain Optimization -->
-    <meta name="description" content="Global spiritual platform for daily Bible verses, AI disciple tests, and community prayers.">
+    <meta name="description" content="Global spiritual platform for daily Bible verses and community prayers.">
     <link rel="canonical" href="https://dailybible.uk">
     
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Main Loader -->
+    <!-- Main Loader with Emergency Exit -->
     <div id="main-loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FDFBF7; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;">
         <i class="fas fa-cross fa-3x" style="color: #B08968; margin-bottom: 20px; animation: pulse 2s infinite;"></i>
         <div style="font-family: 'EB Garamond', serif; color: #34495E; font-size: 1.2rem;">Daily Bible</div>
     </div>
+
+    <script>
+        // Emergency Loader Release: 4 seconds fallback
+        setTimeout(function() {
+            var loader = document.getElementById('main-loader');
+            if (loader && loader.style.display !== 'none') {
+                loader.style.opacity = '0';
+                setTimeout(function() { loader.style.display = 'none'; }, 500);
+                console.warn("⚠️ Emergency loader removal triggered.");
+            }
+        }, 4000);
+    </script>
 
     <header>
         <div class="container">
@@ -44,7 +55,7 @@
                     <div id="streak-badge" style="display:none; margin-right: 15px; font-size: 0.8rem; font-weight: bold; color: #E65100;">
                         <i class="fas fa-fire"></i> <span id="streak-count">0</span>
                     </div>
-                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white; font-family: 'Inter', sans-serif;">
+                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
                         <option value="en">EN</option><option value="ko">KO</option>
                     </select>
                 </div>
@@ -54,24 +65,16 @@
 
     <main>
         <div class="container">
-            <!-- 1. Global Prayer Chain -->
-            <section class="global-stats-board card" style="margin-top: 40px;">
-                <h2 data-i18n="prayer_chain_title" style="text-align: center; color: #34495E; font-size: 1.8rem; margin-bottom: 24px; border: none;">🌏 Global Prayer Chain</h2>
-                <div style="display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 3.5rem; font-weight: 700; color: #B08968;" id="prayer-counter">0</div>
-                        <p style="font-size: 0.8rem; color: #7F8C8D; letter-spacing: 1px;">TOTAL PRAYERS</p>
-                    </div>
-                    <button id="global-prayer-btn" onclick="lightGlobalCandle()" class="primary-btn">
-                        <i class="fas fa-hands-praying"></i> <span data-i18n="btn_i_prayed_global">Join Prayer Now</span>
-                    </button>
-                </div>
+            <section class="global-stats-board card" style="margin-top: 40px; text-align: center;">
+                <h2 data-i18n="prayer_chain_title" class="classic-serif" style="border:none;">🌏 Global Prayer Chain</h2>
+                <div style="font-size: 3rem; font-weight: 700; color: #B08968; margin: 15px 0;" id="prayer-counter">0</div>
+                <button id="global-prayer-btn" onclick="lightGlobalCandle()" class="primary-btn">
+                    <i class="fas fa-hands-praying"></i> <span data-i18n="btn_i_prayed_global">Join Prayer Now</span>
+                </button>
             </section>
 
-            <!-- 2. Daily Word & Mood -->
             <section class="hero-section">
                 <h1 data-i18n="main_title" class="classic-serif">Daily Spiritual Rest</h1>
-                <p data-i18n="mood_title" style="margin-bottom: 24px; color: #7F8C8D;">How is your heart today?</p>
                 <div class="mood-container">
                     <button onclick="getVerseByMood('anxious')" class="mood-btn">😰 Anxious</button>
                     <button onclick="getVerseByMood('lonely')" class="mood-btn">🏚️ Lonely</button>
@@ -82,69 +85,38 @@
                 <div class="bible-app grid-3">
                     <div class="card">
                         <h3 class="classic-serif" data-i18n="daily_bible">Today's Word</h3>
-                        <p id="bible-text" style="font-family: 'EB Garamond', serif; font-size: 1.4rem; font-style: italic; margin-bottom: 10px;">"..."</p>
-                        <small id="bible-ref" style="color: #B08968; font-weight: 600;"></small>
+                        <p id="bible-text" style="font-family: 'EB Garamond', serif; font-size: 1.4rem; font-style: italic;">"..."</p>
+                        <small id="bible-ref"></small>
                     </div>
-                    <div class="card">
-                        <h3 class="classic-serif" data-i18n="daily_prayer">Today's Prayer</h3>
-                        <p id="prayer-text">Loading...</p>
-                    </div>
-                    <div class="card">
-                        <h3 class="classic-serif" data-i18n="daily_mission">Today's Mission</h3>
-                        <p id="mission-text">Loading...</p>
-                    </div>
+                    <div class="card"><h3 class="classic-serif" data-i18n="daily_prayer">Prayer</h3><p id="prayer-text">...</p></div>
+                    <div class="card"><h3 class="classic-serif" data-i18n="daily_mission">Mission</h3><p id="mission-text">...</p></div>
                 </div>
-
-                <div style="margin-top: 30px;">
-                    <button onclick="downloadVerseCard()" class="primary-btn" style="background: #B08968;">
-                        <i class="fas fa-download"></i> <span data-i18n="btn_generate_card">Save Verse Card</span>
-                    </button>
-                </div>
+                <button onclick="downloadVerseCard()" class="primary-btn" style="margin-top: 20px; background: #B08968;">
+                    <i class="fas fa-download"></i> <span data-i18n="btn_generate_card">Save Card</span>
+                </button>
             </section>
 
-            <!-- 3. AI Faith Companion -->
             <section class="card" style="margin-bottom: 60px; border: 1px solid #B08968; text-align: center;">
-                <h2 data-i18n="ai_companion_title" style="margin-bottom: 20px;">🕊️ AI Faith Companion</h2>
+                <h2 data-i18n="ai_companion_title">🕊️ AI Faith Companion</h2>
                 <div style="max-width: 600px; margin: 0 auto;">
-                    <input type="text" id="user-worry" class="input-box" placeholder="Ask about faith, life, or grace...">
-                    <button onclick="askFaithCompanion()" class="primary-btn" style="width: 100%; margin-top: 15px;" data-i18n="ai_companion_btn">Seek Guidance</button>
-                    <p id="ai-response" style="margin-top: 25px; font-family: 'EB Garamond', serif; font-size: 1.2rem; font-style: italic; min-height: 40px;"></p>
-                </div>
-            </section>
-
-            <!-- 4. Feature Links Grid -->
-            <section class="info-grid">
-                <div class="info-card" onclick="location.href='disciple-test.html'" style="cursor:pointer;">
-                    <i class="fas fa-robot"></i>
-                    <h3 data-i18n="nav_test">AI Disciple Test</h3>
-                    <p>Analyze your spiritual traits through 13 biblical archetypes.</p>
-                </div>
-                <div class="info-card" onclick="location.href='faith-checkup.html'" style="cursor:pointer;">
-                    <i class="fas fa-notes-medical"></i>
-                    <h3 data-i18n="nav_checkup">Faith Checkup</h3>
-                    <p>Monitor your spiritual health through weekly self-checks.</p>
-                </div>
-                <div class="info-card" onclick="location.href='community.html'" style="cursor:pointer;">
-                    <i class="fas fa-hands-praying"></i>
-                    <h3 data-i18n="nav_community">Community</h3>
-                    <p>Share your prayer requests and bear each other's burdens.</p>
+                    <input type="text" id="user-worry" class="input-box" data-i18n="input_placeholder" placeholder="Ask Paul...">
+                    <button onclick="askFaithCompanion()" class="primary-btn" style="margin-top: 15px;" data-i18n="ai_companion_btn">Seek Guidance</button>
+                    <p id="ai-response" style="margin-top: 20px; font-style: italic; color: #7F8C8D;"></p>
                 </div>
             </section>
         </div>
     </main>
 
-    <footer style="padding: 60px 0; text-align: center; background: white; border-top: 1px solid #eee;">
-        <div class="container">
-            <p data-i18n="footer_rights">© 2026 British Daily Bible.</p>
-            <nav style="display: flex; justify-content: center; gap: 30px; margin-top: 20px;">
-                <a href="privacy.html" data-i18n="nav_privacy" style="text-decoration:none; color: #2C3E50;">Privacy</a>
-                <a href="terms.html" data-i18n="nav_terms" style="text-decoration:none; color: #2C3E50;">Terms</a>
-                <a href="about.html" data-i18n="nav_about" style="text-decoration:none; color: #2C3E50;">About</a>
-            </nav>
-        </div>
+    <footer style="padding: 60px 0; text-align: center; border-top: 1px solid rgba(0,0,0,0.05);">
+        <p data-i18n="footer_rights">© 2026 British Daily Bible.</p>
+        <nav style="margin-top: 20px; display: flex; justify-content: center; gap: 30px;">
+            <a href="privacy.html" data-i18n="nav_privacy" style="text-decoration:none; color: #34495E;">Privacy</a>
+            <a href="terms.html" data-i18n="nav_terms" style="text-decoration:none; color: #34495E;">Terms</a>
+            <a href="about.html" data-i18n="nav_about" style="text-decoration:none; color: #34495E;">About</a>
+        </nav>
     </footer>
 
-    <!-- Scripts -->
+    <!-- Firebase SDKs (Compat) -->
     <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
     <script src="translations.js"></script>

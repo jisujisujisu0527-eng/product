@@ -1,25 +1,22 @@
-// dailybible.uk - Firebase & Site Manager (Robust Version)
+// firebase-firestore-service.js (Master System Manager)
 
-// 1. 전역 관리 객체 선언
 window.SiteManager = {
     isMockMode: false,
     modules: { firebase: false, store: false },
-    // 로딩 화면 제거 함수
     hideLoader: function() {
         const loader = document.getElementById('main-loader');
-        if (loader) {
+        if (loader && loader.style.display !== 'none') {
             loader.style.opacity = '0';
             setTimeout(() => {
                 loader.style.display = 'none';
-                console.log("✅ Loader hidden.");
+                console.log("✅ Main Loader Hidden Successfully.");
             }, 500);
         }
     }
 };
 
-// 2. 파이어베이스 설정 (사용자 키 입력 필요)
 const firebaseConfig = {
-    apiKey: "YOUR_REAL_API_KEY_HERE",
+    apiKey: "YOUR_REAL_API_KEY", // 실제 키로 교체 필요
     authDomain: "dailybible-uk.firebaseapp.com",
     projectId: "dailybible-uk",
     storageBucket: "dailybible-uk.appspot.com",
@@ -27,38 +24,30 @@ const firebaseConfig = {
     appId: "APP_ID"
 };
 
-// 3. 파이어베이스 초기화 및 안전 장치
 try {
     if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("YOUR_REAL")) {
-        throw new Error("API Key is missing or default.");
+        throw new Error("API Key Missing");
     }
-    // 초기화 (CDN에서 로드된 firebase 객체 사용)
     firebase.initializeApp(firebaseConfig);
     window.db = firebase.firestore();
     window.SiteManager.modules.firebase = true;
-    console.log("✅ Firebase Initialized");
-} catch (error) {
+    console.log("✅ Firebase Connected");
+} catch (e) {
     window.SiteManager.isMockMode = true;
-    console.warn("🚀 Starting in Mock Mode:", error.message);
-    
-    // 가짜 DB 객체 (에러 방지용)
+    console.warn("🚀 Running in Offline Mode:", e.message);
+    // Mock DB structure to prevent crashes
     window.db = {
-        collection: function() {
-            return {
-                doc: () => ({ 
-                    onSnapshot: (cb) => cb({ data: () => ({ totalCount: 0 }), exists: false }),
-                    get: () => Promise.resolve({ exists: false, data: () => ({}) }),
-                    update: () => Promise.resolve(),
-                    set: () => Promise.resolve()
-                }),
-                add: () => Promise.resolve({ id: "mock" }),
-                orderBy: () => ({ limit: () => ({ onSnapshot: () => {} }) }),
-                where: () => ({ limit: () => ({ get: () => Promise.resolve({ empty: true, docs: [] }) }) })
-            };
-        },
+        collection: () => ({
+            doc: () => ({
+                onSnapshot: (cb) => cb({ exists: false, data: () => ({}) }),
+                get: () => Promise.resolve({ exists: false, data: () => ({}) }),
+                update: () => Promise.resolve(),
+                set: () => Promise.resolve()
+            }),
+            add: () => Promise.resolve({ id: "mock" }),
+            orderBy: () => ({ limit: () => ({ onSnapshot: () => {} }) }),
+            where: () => ({ limit: () => ({ get: () => Promise.resolve({ empty: true, docs: [] }) }) })
+        }),
         runTransaction: async () => {}
     };
 }
-
-// **중요**: 2.5초 후에는 성공 여부와 관계없이 무조건 로딩 화면을 걷어냅니다.
-setTimeout(() => window.SiteManager.hideLoader(), 2500);
