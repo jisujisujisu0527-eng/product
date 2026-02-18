@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>신앙 점검 테스트</title>
+    <title>신앙 점검 테스트 - 영적 건강 진단</title>
     <meta name="description" content="나의 영적 밸런스를 확인하고 신앙 성장을 위한 지표를 점검합니다.">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-8260879821489900">
@@ -15,73 +15,90 @@
         <div class="container test-page-container">
             <h1>신앙 점검 테스트</h1>
 
+            <section class="checkup-intro" style="margin-bottom: 30px; line-height: 1.7; color: #555;">
+                <p>영적 성장은 자신의 상태를 정직하게 마주하는 것에서 시작됩니다. 본 테스트는 <strong>심령의 상태(마음), 말씀의 실천(삶), 공동체와의 연결(관계)</strong>이라는 세 가지 핵심 영역을 통해 당신의 현재 신앙 위치를 보여줍니다. 매주 정기적인 점검을 통해 편중되지 않은 균형 잡힌 신앙인으로 성장해 보세요.</p>
+            </section>
+
             <div id="surveyArea" class="card">
-                <h2>📋 신앙 점검 (9가지 질문)</h2>
+                <h2>📋 주간 신앙 자가진단 (9문항)</h2>
+                <p style="font-size: 0.9rem; color: #888; margin-bottom: 20px;">각 질문에 솔직하게 답해 주세요. 결과는 개인의 영적 여정을 위한 참고 자료로 활용됩니다.</p>
                 <form id="faithForm">
-                    <div class="question">
-                        <h4>1. 이번 주 나의 마음 기상도는?</h4>
-                        <label><input type="radio" name="q1" value="5" required> 맑음</label>
-                        <label><input type="radio" name="q1" value="3"> 흐림</label>
-                        <label><input type="radio" name="q1" value="1"> 비/태풍</label>
-                    </div>
-                    <div class="question">
-                        <h4>2. 일상 속 주님의 일하심을 느꼈나요?</h4>
-                        <label><input type="radio" name="q2" value="5" required> 매우 그렇다</label>
-                        <label><input type="radio" name="q2" value="3"> 보통이다</label>
-                        <label><input type="radio" name="q2" value="1"> 잘 모르겠다</label>
-                    </div>
-                    <div class="question">
-                        <h4>3. 이번 주 나의 우선순위 1번은?</h4>
-                        <label><input type="radio" name="q3" value="5" required> 하나님</label>
-                        <label><input type="radio" name="q3" value="3"> 가족/업무</label>
-                        <label><input type="radio" name="q3" value="1"> 개인적 휴식</label>
-                    </div>
-
-                    <div class="question">
-                        <h4>4. 설교 말씀 중 기억나는 단어가 있나요?</h4>
-                        <label><input type="radio" name="q4" value="5" required> 명확히 기억남</label>
-                        <label><input type="radio" name="q4" value="3"> 어렴풋함</label>
-                        <label><input type="radio" name="q4" value="1"> 기억 안 남</label>
-                    </div>
-                    <div class="question">
-                        <h4>5. 말씀을 삶에 적용하려고 노력했나요? (1~5점)</h4>
-                        <input type="range" name="q5" min="1" max="5" value="3">
-                    </div>
-                    <div class="question">
-                        <h4>6. 실천을 방해하는 요소가 있었나요?</h4>
-                        <label><input type="radio" name="q6" value="1" required> 매우 많았음</label>
-                        <label><input type="radio" name="q6" value="3"> 조금 있었음</label>
-                        <label><input type="radio" name="q6" value="5"> 거의 없었음</label>
+                    <div class="question-group">
+                        <h3 style="color: #007bff; border-bottom: 1px solid #eee; padding-bottom: 5px;">[영역 1] 내면의 평안과 우선순위</h3>
+                        <div class="question">
+                            <h4>1. 이번 주 나의 마음 기상도는?</h4>
+                            <label><input type="radio" name="q1" value="5" required> 맑음 (평안과 감사)</label>
+                            <label><input type="radio" name="q1" value="3"> 흐림 (불안과 걱정)</label>
+                            <label><input type="radio" name="q1" value="1"> 비/태풍 (영적 침체)</label>
+                        </div>
+                        <div class="question">
+                            <h4>2. 일상 속 주님의 일하심을 느꼈나요?</h4>
+                            <label><input type="radio" name="q2" value="5" required> 매우 그렇다</label>
+                            <label><input type="radio" name="q2" value="3"> 보통이다</label>
+                            <label><input type="radio" name="q2" value="1"> 잘 모르겠다</label>
+                        </div>
+                        <div class="question">
+                            <h4>3. 이번 주 나의 우선순위 1번은?</h4>
+                            <label><input type="radio" name="q3" value="5" required> 하나님</label>
+                            <label><input type="radio" name="q3" value="3"> 가족/업무</label>
+                            <label><input type="radio" name="q3" value="1"> 개인적 휴식/쾌락</label>
+                        </div>
                     </div>
 
-                    <div class="question">
-                        <h4>7. 공동체의 돌봄이 필요하다고 느끼나요?</h4>
-                        <label><input type="radio" name="q7" value="5" required> 매우 필요/감사함</label>
-                        <label><input type="radio" name="q7" value="3"> 가끔 느낌</label>
-                        <label><input type="radio" name="q7" value="1"> 혼자가 편함</label>
-                    </div>
-                    <div class="question">
-                        <h4>8. 다른 지체를 위해 기도나 섬김을 했나요?</h4>
-                        <label><input type="radio" name="q8" value="5" required> 실천함</label>
-                        <label><input type="radio" name="q8" value="3"> 마음만 먹음</label>
-                        <label><input type="radio" name="q8" value="1"> 못 함</label>
-                    </div>
-                    <div class="question">
-                        <h4>9. 교회가 나에게 생명을 공급하나요?</h4>
-                        <label><input type="radio" name="q9" value="5" required> 매우 그렇다</label>
-                        <label><input type="radio" name="q9" value="3"> 보통이다</label>
-                        <label><input type="radio" name="q9" value="1"> 잘 모르겠다</label>
+                    <div class="question-group" style="margin-top: 30px;">
+                        <h3 style="color: #28a745; border-bottom: 1px solid #eee; padding-bottom: 5px;">[영역 2] 말씀의 갈망과 순종</h3>
+                        <div class="question">
+                            <h4>4. 설교 말씀 중 기억나는 단어가 있나요?</h4>
+                            <label><input type="radio" name="q4" value="5" required> 명확히 기억남</label>
+                            <label><input type="radio" name="q4" value="3"> 어렴풋함</label>
+                            <label><input type="radio" name="q4" value="1"> 기억 안 남</label>
+                        </div>
+                        <div class="question">
+                            <h4>5. 말씀을 삶에 적용하려고 노력했나요? (1~5점)</h4>
+                            <input type="range" name="q5" min="1" max="5" value="3" style="width: 100%;">
+                        </div>
+                        <div class="question">
+                            <h4>6. 실천을 방해하는 요소가 있었나요?</h4>
+                            <label><input type="radio" name="q6" value="1" required> 매우 많았음</label>
+                            <label><input type="radio" name="q6" value="3"> 조금 있었음</label>
+                            <label><input type="radio" name="q6" value="5"> 거의 없었음</label>
+                        </div>
                     </div>
 
-                    <button type="submit">결과 확인 및 저장</button>
+                    <div class="question-group" style="margin-top: 30px;">
+                        <h3 style="color: #fd7e14; border-bottom: 1px solid #eee; padding-bottom: 5px;">[영역 3] 공동체와 사랑의 나눔</h3>
+                        <div class="question">
+                            <h4>7. 공동체의 돌봄이 필요하다고 느끼나요?</h4>
+                            <label><input type="radio" name="q7" value="5" required> 매우 필요/감사함</label>
+                            <label><input type="radio" name="q7" value="3"> 가끔 느낌</label>
+                            <label><input type="radio" name="q7" value="1"> 혼자가 편함</label>
+                        </div>
+                        <div class="question">
+                            <h4>8. 다른 지체를 위해 기도나 섬김을 했나요?</h4>
+                            <label><input type="radio" name="q8" value="5" required> 실천함</label>
+                            <label><input type="radio" name="q8" value="3"> 마음만 먹음</label>
+                            <label><input type="radio" name="q8" value="1"> 못 함</label>
+                        </div>
+                        <div class="question">
+                            <h4>9. 교회가 나에게 생명을 공급하나요?</h4>
+                            <label><input type="radio" name="q9" value="5" required> 매우 그렇다</label>
+                            <label><input type="radio" name="q9" value="3"> 보통이다</label>
+                            <label><input type="radio" name="q9" value="1"> 잘 모르겠다</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" style="margin-top: 30px; width: 100%; padding: 15px; font-size: 1.1rem;">결과 확인 및 데이터 저장</button>
                 </form>
             </div>
 
             <div id="resultArea" class="card" style="display: none;">
-                <h2>📊 나의 신앙 밸런스</h2>
+                <h2>📊 나의 신앙 밸런스 결과</h2>
                 <canvas id="faithChart"></canvas>
-                <div id="typeDescription" style="margin-top:20px; font-weight:bold; text-align:center;"></div>
-                <button onclick="location.reload()" style="margin-top:20px; background:#666;">다시 하기</button>
+                <div id="typeDescription" style="margin-top:20px; font-weight:bold; text-align:center; line-height: 1.6;"></div>
+                <div class="spiritual-tip" style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 5px; font-size: 0.9rem;">
+                    <strong>💡 영적 팁:</strong> 가장 점수가 낮은 영역을 이번 주 집중 기도 제목으로 삼아보세요.
+                </div>
+                <button onclick="location.reload()" style="margin-top:20px; background:#666; width: 100%;">다시 테스트하기</button>
             </div>
         </div>
     </main>

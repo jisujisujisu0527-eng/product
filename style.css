@@ -10,6 +10,92 @@ body {
     line-height: 1.6;
 }
 
+/* Spiritual Insight Section Styles */
+.spiritual-insight-section {
+    margin-top: 60px;
+    padding: 40px;
+    background-color: #ffffff;
+    border: 1px solid #e0dedc;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    text-align: left;
+    transition: transform 0.3s ease;
+}
+
+.spiritual-insight-section:hover {
+    transform: translateY(-5px);
+}
+
+body.dark-mode .spiritual-insight-section {
+    background-color: #3a2f2b;
+    border-color: #5d544f;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.spiritual-insight-section h2 {
+    color: #4e342e;
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.spiritual-insight-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background-color: #ffab40;
+    border-radius: 2px;
+}
+
+body.dark-mode .spiritual-insight-section h2 {
+    color: #fbe9e7;
+}
+
+.spiritual-insight-section p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #5d544f;
+    margin-bottom: 20px;
+}
+
+body.dark-mode .spiritual-insight-section p {
+    color: #ded7c8;
+}
+
+.spiritual-insight-section h3 {
+    color: #4e342e;
+    font-size: 1.4rem;
+    margin-top: 35px;
+    margin-bottom: 20px;
+}
+
+body.dark-mode .spiritual-insight-section h3 {
+    color: #fbe9e7;
+}
+
+.spiritual-insight-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.spiritual-insight-section ul li {
+    margin-bottom: 15px;
+    padding-left: 20px;
+    position: relative;
+}
+
+.spiritual-insight-section ul li::before {
+    content: '•';
+    color: #ffab40;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
 body.dark-mode {
     background-color: #4A3C32; /* 따뜻한 느낌의 어두운 갈색 배경 */
     color: #FBE9E7; /* 밝은 크림색 텍스트 */

@@ -3,23 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>예수님 제자상 테스트</title>
-    <meta name="description" content="Google Teachable Machine 모델을 활용하여 예수님의 제자상을 테스트해보세요.">
+    <title>예수님 제자상 테스트 - AI 영적 성향 분석</title>
+    <meta name="description" content="인공지능(AI)을 활용하여 성경 속 인물들과 나의 영적 성향을 비교해보는 예수님 제자상 테스트입니다.">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-8260879821489900">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <main>
-        <div class="test-container">
-            <h2>예수님 제자상 테스트</h2>
-            <input type="file" id="file-input" accept="image/*" class="file-input-button">
-            <div id="image-display-container">
-                <img id="uploaded-image" src="#" alt="업로드된 이미지" style="display: none;">
+        <div class="container">
+            <div class="test-container">
+                <h2>예수님 제자상 테스트 (AI 분석)</h2>
+                
+                <section class="test-intro-text" style="margin-bottom: 30px; text-align: left; line-height: 1.7; color: #444; background: #fdfdfd; padding: 20px; border-left: 5px solid #007bff;">
+                    <h3>나의 영적 성향은 누구와 닮았을까요?</h3>
+                    <p>본 테스트는 Google의 Teachable Machine 인공지능 기술을 활용하여 사용자의 이미지(또는 업로드한 사진)를 분석하고, 성경 속 주요 제자들의 특성과 비교해 봅니다. 열정적인 베드로, 사랑의 사도 요한, 의심 많지만 정직했던 도마 등 당신이 가진 고유한 영적 에너지를 확인해 보세요.</p>
+                    <p style="font-size: 0.85rem; color: #777;">* 업로드된 사진은 서버에 저장되지 않으며 오직 브라우저 내 인공지능 판단용으로만 사용됩니다.</p>
+                </section>
+
+                <div class="upload-area" style="padding: 20px; border: 2px dashed #ddd; border-radius: 10px; margin-bottom: 20px;">
+                    <p>분석할 이미지를 선택해 주세요</p>
+                    <input type="file" id="file-input" accept="image/*" class="file-input-button">
+                </div>
+
+                <div id="image-display-container">
+                    <img id="uploaded-image" src="#" alt="업로드된 이미지" style="display: none; max-width: 100%; border-radius: 8px; margin: 0 auto;">
+                </div>
+                <button type="button" id="predict-button" class="test-start-button" style="display: none; width: 100%;">AI 판단 시작하기</button>
+                <div id="loading-indicator" style="display: none; margin-top: 20px; font-weight: bold; color: #007bff;">인공지능이 분석 중입니다...</div>
+                <div id="label-container" style="margin-top: 20px;"></div>
+
+                <section class="test-meaning-section" style="margin-top: 50px; text-align: left; border-top: 1px solid #eee; padding-top: 30px;">
+                    <h3>제자도란 무엇인가?</h3>
+                    <p style="line-height: 1.6; color: #555;">예수님의 제자가 된다는 것은 단순히 지식을 얻는 것이 아니라, 그분의 삶의 태도를 닮아가는 과정입니다. 각기 다른 성격과 배경을 가진 12제자가 한 팀이 되었듯, 우리 모두는 각자의 고유한 모습으로 부르심을 받았습니다. 이 테스트를 통해 자신의 장점을 발견하고 부족한 영역을 기도로 채워가는 계기가 되길 바랍니다.</p>
+                </section>
             </div>
-            <button type="button" id="predict-button" class="test-start-button" style="display: none;">판단하기</button>
-            <div id="loading-indicator" style="display: none; margin-top: 20px;">분석 중...</div>
-            <div id="label-container"></div>
         </div>
     </main>
     <footer>
@@ -48,63 +66,48 @@
                 const modelURL = URL + "model.json";
                 const metadataURL = URL + "metadata.json";
 
-                loadingIndicator.style.display = 'block'; // Show loading during model load
-                predictButton.disabled = true; // Disable button while loading
+                loadingIndicator.style.display = 'block'; 
+                predictButton.disabled = true; 
 
                 model = await tmImage.load(modelURL, metadataURL);
                 maxPredictions = model.getTotalClasses();
 
-                loadingIndicator.style.display = 'none'; // Hide loading after model load
-                predictButton.disabled = false; // Enable button
+                loadingIndicator.style.display = 'none'; 
+                predictButton.disabled = false; 
 
-                labelContainer.innerHTML = '<div style="color: #666;">이미지를 업로드하고 \'판단하기\' 버튼을 눌러주세요.</div>';
+                labelContainer.innerHTML = '<div style="color: #666;">준비가 되었습니다. 이미지를 업로드하세요.</div>';
 
             } catch (error) {
                 console.error("모델 로드 중 오류 발생:", error);
-                labelContainer.innerHTML = '<div style="color: red;">모델 로드에 실패했습니다. 페이지를 새로고침 해주세요.</div>';
+                labelContainer.innerHTML = '<div style="color: red;">모델 로드에 실패했습니다.</div>';
                 loadingIndicator.style.display = 'none';
             }
         }
 
         async function predict() {
-            if (!model) {
-                labelContainer.innerHTML = '<div style="color: red;">모델이 로드되지 않았습니다.</div>';
-                return;
-            }
-
+            if (!model) return;
             if (uploadedImage.src && uploadedImage.style.display !== 'none') {
-                labelContainer.innerHTML = ''; // Clear previous predictions
-                loadingIndicator.style.display = 'block'; // Show loading during prediction
-                predictButton.disabled = true; // Disable button during prediction
+                labelContainer.innerHTML = ''; 
+                loadingIndicator.style.display = 'block'; 
+                predictButton.disabled = true; 
 
                 try {
                     const prediction = await model.predict(uploadedImage);
-                    loadingIndicator.style.display = 'none'; // Hide loading after prediction
-                    predictButton.disabled = false; // Enable button
-
-                    // Sort predictions by probability in descending order
+                    loadingIndicator.style.display = 'none'; 
+                    predictButton.disabled = false; 
                     prediction.sort((a, b) => b.probability - a.probability);
 
-                    // Display results
                     for (let i = 0; i < maxPredictions; i++) {
                         const classPrediction = document.createElement("div");
-                        classPrediction.className = 'prediction-result-item'; // Add class for styling
+                        classPrediction.className = 'prediction-result-item'; 
                         const probability = (prediction[i].probability * 100).toFixed(1);
                         classPrediction.innerHTML = `${prediction[i].className}: <strong>${probability}%</strong>`;
                         labelContainer.appendChild(classPrediction);
                     }
-                    if (prediction.length === 0) {
-                        labelContainer.innerHTML = '<div>예측 결과를 찾을 수 없습니다.</div>';
-                    }
-
                 } catch (error) {
-                    console.error("예측 중 오류 발생:", error);
-                    labelContainer.innerHTML = '<div style="color: red;">이미지 예측 중 오류가 발생했습니다.</div>';
                     loadingIndicator.style.display = 'none';
                     predictButton.disabled = false;
                 }
-            } else {
-                labelContainer.innerHTML = '<div style="color: orange;">먼저 이미지를 업로드해야 합니다.</div>';
             }
         }
 
@@ -114,22 +117,15 @@
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     uploadedImage.src = e.target.result;
-                    uploadedImage.style.display = 'block'; // Show the image
-                    predictButton.style.display = 'block'; // Show the predict button
-                    labelContainer.innerHTML = '<div style="color: #666;">\'판단하기\' 버튼을 눌러 분석하세요.</div>'; // Prompt user to predict
+                    uploadedImage.style.display = 'block'; 
+                    predictButton.style.display = 'block'; 
+                    labelContainer.innerHTML = '<div style="color: #666;">준비 완료! 판단 시작 버튼을 눌러주세요.</div>';
                 };
                 reader.readAsDataURL(file);
-            } else {
-                uploadedImage.src = '#';
-                uploadedImage.style.display = 'none';
-                predictButton.style.display = 'none';
-                labelContainer.innerHTML = '';
             }
         });
 
         predictButton.addEventListener('click', predict);
-
-        // Initialize the model when the page loads
         init();
     </script>
 </body>
