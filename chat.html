@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="nav_chat">Apostle Chat | Daily Bible</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .chat-container { max-width: 600px; margin: 40px auto; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid #eee; }
+        .chat-header { background: #4a3b2a; padding: 30px; text-align: center; color: white; }
+        .chat-header img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #fff; margin-bottom: 15px; background: #fff; }
+        .chat-window { height: 450px; overflow-y: auto; padding: 20px; background: #fdfaf5; display: flex; flex-direction: column; gap: 15px; }
+        .msg { padding: 12px 18px; border-radius: 15px; max-width: 80%; line-height: 1.6; }
+        .bot-msg { background: #fff; align-self: flex-start; border: 1px solid #eee; color: #444; border-bottom-left-radius: 2px; }
+        .user-msg { background: #B08968; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .chat-input-area { display: flex; padding: 20px; background: white; border-top: 1px solid #eee; gap: 10px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="nav-logo">
+                    <a href="index.html" data-i18n="site_logo">British Daily Bible</a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Disciple</a></li>
+                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Faith Check</a></li>
+                    <li><a href="faith-dashboard.html" data-i18n="nav_dashboard">Dashboard</a></li>
+                    <li><a href="community.html" data-i18n="nav_community">Community</a></li>
+                    <li><a href="chat.html" data-i18n="nav_chat">Apostle Chat</a></li>
+                </ul>
+                <div class="lang-switcher">
+                    <button onclick="changeLanguage('ko')" class="lang-btn">KO</button>
+                    <button onclick="changeLanguage('en')" class="lang-btn">EN</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Paul&top=shortHair&topProbability=100&facialHair=beardMajestic&facialHairProbability=100&clothes=graphicShirt&clothColor=65c9ff" alt="Apostle Paul">
+                    <h2 data-i18n="chat_title" style="font-family: 'Lora', serif; font-size: 1.6rem;">Chat with Apostle Paul</h2>
+                    <p data-i18n="chat_subtitle" style="font-size: 0.9rem; font-style: italic; opacity: 0.9;">Grace and peace to you</p>
+                </div>
+
+                <div id="chat-window" class="chat-window">
+                    <div class="msg bot-msg" id="bot-welcome">"Grace to you and peace from God our Father. How can I encourage your faith today?"</div>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" class="input-box" data-i18n="chat_placeholder" placeholder="Ask about faith, anxiety, or grace..." style="margin-bottom: 0;">
+                    <button onclick="sendChatMessage()" class="primary-btn" style="white-space: nowrap;">
+                        <i class="fas fa-paper-plane"></i> <span data-i18n="chat_send">Send</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="translations.js"></script>
+    <script src="main.js"></script>
+    <script type="module">
+        // Firebase Cloud Functions 호출 시뮬레이션 및 로직
+        // 실제 API 배포 전까지는 고정된 바울의 서신서 구절로 응답합니다.
+        window.sendChatMessage = async function() {
+            const input = document.getElementById('chat-input');
+            const windowEl = document.getElementById('chat-window');
+            const message = input.value.trim();
+            if (!message) return;
+
+            appendMessage('user-msg', message);
+            input.value = '';
+
+            // AI 호출 시뮬레이션
+            setTimeout(() => {
+                const response = getPaulResponse(message);
+                appendMessage('bot-msg', response);
+            }, 1000);
+        };
+
+        function appendMessage(type, text) {
+            const windowEl = document.getElementById('chat-window');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `msg ${type}`;
+            msgDiv.textContent = text;
+            windowEl.appendChild(msgDiv);
+            windowEl.scrollTop = windowEl.scrollHeight;
+        }
+
+        function getPaulResponse(msg) {
+            const responses = {
+                ko: [
+                    "형제여, 아무 것도 염려하지 말고 다만 모든 일에 기도와 간구로 너희 구할 것을 감사함으로 하나님께 아뢰십시오.",
+                    "우리가 알거니와 하나님을 사랑하는 자 곧 그의 뜻대로 부르심을 입은 자들에게는 모든 것이 합력하여 선을 이루느니라.",
+                    "내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라."
+                ],
+                en: [
+                    "My brother, do not be anxious about anything, but in everything by prayer and supplication with thanksgiving let your requests be made known to God.",
+                    "And we know that for those who love God all things work together for good, for those who are called according to his purpose.",
+                    "I can do all things through him who strengthens me."
+                ]
+            };
+            const list = responses[currentLang] || responses['en'];
+            return list[Math.floor(Math.random() * list.length)];
+        }
+    </script>
+</body>
+</html>
