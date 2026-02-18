@@ -1,160 +1,120 @@
-console.log("Running version 1.2");
-
-
-
-const popularVerses = [
-    { text: "태초에 하나님이 천지를 창조하시니라", reference: "창세기 1:1" },
-    { text: "네 시작은 미약하였으나 네 나중은 심히 창대하리라", reference: "욥기 8:7" },
-    { text: "항상 기뻐하라 쉬지 말고 기도하라 범사에 감사하라 이것이 그리스도 예수 안에서 너희를 향하신 하나님의 뜻이니라", reference: "데살로니가전서 5:16-18" },
-    { text: "수고하고 무거운 짐 진 자들아 다 내게로 오라 내가 너희를 쉬게 하리라", reference: "마태복음 11:28" },
-    { text: "그런즉 믿음, 소망, 사랑, 이 세 가지는 항상 있을 것인데 그 중의 제일은 사랑이라", reference: "고린도전서 13:13" },
-    { text: "두려워하지 말라 내가 너와 함께 함이라 놀라지 말라 나는 네 하나님이 됨이라 내가 너를 굳세게 하리라 참으로 너를 도와 주리라 참으로 나의 의로운 오른손으로 너를 붙들리라", reference: "이사야 41:10" },
-    { text: "여호와는 나의 목자시니 내게 부족함이 없으리로다", reference: "시편 23:1" },
-    { text: "내가 그리스도와 함께 십자가에 못 박혔나니 그런즉 이제는 내가 사는 것이 아니요 오직 내 안에 그리스도께서 사시는 것이라 이제 내가 육체 가운데 사는 것은 나를 사랑하사 나를 위하여 자기 자신을 버리신 하나님의 아들을 믿는 믿음 안에서 사는 것이라", reference: "갈라디아서 2:20" },
-    { text: "너희는 먼저 그의 나라와 그의 의를 구하라 그리하면 이 모든 것을 너희에게 더하시리라", reference: "마태복음 6:33" },
-    { text: "아무 것도 염려하지 말고 다만 모든 일에 기도와 간구로, 너희 구할 것을 감사함으로 하나님께 아뢰라", reference: "빌립보서 4:6" }
-];
-
-const prayerVerses = [
-    { text: "쉬지 말고 기도하라, 너희의 필요를 주께 아뢰고 감사함으로 간구하라. 그리하면 평강이 너희 마음을 지키리라.", reference: "빌립보서 4:6-7 변형" },
-    { text: "주님을 찾으라, 그를 부를 때 그는 가까이 계시니, 의인의 기도는 역사하는 힘이 많으니라.", reference: "야고보서 5:16 변형" },
-    { text: "너희 중에 고난당하는 자가 있느냐 그는 기도할 것이요 즐거워하는 자가 있느냐 그는 찬송할지니라.", reference: "야고보서 5:13 변형" },
-    { text: "구하라 그러면 너희에게 주실 것이요 찾으라 그러면 찾을 것이요 문을 두드리라 그러면 너희에게 열릴 것이니.", reference: "마태복음 7:7 변형" },
-    { text: "아무것도 염려하지 말고 오직 모든 일에 기도와 간구로, 너희 구할 것을 감사함으로 하나님께 아뢰라.", reference: "빌립보서 4:6-7" },
-    { text: "너희는 마음에 근심하지 말라 하나님을 믿으니 또 나를 믿으라.", reference: "요한복음 14:1" },
-    { text: "내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라.", reference: "빌립보서 4:13" },
-    { text: "여호와는 나의 목자시니 내게 부족함이 없으리로다.", reference: "시편 23:1" }
-];
-
-const evangelismVerses = [
-    { text: "온 천하에 다니며 모든 피조물에게 복음을 전파하라. 믿고 세례를 받는 자는 구원을 얻으리라.", reference: "마가복음 16:15-16 변형" },
-    { text: "내가 곧 길이요 진리요 생명이니 나로 말미암지 않고는 아버지께 올 자가 없느느리라. 주 예수를 믿으라 그리하면 너와 네 집이 구원을 받으리라.", reference: "요한복음 14:6, 사도행전 16:31 변형" },
-    { text: "너희는 세상의 빛이라 산 위에 있는 동네가 숨겨지지 못할 것이요.", reference: "마태복음 5:14 변형" },
-    { text: "하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니 이는 그를 믿는 자마다 멸망하지 않고 영생을 얻게 하려 하심이라.", reference: "요한복음 3:16 변형" },
-    { text: "오직 성령이 너희에게 임하시면 너희가 권능을 받고 예루살렘과 온 유대와 사마리아와 땅 끝까지 이르러 내 증인이 되리라 하시니라.", reference: "사도행전 1:8" },
-    { text: "내가 너희에게 분부한 모든 것을 가르쳐 지키게 하라 볼지어다 내가 세상 끝날까지 너희와 항상 함께 있으리라 하시니라.", reference: "마태복음 28:20" },
-    { text: "그들이 평안하다, 안전하다 할 그 때에 임신한 여자에게 해산의 고통이 이름과 같이 멸망이 갑자기 그들에게 이르리니 결코 피하지 못하리라.", reference: "데살로니가전서 5:3" },
-    { text: "그 후에 주께서 달리 칠십 인을 세우사 친히 가시려는 각 동네와 각 지역으로 둘씩 앞서 보내시며.", reference: "누가복음 10:1" }
-];
-
-
-const bibleBooks = {
-    "창세기": 50, "출애굽기": 40, "레위기": 27, "민수기": 36, "신명기": 34,
-    "여호수아": 24, "사사기": 21, "룻기": 4, "사무엘상": 31, "사무엘하": 24,
-    "열왕기상": 22, "열왕기하": 25, "역대상": 29, "역대하": 36, "에스라": 10,
-    "느헤미야": 13, "에스더": 10, "욥기": 42, "시편": 150, "잠언": 31,
-    "전도서": 12, "아가": 8, "이사야": 66, "예레미야": 52, "예레미야애가": 5,
-    "에스겔": 48, "다니엘": 12, "호세아": 14, "요엘": 3, "아모스": 9,
-    "오바댜": 1, "요나": 4, "미가": 7, "나훔": 3, "하박국": 3, "스바냐": 3,
-    "학개": 2, "스가랴": 14, "말라기": 4,
-    "마태복음": 28, "마가복음": 16, "누가복음": 24, "요한복음": 21, "사도행전": 28,
-    "로마서": 16, "고린도전서": 16, "고린도후서": 13, "갈라디아서": 6, "에베소서": 6,
-    "빌립보서": 4, "골로새서": 4, "데살로니가전서": 5, "데살로니가후서": 3, "디모데전서": 6,
-    "디모데후서": 4, "디도서": 3, "빌레몬서": 1, "히브리서": 13, "야고보서": 5,
-    "베드로전서": 5, "베드로후서": 3, "요한1서": 5, "요한2서": 1, "요한3서": 1,
-    "유다서": 1, "요한계시록": 22
-};
-
-const koreanToEnglish = {
-    "창세기": "Genesis", "출애굽기": "Exodus", "레위기": "Leviticus", "민수기": "Numbers",
-    "신명기": "Deuteronomy", "여호수아": "Joshua", "사사기": "Judges", "룻기": "Ruth",
-    "사무엘상": "1 Samuel", "사무엘하": "2 Samuel", "열왕기상": "1 Kings", "열왕기하": "2 Kings",
-    "역대상": "1 Chronicles", "역대하": "2 Chronicles", "에스라": "Ezra", "느헤미야": "Nehemiah",
-    "에스더": "Esther", "욥기": "Job", "시편": "Psalms", "잠언": "Proverbs",
-    "전도서": "Ecclesiastes", "아가": "Song of Songs", "이사야": "Isaiah",
-    "예레미야": "Jeremiah", "예레미야애가": "Lamentations", "에스겔": "Ezekiel",
-    "다니엘": "Daniel", "호세아": "Hosea", "요엘": "Joel", "아모스": "Amos",
-    "오바댜": "Obadiah", "요나": "Jonah", "미가": "Micah", "나훔": "Nahum",
-    "하박국": "Habakkuk", "스바냐": "Zephaniah", "학개": "Haggai", "스가랴": "Zechariah",
-    "말라기": "Malachi",
-    "마태복음": "Matthew", "마가복음": "Mark", "누가복음": "Luke", "요한복음": "John",
-    "사도행전": "Acts", "로마서": "Romans", "고린도전서": "1 Corinthians",
-    "고린도후서": "2 Corinthians", "갈라디아서": "Galatians", "에베소서": "Ephesians",
-    "빌립보서": "Philippians", "골로새서": "Colossians", "데살로니가전서": "1 Thessalonians",
-    "데살로니가후서": "2 Thessalonians", "디모데전서": "1 Timothy", "디모데후서": "2 Timothy",
-    "디도서": "Titus", "빌레몬서": "Philemon", "히브리서": "Hebrews", "야고보서": "James",
-    "베드로전서": "1 Peter", "베드로후서": "2 Peter", "요한1서": "1 John",
-    "요한2서": "2 John", "요한3서": "3 John", "유다서": "Jude", "요한계시록": "Revelation"
-};
-
-const verseText = document.getElementById('verse-text');
-const verseReference = document.getElementById('verse-reference');
-const newVerseBtn = document.getElementById('new-verse-btn');
-const themeToggleBtn = document.getElementById('theme-toggle-btn');
-const prayerVerseText = document.getElementById('prayer-verse-text');
-const prayerVerseReference = document.getElementById('prayer-verse-reference');
-const newPrayerVerseBtn = document.getElementById('new-prayer-verse-btn');
-const evangelismVerseText = document.getElementById('evangelism-verse-text');
-const evangelismVerseReference = document.getElementById('evangelism-verse-reference');
-const newEvangelismVerseBtn = document.getElementById('new-evangelism-verse-btn');
-
-function getRandomBook() {
-    const books = Object.keys(bibleBooks);
-    return books[Math.floor(Math.random() * books.length)];
-}
-
-
-
-async function getRandomVerse() {
-    // 50% chance to display a popular verse
-    if (Math.random() < 0.5) {
-        const verse = popularVerses[Math.floor(Math.random() * popularVerses.length)];
-        displayVerse(verse.text, verse.reference);
-        return;
+// i18n Translations & Content Data
+const translations = {
+    ko: {
+        nav_home: "홈", nav_about: "소개", nav_test: "제자상 테스트", nav_checkup: "신앙 점검", nav_dashboard: "대시보드",
+        nav_privacy: "개인정보처리방침", nav_terms: "이용약관",
+        main_title: "오늘의 성경 구절", loading: "말씀을 불러오고 있습니다...",
+        btn_new_verse: "새로운 구절", btn_theme: "테마 변경", btn_refresh: "새로고침", btn_send: "보내기",
+        guide_title: "신앙 성장을 위한 유용한 가이드",
+        guide_1_title: "성경 통독 입문", guide_1_desc: "창세기부터 요한계시록까지, 체계적인 읽기 플랜으로 하나님의 구속사를 파악해 보세요.",
+        guide_2_title: "효과적인 기도 방법", guide_2_desc: "ACTS 기법(찬양, 고백, 감사, 간구)을 통해 더 깊은 주님과의 대화를 시작하세요.",
+        guide_3_title: "묵상의 시간(QT)", guide_3_desc: "매일 15분, 조용한 장소에서 말씀을 되새기며 삶의 방향을 정립하세요.",
+        insight_title: "오늘의 영적 인사이트: 묵상의 힘",
+        insight_p1: "우리는 매일 수많은 정보의 홍수 속에서 살아갑니다. 분주함 속에서 '성경 묵상'은 우리 영혼이 숨을 쉴 수 있는 생명줄과 같습니다.",
+        insight_p2: "묵상의 히브리어 어원 '하가'는 '작은 소리로 읊조리다'라는 뜻입니다. 이는 말씀을 반복적으로 되새기며 삶에 녹여내는 과정을 의미합니다.",
+        prayer_title: "오늘의 기도구절", evangelism_title: "오늘의 전도구절",
+        contact_title: "제휴 및 기도요청"
+    },
+    en: {
+        nav_home: "Home", nav_about: "About", nav_test: "Disciple Test", nav_checkup: "Faith Check", nav_dashboard: "Dashboard",
+        nav_privacy: "Privacy Policy", nav_terms: "Terms of Use",
+        main_title: "Daily Bible Verse", loading: "Loading Word of God...",
+        btn_new_verse: "New Verse", btn_theme: "Switch Theme", btn_refresh: "Refresh", btn_send: "Send",
+        guide_title: "Useful Guides for Faith Growth",
+        guide_1_title: "Intro to Bible Reading", guide_1_desc: "Understand God's redemptive history through a systematic reading plan.",
+        guide_2_title: "Effective Prayer", guide_2_desc: "Start a deeper conversation with the Lord using the ACTS method.",
+        guide_3_title: "Meditation Time (QT)", guide_3_desc: "Spend 15 mins daily reflecting on the Word to set your life's direction.",
+        insight_title: "Spiritual Insight: Power of Meditation",
+        insight_p1: "We live in a flood of information. Amidst the busyness, 'Bible Meditation' is a lifeline for our souls to breathe.",
+        insight_p2: "The Hebrew root of meditation, 'Hagah', means 'to mutter'. It means repeating the Word and melting it into your life.",
+        prayer_title: "Prayer Verse", evangelism_title: "Evangelism Verse",
+        contact_title: "Partnership & Prayer Request"
     }
+};
 
-    // Fetch a random verse from the API
-    const koreanBook = getRandomBook();
-    const englishBook = koreanToEnglish[koreanBook];
-    const chapter = Math.floor(Math.random() * bibleBooks[koreanBook]) + 1;
-    const url = `https://bible-api.com/${englishBook}+${chapter}?translation=ko`;
-    console.log("Fetching verse from URL:", url);
+const versesData = {
+    ko: {
+        popular: [
+            { text: "여호와는 나의 목자시니 내게 부족함이 없으리로다", ref: "시편 23:1" },
+            { text: "너희는 먼저 그의 나라와 그의 의를 구하라", ref: "마태복음 6:33" },
+            { text: "항상 기뻐하라 쉬지 말고 기도하라 범사에 감사하라", ref: "살전 5:16-18" }
+        ],
+        prayer: [
+            { text: "구하라 그러면 너희에게 주실 것이요 찾으라 그러면 찾을 것이요", ref: "마태복음 7:7" }
+        ],
+        evangelism: [
+            { text: "오직 성령이 너희에게 임하시면 너희가 권능을 받고... 내 증인이 되리라", ref: "사도행전 1:8" }
+        ]
+    },
+    en: {
+        popular: [
+            { text: "The LORD is my shepherd; I shall not want.", ref: "Psalm 23:1" },
+            { text: "But seek first the kingdom of God and his righteousness.", ref: "Matthew 6:33" },
+            { text: "Rejoice always, pray without ceasing, give thanks in all circumstances.", ref: "1 Thess 5:16-18" }
+        ],
+        prayer: [
+            { text: "Ask, and it will be given to you; seek, and you will find.", ref: "Matthew 7:7" }
+        ],
+        evangelism: [
+            { text: "But you will receive power when the Holy Spirit has come upon you... you will be my witnesses.", ref: "Acts 1:8" }
+        ]
+    }
+};
 
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
+// State
+let currentLang = localStorage.getItem('lang') || 'ko';
 
-        if (data && data.verses && data.verses.length > 0) {
-            const verse = data.verses[Math.floor(Math.random() * data.verses.length)];
-            displayVerse(verse.text, data.reference);
-        } else {
-            console.warn("Invalid verse data, falling back to popular verses.", data);
-            const verse = popularVerses[Math.floor(Math.random() * popularVerses.length)];
-            displayVerse(verse.text, verse.reference);
+// Elements
+const verseTextEl = document.getElementById('verse-text');
+const verseRefEl = document.getElementById('verse-reference');
+const prayerTextEl = document.getElementById('prayer-verse-text');
+const prayerRefEl = document.getElementById('prayer-verse-reference');
+const evanTextEl = document.getElementById('evangelism-verse-text');
+const evanRefEl = document.getElementById('evangelism-verse-reference');
+
+// Functions
+window.changeLanguage = function(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    applyTranslations();
+    refreshAllVerses();
+};
+
+function applyTranslations() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[currentLang][key]) {
+            el.textContent = translations[currentLang][key];
         }
-    } catch (error) {
-        console.error("Error fetching verse, falling back to popular verses:", error);
-        const verse = popularVerses[Math.floor(Math.random() * popularVerses.length)];
-        displayVerse(verse.text, verse.reference);
-    }
+    });
+    document.documentElement.lang = currentLang;
 }
 
-async function displayVerse(text, reference) {
-    verseText.textContent = `\"${text}\"`;
-    verseReference.textContent = reference;
+function refreshAllVerses() {
+    displayRandomVerse('popular', verseTextEl, verseRefEl);
+    displayRandomVerse('prayer', prayerTextEl, prayerRefEl);
+    displayRandomVerse('evangelism', evanTextEl, evanRefEl);
 }
 
-async function displayRandomPrayerVerse() {
-    const verse = prayerVerses[Math.floor(Math.random() * prayerVerses.length)];
-    prayerVerseText.textContent = `\"${verse.text}\"`;
-    prayerVerseReference.textContent = verse.reference;
+function displayRandomVerse(type, textEl, refEl) {
+    const list = versesData[currentLang][type];
+    const random = list[Math.floor(Math.random() * list.length)];
+    if (textEl) textEl.textContent = `\"${random.text}\"`;
+    if (refEl) refEl.textContent = random.ref;
 }
 
-async function displayRandomEvangelismVerse() {
-    const verse = evangelismVerses[Math.floor(Math.random() * evangelismVerses.length)];
-    evangelismVerseText.textContent = `\"${verse.text}\"`;
-    evangelismVerseReference.textContent = verse.reference;
-}
-
-newVerseBtn.addEventListener('click', getRandomVerse);
-
-newPrayerVerseBtn.addEventListener('click', displayRandomPrayerVerse);
-newEvangelismVerseBtn.addEventListener('click', displayRandomEvangelismVerse);
-
-themeToggleBtn.addEventListener('click', () => {
+// Theme Toggle
+document.getElementById('theme-toggle-btn').addEventListener('click', () => {
     document.body.classList.toggle('dark-mode');
 });
 
-getRandomVerse();
-displayRandomPrayerVerse();
-displayRandomEvangelismVerse();
+// Sync Event Listeners for New Verses
+document.getElementById('new-verse-btn').addEventListener('click', () => displayRandomVerse('popular', verseTextEl, verseRefEl));
+document.getElementById('new-prayer-verse-btn')?.addEventListener('click', () => displayRandomVerse('prayer', prayerTextEl, prayerRefEl));
+document.getElementById('new-evangelism-verse-btn')?.addEventListener('click', () => displayRandomVerse('evangelism', evanTextEl, evanRefEl));
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    applyTranslations();
+    refreshAllVerses();
+});
