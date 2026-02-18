@@ -1,3 +1,79 @@
+/* Blog Section Styles */
+.blog-container {
+    padding: 40px 20px;
+    max-width: 1200px;
+}
+
+.blog-title {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #4A3C32;
+}
+
+.blog-subtitle {
+    font-size: 1.2rem;
+    color: #888;
+    margin-bottom: 50px;
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.blog-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blog-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
+
+.blog-date {
+    font-size: 0.85rem;
+    color: #FFAB40;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.blog-post-title {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #333;
+    line-height: 1.4;
+}
+
+.blog-excerpt {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.read-more {
+    color: #4A3C32;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.read-more:hover {
+    color: #FFAB40;
+}
+
 /* Global Layout */
 body {
     font-family: 'Noto Sans KR', sans-serif;
