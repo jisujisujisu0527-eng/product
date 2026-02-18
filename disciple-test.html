@@ -3,133 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 제자상 테스트 - 인공지능 관상 분석</title>
+    <title data-i18n="test_title">AI 제자상 테스트 - 인공지능 관상 분석</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Teachable Machine Library -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-models/speech-commands@latest/dist/speech-commands.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></script>
 </head>
 <body>
     <header>
-        <nav class="navbar">
-            <div class="nav-logo"><a href="index.html">Daily Bible</a></div>
-            <ul class="nav-links">
-                <li><a href="index.html">홈</a></li>
-                <li><a href="faith-checkup.html">신앙 점검</a></li>
-                <li><a href="disciple-test.html" class="active">제자상 테스트</a></li>
-            </ul>
-        </nav>
+        <div class="container">
+            <nav class="navbar">
+                <div class="nav-logo">
+                    <a href="index.html" data-i18n="site_logo">British Daily Bible</a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+                    <li><a href="disciple-test.html" class="active" data-i18n="nav_test">AI Disciple</a></li>
+                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Faith Check</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
     <main>
         <div class="container">
-            <section class="test-header card">
-                <h1>AI 제자상 분석기</h1>
-                <p>당신의 모습 속에 담긴 주님의 제자 모습을 인공지능이 분석합니다.</p>
+            <section class="test-header card" style="text-align: center; padding: 40px;">
+                <h1 data-i18n="test_header">AI 제자상 분석기</h1>
+                <p data-i18n="test_desc">나의 얼굴상에 담긴 제자의 모습은 무엇일까요? 사진을 올려 확인해보세요.</p>
                 <div class="alert-info" style="font-size: 0.8rem; color: #666; margin-top: 10px;">
-                    * 카메라 권한이 필요합니다. 분석된 이미지는 서버에 저장되지 않습니다.
+                    * 사진은 서버에 저장되지 않고 브라우저에서만 분석됩니다.
                 </div>
             </section>
 
-            <div class="test-container card">
-                <div id="webcam-container" style="margin-bottom: 20px; border-radius: 15px; overflow: hidden; background: #000; min-height: 200px; display: flex; align-items: center; justify-content: center;">
-                    <button type="button" class="primary-btn" onclick="init()">카메라 시작하기 (Start AI)</button>
+            <div class="test-container card" style="margin-top: 30px; text-align: center;">
+                <!-- Image Upload Area -->
+                <div class="upload-area" style="border: 2px dashed #ddd; padding: 40px; border-radius: 20px; margin-bottom: 20px;">
+                    <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="readURL(this);">
+                    
+                    <div id="image-preview-container" style="display: none; margin-bottom: 20px;">
+                        <img id="imagePreview" src="#" alt="your image" style="max-width: 100%; max-height: 300px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);" />
+                    </div>
+
+                    <div id="upload-label-container">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #B08968; margin-bottom: 15px;"></i>
+                        <h3 style="margin-bottom: 20px;">사진을 업로드해주세요</h3>
+                        <button type="button" class="primary-btn" onclick="document.getElementById('imageUpload').click();">
+                            <i class="fas fa-image"></i> 사진 선택하기
+                        </button>
+                    </div>
                 </div>
-                
-                <div id="label-container" style="margin-top: 20px;"></div>
-                
-                <div id="ai-result" class="result-box" style="display: none; margin-top: 30px; padding: 20px; border: 2px solid #FFAB40; border-radius: 10px; background: #FFF8E1;">
-                    <h2 id="disciple-name" style="color: #D84315;">분석 중...</h2>
-                    <p id="disciple-desc" style="line-height: 1.6; margin-top: 10px;"></p>
+
+                <!-- Analysis Button -->
+                <div id="loading-area" style="display: none;">
+                    <p style="font-size: 1.2rem; font-weight: bold; color: #2C3E50;">AI가 당신의 제자상을 분석 중입니다...</p>
+                    <div style="margin-top: 10px;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #B08968;"></i>
+                    </div>
+                </div>
+
+                <!-- Result Area -->
+                <div id="result-area" style="display: none; margin-top: 30px; padding: 30px; background: #F9F7F2; border-radius: 15px; border: 1px solid #B08968;">
+                    <h2 id="result-title" style="color: #D84315; font-family: 'Lora', serif; margin-bottom: 15px;"></h2>
+                    <p id="result-desc" style="line-height: 1.8; color: #333;"></p>
+                    
+                    <!-- Progress Bars -->
+                    <div id="label-container" style="margin-top: 25px; text-align: left; max-width: 400px; margin-left: auto; margin-right: auto;"></div>
+                    
+                    <button onclick="window.location.reload();" class="secondary-btn" style="margin-top: 30px;">다른 사진으로 다시하기</button>
                 </div>
             </div>
         </div>
     </main>
 
     <script type="text/javascript">
-        // 모델 URL (Teachable Machine에서 업로드 후 생성된 URL을 여기에 넣으세요)
-        let URL = ""; // 예: "https://teachablemachine.withgoogle.com/models/xxxx/"
+        // ★★★ 여기에 Teachable Machine에서 훈련시킨 모델 URL을 넣어주세요! ★★★
+        const URL = "https://teachablemachine.withgoogle.com/models/YOUR_MODEL_URL/"; 
+        // 예: const URL = "https://teachablemachine.withgoogle.com/models/abc1234/";
 
-        let model, webcam, labelContainer, maxPredictions;
+        let model, maxPredictions;
 
+        // Load the image model
         async function init() {
-            if (!URL) {
-                alert("Teachable Machine 모델 URL을 설정해주세요! 현재는 데모 모드입니다.");
-                return;
+            if (URL === "https://teachablemachine.withgoogle.com/models/YOUR_MODEL_URL/") {
+                alert("모델 URL이 설정되지 않았습니다. 개발자에게 문의하거나 코드를 확인해주세요.");
+                return false;
             }
-
             const modelURL = URL + "model.json";
             const metadataURL = URL + "metadata.json";
-
-            document.getElementById('webcam-container').innerHTML = "모델 로딩 중...";
-
             model = await tmImage.load(modelURL, metadataURL);
             maxPredictions = model.getTotalClasses();
-
-            const flip = true;
-            webcam = new tmImage.Webcam(300, 300, flip);
-            await webcam.setup();
-            await webcam.play();
-            window.requestAnimationFrame(loop);
-
-            document.getElementById("webcam-container").innerHTML = "";
-            document.getElementById("webcam-container").appendChild(webcam.canvas);
-            
-            labelContainer = document.getElementById("label-container");
-            for (let i = 0; i < maxPredictions; i++) {
-                labelContainer.appendChild(document.createElement("div"));
-            }
-        }
-
-        async function loop() {
-            webcam.update();
-            await predict();
-            window.requestAnimationFrame(loop);
+            return true;
         }
 
         async function predict() {
-            const prediction = await model.predict(webcam.canvas);
-            let highestProb = 0;
-            let bestMatch = "";
+            // Predict
+            const image = document.getElementById("imagePreview");
+            const prediction = await model.predict(image, false);
+            
+            // Find best match
+            prediction.sort((a, b) => b.probability - a.probability);
+            const bestMatch = prediction[0];
 
-            for (let i = 0; i < maxPredictions; i++) {
-                const classPrediction = prediction[i].className + ": " + (prediction[i].probability * 100).toFixed(0) + "%";
-                labelContainer.childNodes[i].innerHTML = `
-                    <div style="margin-bottom: 5px;">
-                        <span style="display:inline-block; width:100px;">${prediction[i].className}</span>
-                        <div style="display:inline-block; width:200px; background:#eee; height:10px; border-radius:5px;">
-                            <div style="width:${(prediction[i].probability * 100)}%; background:#FFAB40; height:100%; border-radius:5px;"></div>
+            // Display Result
+            const resultTitle = document.getElementById("result-title");
+            const resultDesc = document.getElementById("result-desc");
+            const labelContainer = document.getElementById("label-container");
+
+            resultTitle.innerText = bestMatch.className;
+            resultDesc.innerText = getDiscipleDescription(bestMatch.className);
+
+            // Draw Progress Bars (Top 3)
+            labelContainer.innerHTML = "";
+            for (let i = 0; i < 3; i++) {
+                if (i >= prediction.length) break;
+                const p = prediction[i];
+                const width = (p.probability * 100).toFixed(1) + "%";
+                const color = i === 0 ? "#D84315" : "#B08968"; // Top 1 highlights
+                
+                const barHtml = `
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 3px;">
+                            <span>${p.className}</span>
+                            <span>${width}</span>
+                        </div>
+                        <div style="background: #e0e0e0; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div style="width: ${width}; background: ${color}; height: 100%;"></div>
                         </div>
                     </div>
                 `;
-
-                if (prediction[i].probability > highestProb) {
-                    highestProb = prediction[i].probability;
-                    bestMatch = prediction[i].className;
-                }
+                labelContainer.insertAdjacentHTML('beforeend', barHtml);
             }
 
-            if (highestProb > 0.8) {
-                showResult(bestMatch);
+            document.getElementById("loading-area").style.display = "none";
+            document.getElementById("result-area").style.display = "block";
+        }
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imageUpload').style.display = "none";
+                    document.getElementById('upload-label-container').style.display = "none";
+                    document.getElementById('image-preview-container').style.display = "block";
+                    document.getElementById('imagePreview').setAttribute('src', e.target.result);
+                    
+                    // Start Analysis
+                    startAnalysis();
+                };
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
-        const discipleInfo = {
-            "개척하는 바울": "당신은 복음의 불모지를 개척하는 용기를 가졌습니다. 새로운 도전을 두려워하지 마세요.",
-            "지혜로운 솔로몬": "당신에게는 하나님의 지혜가 머물러 있습니다. 분별력 있게 세상을 이끌어갈 것입니다.",
-            "위로하는 바나바": "당신은 사람을 세우는 은사가 있습니다. 당신의 격려가 한 영혼을 살릴 것입니다.",
-            "충성된 다윗": "당신은 예배의 기쁨을 아는 사람입니다. 하나님을 향한 당신의 찬양을 기뻐하십니다.",
-            "담대한 에스더": "당신은 위기의 시대에 부름받은 사람입니다. 당신의 결단이 공동체를 구할 것입니다.",
-            "섬기는 마르다": "당신의 수고로운 손길을 주님께서 알고 계십니다. 봉사를 통해 하나님의 나라가 확장됩니다.",
-            "기도의 다니엘": "당신은 기도로 승부하는 영적 용사입니다. 무릎으로 세상을 이기는 삶을 사세요.",
-            "전하는 베드로": "당신은 사람을 낚는 어부입니다. 당신의 입술을 통해 복음의 능력이 나타날 것입니다."
-        };
+        async function startAnalysis() {
+            document.getElementById("loading-area").style.display = "block";
+            
+            // Wait for model load if not loaded
+            if (!model) {
+                const success = await init();
+                if (!success) {
+                    document.getElementById("loading-area").style.display = "none";
+                    return; 
+                }
+            }
+            
+            // Artificial delay for UX (feels like processing)
+            setTimeout(async () => {
+                await predict();
+            }, 1500);
+        }
 
-        function showResult(name) {
-            const resBox = document.getElementById('ai-result');
-            resBox.style.display = 'block';
-            document.getElementById('disciple-name').innerText = "결과: " + name;
-            document.getElementById('disciple-desc').innerText = discipleInfo[name] || "당신은 소중한 주님의 제자입니다.";
+        function getDiscipleDescription(name) {
+            const descriptions = {
+                "열정의 베드로": "당신은 주님을 향한 뜨거운 열정을 가진 베드로와 닮았습니다. 때로는 실수해도 다시 일어나 주님의 교회를 세우는 반석이 될 것입니다.",
+                "묵묵한 안드레": "당신은 보이지 않는 곳에서 묵묵히 영혼들을 주님께로 인도하는 안드레와 닮았습니다. 당신의 겸손함이 큰 열매를 맺을 것입니다.",
+                "우레의 아들 야고보": "당신은 열정적이고 결단력 있는 야고보와 닮았습니다. 주님을 위해 가장 먼저 헌신할 준비가 된 용기 있는 제자입니다.",
+                "사랑의 요한": "당신은 주님의 사랑을 깊이 깨닫고 그 사랑을 전하는 요한과 닮았습니다. 당신의 온유함이 공동체를 하나로 묶어줄 것입니다.",
+                "빌립": "당신은 현실적이고 명확한 분석력을 가진 빌립과 닮았습니다. 당신의 영특함이 하나님의 사역을 효율적으로 돕게 될 것입니다.",
+                "진실한 바돌로매": "당신은 마음에 간사함이 없는 정직한 바돌로매와 닮았습니다. 하나님은 당신의 투명하고 순수한 중심을 기뻐하십니다.",
+                "확신의 도마": "당신은 질문하고 확인하며 확고한 믿음을 찾아가는 도마와 닮았습니다. 당신의 의문은 결국 흔들리지 않는 신앙의 뿌리가 될 것입니다.",
+                "변화된 마태": "당신은 세상의 가치를 넘어 하늘의 가치를 선택한 마태와 닮았습니다. 당신의 은사를 사용하여 하나님 나라의 기록을 남겨보세요.",
+                "작은 야고보": "당신은 이름도 없이 빛도 없이 낮은 곳에서 섬기는 작은 야고보와 닮았습니다. 주님은 당신의 작은 헌신을 가장 크게 보십니다.",
+                "용기 있는 다대오": "당신은 소외된 곳에서 담대하게 진리를 외치는 다대오와 닮았습니다. 당신의 정의로움이 어둠을 밝힐 것입니다.",
+                "열혈당원 시몬": "당신은 세상을 변화시키려는 뜨거운 열정을 가진 시몬과 닮았습니다. 그 열정이 주님의 평화와 만나 더 큰 역사를 이룰 것입니다.",
+                "선택받은 맛디아": "당신은 준비된 신실함으로 부름받은 맛디아와 닮았습니다. 당신의 꾸준함이 비어있는 자리를 채우는 축복의 통로가 될 것입니다.",
+                "이방인의 사도 바울": "당신은 지적인 통찰과 폭발적인 전도 열정을 가진 바울과 닮았습니다. 당신은 세상을 향해 복음을 전파할 위대한 사명을 가진 자입니다."
+            };
+            return descriptions[name] || "당신은 주님이 선택하신 귀한 제자입니다.";
+        }
+        
+        // i18n logic (simple check for now, can be expanded)
+        if (localStorage.getItem('lang') === 'en') {
+           // Simple text replacements for EN mode could be added here or via main.js
+           document.querySelector('[data-i18n="test_header"]').textContent = "AI Disciple Analyzer";
+           document.querySelector('[data-i18n="test_desc"]').textContent = "What biblical disciple do you resemble? Upload a photo to find out.";
         }
     </script>
 </body>
