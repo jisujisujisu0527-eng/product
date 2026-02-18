@@ -1,4 +1,4 @@
-// Comprehensive i18n Translations
+// Comprehensive i18n Translations & Content Data
 const translations = {
     ko: {
         nav_home: "홈", nav_blog: "블로그", nav_about: "소개", nav_test: "제자상 테스트", nav_checkup: "신앙 점검", nav_dashboard: "대시보드",
@@ -81,36 +81,44 @@ const versesData = {
     }
 };
 
-// Language Detection & Logic
+// Language Detection
 let currentLang = localStorage.getItem('lang') || (navigator.language.startsWith('ko') ? 'ko' : 'en');
+
+// Daily Seed Logic (YYYYMMDD)
+function getDailySeed() {
+    const today = new Date();
+    return today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+}
 
 window.changeLanguage = function(lang) {
     currentLang = lang;
     localStorage.setItem('lang', lang);
     applyTranslations();
-    refreshAllVerses();
+    refreshDailyVerses();
 };
 
 function applyTranslations() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (translations[currentLang][key]) {
-            el.textContent = translations[currentLang][key];
-        }
-    });
-    // Placeholder translation
-    document.querySelectorAll('input, textarea').forEach(el => {
-        if (el.name === 'name') el.placeholder = currentLang === 'ko' ? "성함" : "Name";
-        if (el.name === 'email') el.placeholder = currentLang === 'ko' ? "이메일" : "Email";
-        if (el.tagName === 'TEXTAREA') el.placeholder = currentLang === 'ko' ? "내용을 입력해주세요" : "Your Message";
+        if (translations[currentLang][key]) el.textContent = translations[currentLang][key];
     });
     document.documentElement.lang = currentLang;
 }
 
-function refreshAllVerses() {
-    displayRandomVerse('popular', document.getElementById('verse-text'), document.getElementById('verse-reference'));
-    displayRandomVerse('prayer', document.getElementById('prayer-verse-text'), document.getElementById('prayer-verse-reference'));
-    displayRandomVerse('evangelism', document.getElementById('evangelism-verse-text'), document.getElementById('evangelism-verse-reference'));
+function refreshDailyVerses() {
+    const seed = getDailySeed();
+    displayVerseBySeed('popular', document.getElementById('verse-text'), document.getElementById('verse-reference'), seed, 0);
+    displayVerseBySeed('prayer', document.getElementById('prayer-verse-text'), document.getElementById('prayer-verse-reference'), seed, 7);
+    displayVerseBySeed('evangelism', document.getElementById('evangelism-verse-text'), document.getElementById('evangelism-verse-reference'), seed, 13);
+}
+
+function displayVerseBySeed(type, textEl, refEl, seed, offset) {
+    const list = versesData[currentLang][type];
+    if (!list) return;
+    const index = (seed + offset) % list.length;
+    const item = list[index];
+    if (textEl) textEl.textContent = `\"${item.text}\"`;
+    if (refEl) refEl.textContent = item.ref;
 }
 
 function displayRandomVerse(type, textEl, refEl) {
@@ -121,18 +129,16 @@ function displayRandomVerse(type, textEl, refEl) {
     if (refEl) refEl.textContent = random.ref;
 }
 
-// Theme Toggle
-document.getElementById('theme-toggle-btn')?.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-});
-
 // Event Listeners
-document.getElementById('new-verse-btn')?.addEventListener('click', () => displayRandomVerse('popular', document.getElementById('verse-text'), document.getElementById('verse-reference')));
-document.getElementById('new-prayer-verse-btn')?.addEventListener('click', () => displayRandomVerse('prayer', document.getElementById('prayer-verse-text'), document.getElementById('prayer-verse-reference')));
-document.getElementById('new-evangelism-verse-btn')?.addEventListener('click', () => displayRandomVerse('evangelism', document.getElementById('evangelism-verse-text'), document.getElementById('evangelism-verse-reference')));
-
-// Initialize
 document.addEventListener('DOMContentLoaded', () => {
     applyTranslations();
-    refreshAllVerses();
+    refreshDailyVerses();
+    
+    document.getElementById('theme-toggle-btn')?.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+    });
+
+    document.getElementById('new-verse-btn')?.addEventListener('click', () => displayRandomVerse('popular', document.getElementById('verse-text'), document.getElementById('verse-reference')));
+    document.getElementById('new-prayer-verse-btn')?.addEventListener('click', () => displayRandomVerse('prayer', document.getElementById('prayer-verse-text'), document.getElementById('prayer-verse-reference')));
+    document.getElementById('new-evangelism-verse-btn')?.addEventListener('click', () => displayRandomVerse('evangelism', document.getElementById('evangelism-verse-text'), document.getElementById('evangelism-verse-reference')));
 });
