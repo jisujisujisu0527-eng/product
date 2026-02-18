@@ -59,6 +59,21 @@
 
     <main>
         <div class="container">
+            <!-- Global Stats Board -->
+            <section class="global-stats-board card" style="margin-top: 20px; text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white;">
+                <h2 data-i18n="prayer_chain_title" style="color: white; border: none; margin-bottom: 10px;">🌏 Global Prayer Chain</h2>
+                <div style="font-size: 2.5rem; font-weight: bold; margin: 15px 0;" id="prayer-counter">0</div>
+                <p data-i18n="prayer_count_desc" style="font-size: 0.9rem; opacity: 0.9;">Believers are praying together globally.</p>
+                <div style="margin-top: 20px; font-size: 0.8rem; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; display: inline-block;">
+                    <span data-i18n="last_prayer_from">Latest prayer from</span>: <strong id="recent-country">...</strong>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button id="global-prayer-btn" onclick="lightGlobalCandle()" class="primary-btn" style="background: white; color: var(--primary-color);">
+                        <i class="fas fa-praying-hands"></i> <span data-i18n="btn_i_prayed_global">Join Prayer Now</span>
+                    </button>
+                </div>
+            </section>
+
             <section class="hero-section">
                 <h1 data-i18n="main_title">Daily Spiritual Rest</h1>
                 
@@ -94,6 +109,14 @@
                     <button id="theme-toggle-btn" class="mini-btn">
                         <i class="fas fa-adjust"></i>
                     </button>
+                </div>
+            </section>
+
+            <!-- Leaderboard Section -->
+            <section class="card" style="margin-top: 40px;">
+                <h2 data-i18n="quiz_leaderboard_title">🏆 Bible Quiz Leaderboard</h2>
+                <div id="leaderboard-list" style="margin-top: 20px;">
+                    <p data-i18n="loading">Loading rankings...</p>
                 </div>
             </section>
 
