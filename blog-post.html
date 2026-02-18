@@ -151,35 +151,34 @@
             const container = document.getElementById('post-content-area');
             const backBtn = document.getElementById('back-btn-text');
 
-            // Update back button text based on language
             backBtn.innerHTML = currentLang === 'ko' ? '<i class="fas fa-arrow-left"></i> 목록으로 돌아가기' : '<i class="fas fa-arrow-left"></i> Back to List';
 
             if (post) {
+                const data = post[currentLang]; // Get current language data
                 container.innerHTML = `
                     <div class="post-header">
                         <span class="post-date">${post.date}</span>
-                        <h1 class="post-title">${post.title}</h1>
+                        <h1 class="post-title">${data.title}</h1>
                     </div>
                     
                     <div class="video-wrapper">
                         <iframe src="https://www.youtube.com/embed/${post.videoId}?rel=0&modestbranding=1&origin=${window.location.origin}" 
-                                title="${post.title}" 
+                                title="${data.title}" 
                                 frameborder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                                 allowfullscreen></iframe>
                     </div>
 
                     <div class="post-content">
-                        ${post.content}
+                        ${data.content}
                     </div>
                 `;
-                document.title = `${post.title} | Daily Bible Verse`;
+                document.title = `${data.title} | Daily Bible Verse`;
             } else {
                 container.innerHTML = '<h2>Post Not Found.</h2>';
             }
         }
 
-        // Handle language change in post detail
         const originalChangeLanguagePost = window.changeLanguage;
         window.changeLanguage = function(lang) {
             originalChangeLanguagePost(lang);

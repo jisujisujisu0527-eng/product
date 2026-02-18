@@ -71,16 +71,16 @@
             const blogList = document.getElementById('blog-list');
             blogList.innerHTML = '';
             
-            // Get read more text from translations
             const readMoreText = translations[currentLang].btn_read_more || "Read More";
 
             [...blogPosts].reverse().forEach(post => {
+                const data = post[currentLang]; // Get current language data
                 const article = document.createElement('article');
                 article.className = 'blog-card';
                 article.innerHTML = `
                     <div class="blog-date">${post.date}</div>
-                    <h2 class="blog-post-title">${post.title}</h2>
-                    <p class="blog-excerpt">${post.excerpt}</p>
+                    <h2 class="blog-post-title">${data.title}</h2>
+                    <p class="blog-excerpt">${data.excerpt}</p>
                     <a href="blog-post.html?id=${post.id}" class="read-more">
                         ${readMoreText} <i class="fas fa-play-circle"></i>
                     </a>
