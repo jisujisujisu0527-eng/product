@@ -90,6 +90,55 @@ h1, h2, h3, .verse-text {
     color: var(--primary-color);
 }
 
+/* Bible App Daily Content Grid */
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+@media (max-width: 900px) {
+    .grid-3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.bible-app .card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.bible-app h3 {
+    font-size: 1.1rem;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding-bottom: 10px;
+    font-weight: 700;
+}
+
+.bible-app p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-main);
+    flex-grow: 1;
+}
+
+#bible-ref {
+    display: block;
+    margin-top: 15px;
+    font-weight: 600;
+    color: var(--accent-color);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
 /* Verse Card - The Centerpiece */
 .verse-text-section.card {
     background: var(--card-bg);
