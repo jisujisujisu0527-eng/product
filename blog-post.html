@@ -1,25 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5NEGEVBDK8"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-5NEGEVBDK8');
-    </script>
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "vj2cbfxdgz");
-    </script>
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>블로그 상세 | Daily Bible Verse</title>
+    <title data-i18n="nav_blog">블로그 상세 | Daily Bible Verse</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -37,35 +22,59 @@
         .post-content { font-size: 1.2rem; line-height: 1.9; color: #444; text-align: left; }
         .post-content h3 { margin-top: 40px; color: #2c3e50; border-left: 5px solid #FFAB40; padding-left: 20px; font-size: 1.6rem; }
         .action-bar { margin-top: 60px; border-top: 1px solid #eee; padding-top: 30px; text-align: center; }
-        .back-btn { padding: 12px 30px; background: #4A3C32; color: #fff; text-decoration: none; border-radius: 30px; font-weight: bold; }
+        .back-btn { padding: 12px 30px; background: #4A3C32; color: #fff; text-decoration: none; border-radius: 30px; font-weight: bold; display: inline-block; }
         body.dark-mode .letter-box, body.dark-mode .comic-panel, body.dark-mode .meditation-card { background: #2c2c2c; color: #eee; border-color: #444; }
         body.dark-mode .post-title, body.dark-mode .post-content { color: #fbe9e7; }
     </style>
 </head>
 <body>
     <header>
-        <nav class="navbar">
-            <div class="nav-logo">
-                <a href="index.html"><i class="fas fa-cross"></i> Daily Bible</a>
-            </div>
-            <ul class="nav-links">
-                <li><a href="index.html" data-i18n="nav_home">홈</a></li>
-                <li><a href="blog.html" class="active" data-i18n="nav_blog">블로그</a></li>
-                <li><a href="about.html" data-i18n="nav_about">소개</a></li>
-            </ul>
-            <div class="lang-switcher">
-                <button onclick="changeLanguage('ko')" class="lang-btn">KO</button>
-                <button onclick="changeLanguage('en')" class="lang-btn">EN</button>
-            </div>
-        </nav>
+        <div class="container">
+            <nav class="navbar">
+                <div class="nav-logo">
+                    <a href="index.html" data-i18n="site_logo">British Daily Bible</a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Disciple</a></li>
+                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Faith Check</a></li>
+                    <li><a href="faith-dashboard.html" data-i18n="nav_dashboard">Dashboard</a></li>
+                </ul>
+                <div class="lang-switcher">
+                    <button onclick="changeLanguage('ko')" class="lang-btn">KO</button>
+                    <button onclick="changeLanguage('en')" class="lang-btn">EN</button>
+                    <button onclick="changeLanguage('es')" class="lang-btn">ES</button>
+                    <button onclick="changeLanguage('fr')" class="lang-btn">FR</button>
+                </div>
+            </nav>
+        </div>
     </header>
+
     <main>
         <div class="container blog-detail-container">
-            <div id="post-content-area"><p>Loading...</p></div>
-            <div class="action-bar"><a href="blog.html" class="back-btn" id="back-btn-text">Back</a></div>
+            <div id="post-content-area"><p data-i18n="loading">Loading...</p></div>
+            <div class="action-bar">
+                <a href="blog.html" class="back-btn" id="back-btn-text">
+                    <i class="fas fa-arrow-left"></i> <span data-i18n="nav_blog">Back to List</span>
+                </a>
+            </div>
         </div>
     </main>
-    <footer><div class="footer-content"><p>&copy; 2026 Daily Bible Verse. All rights reserved.</p></div></footer>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p data-i18n="footer_rights">© 2026 British Daily Bible. All rights reserved.</p>
+                <nav class="footer-nav">
+                    <a href="privacy.html" data-i18n="nav_privacy">Privacy</a>
+                    <a href="terms.html" data-i18n="nav_terms">Terms</a>
+                    <a href="about.html" data-i18n="nav_about">About</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script src="translations.js"></script>
     <script src="main.js"></script>
     <script src="blog-data.js"></script>
     <script>
@@ -74,17 +83,18 @@
             const postId = parseInt(urlParams.get('id'));
             const post = blogPosts.find(p => p.id === postId);
             const container = document.getElementById('post-content-area');
-            const backBtn = document.getElementById('back-btn-text');
-            backBtn.innerHTML = currentLang === 'ko' ? '<i class="fas fa-arrow-left"></i> 목록으로 돌아가기' : '<i class="fas fa-arrow-left"></i> Back to List';
+            
             if (post) {
-                const data = post[currentLang];
-                let mediaHtml = post.hasVideo ? `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${post.videoId}?rel=0&modestbranding=1" title="${data.title}" frameborder="0" allowfullscreen></iframe></div>` : `<div class="alternate-content">${data.alternateContent}</div>`;
+                const data = post[currentLang] || post['en'];
+                let mediaHtml = post.hasVideo ? `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${post.videoId}?rel=0&modestbranding=1" title="${data.title}" frameborder="0" allowfullscreen></iframe></div>` : `<div class="alternate-content">${data.alternateContent || ""}</div>`;
                 container.innerHTML = `<div class="post-header"><span class="post-date">${post.date}</span><h1 class="post-title">${data.title}</h1></div>${mediaHtml}<div class="post-content">${data.content || ''}</div>`;
                 document.title = `${data.title} | Daily Bible Verse`;
-            } else { container.innerHTML = '<h2>Post Not Found.</h2>'; }
+            } else { 
+                container.innerHTML = '<h2>Post Not Found.</h2>'; 
+            }
         }
-        const originalChangeLanguagePost = window.changeLanguage;
-        window.changeLanguage = function(lang) { originalChangeLanguagePost(lang); loadPost(); };
+
+        window.addEventListener('languageChanged', loadPost);
         document.addEventListener('DOMContentLoaded', loadPost);
     </script>
 </body>

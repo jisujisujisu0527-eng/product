@@ -1,39 +1,43 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5NEGEVBDK8"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-5NEGEVBDK8');
-    </script>
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "vj2cbfxdgz");
-    </script>
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>신앙 점검 대시보드</title>
-    <meta name="description" content="성도들의 신앙 점검 결과를 모아보고 전반적인 영적 상태를 파악합니다.">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
-    <meta name="google-adsense-account" content="ca-pub-8260879821489900">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title data-i18n="nav_dashboard">신앙 점검 대시보드</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="nav-logo">
+                    <a href="index.html" data-i18n="site_logo">British Daily Bible</a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Disciple</a></li>
+                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Faith Check</a></li>
+                    <li><a href="faith-dashboard.html" data-i18n="nav_dashboard">Dashboard</a></li>
+                </ul>
+                <div class="lang-switcher">
+                    <button onclick="changeLanguage('ko')" class="lang-btn">KO</button>
+                    <button onclick="changeLanguage('en')" class="lang-btn">EN</button>
+                    <button onclick="changeLanguage('es')" class="lang-btn">ES</button>
+                    <button onclick="changeLanguage('fr')" class="lang-btn">FR</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
     <main>
         <div class="container dashboard-container">
-            <h1>신앙 점검 대시보드</h1>
+            <h1 data-i18n="dashboard_title">신앙 점검 대시보드</h1>
             
             <section class="summary-section card" style="margin-bottom: 30px;">
-                <h2>📊 공동체 영적 건강도 (평균)</h2>
+                <h2 data-i18n="community_health">📊 공동체 영적 건강도 (평균)</h2>
                 <div style="max-width: 500px; margin: 0 auto;">
                     <canvas id="averageFaithChart"></canvas>
                 </div>
@@ -41,19 +45,19 @@
             </section>
 
             <div id="data-table-container" class="card">
-                <h2>📋 최근 점검 기록</h2>
+                <h2 data-i18n="recent_records">📋 최근 점검 기록</h2>
                 <div style="overflow-x: auto;">
                     <table id="faithResultsTable">
                         <thead>
                             <tr>
-                                <th>이름</th>
-                                <th>영적 민감성</th>
-                                <th>우선순위</th>
-                                <th>말씀 수용성</th>
-                                <th>실천적 순종</th>
-                                <th>공동체 의식</th>
-                                <th>사랑의 나눔</th>
-                                <th>제출일</th>
+                                <th data-i18n="col_name">이름</th>
+                                <th data-i18n="col_sensitivity">영적 민감성</th>
+                                <th data-i18n="col_priority">우선순위</th>
+                                <th data-i18n="col_receptivity">말씀 수용성</th>
+                                <th data-i18n="col_obedience">실천적 순종</th>
+                                <th data-i18n="col_community">공동체 의식</th>
+                                <th data-i18n="col_sharing">사랑의 나눔</th>
+                                <th data-i18n="col_date">제출일</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,22 +65,27 @@
                         </tbody>
                     </table>
                 </div>
-                <p id="loadingMessage">데이터를 불러오는 중...</p>
-                <p id="errorMessage" style="color: red; display: none;">데이터를 불러오지 못했습니다. Firebase 설정을 확인해주세요.</p>
+                <p id="loadingMessage" data-i18n="loading">데이터를 불러오는 중...</p>
+                <p id="errorMessage" style="color: red; display: none;" data-i18n="save_fail">데이터를 불러오지 못했습니다.</p>
             </div>
             
-            <button onclick="window.location.href='faith-checkup.html'" style="margin-top:20px; width: 100%;">나도 점검하기</button>
+            <button onclick="window.location.href='faith-checkup.html'" style="margin-top:20px; width: 100%;" data-i18n="btn_checkup_now">나도 점검하기</button>
         </div>
     </main>
     <footer>
-        <div class="footer-content">
-            <p>&copy; 2026 신앙 점검 대시보드. All rights reserved.</p>
-            <nav class="footer-nav">
-                <a href="#">개인정보처리방침</a>
-                <a href="#">이용약관</a>
-            </nav>
+        <div class="container">
+            <div class="footer-content">
+                <p data-i18n="footer_rights">© 2026 British Daily Bible. All rights reserved.</p>
+                <nav class="footer-nav">
+                    <a href="privacy.html" data-i18n="nav_privacy">Privacy</a>
+                    <a href="terms.html" data-i18n="nav_terms">Terms</a>
+                    <a href="about.html" data-i18n="nav_about">About</a>
+                </nav>
+            </div>
         </div>
     </footer>
+    <script src="translations.js"></script>
+    <script src="main.js"></script>
     <script type="module" src="./faith-dashboard.js"></script>
 </body>
 </html>

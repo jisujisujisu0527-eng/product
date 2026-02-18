@@ -1,46 +1,59 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5NEGEVBDK8"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-5NEGEVBDK8');
-    </script>
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "vj2cbfxdgz");
-    </script>
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이용약관 - 오늘의 성경 구절</title>
+    <title data-i18n="nav_terms">이용약관 - 오늘의 성경 구절</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="nav-logo">
+                    <a href="index.html" data-i18n="site_logo">British Daily Bible</a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Disciple</a></li>
+                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Faith Check</a></li>
+                    <li><a href="faith-dashboard.html" data-i18n="nav_dashboard">Dashboard</a></li>
+                </ul>
+                <div class="lang-switcher">
+                    <button onclick="changeLanguage('ko')" class="lang-btn">KO</button>
+                    <button onclick="changeLanguage('en')" class="lang-btn">EN</button>
+                    <button onclick="changeLanguage('es')" class="lang-btn">ES</button>
+                    <button onclick="changeLanguage('fr')" class="lang-btn">FR</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
     <main class="container">
-        <h1>이용약관</h1>
-        <p>오늘의 성경 구절 서비스를 이용해 주셔서 감사합니다.</p>
-
-        <h2>1. 목적</h2>
-        <p>본 약관은 본 사이트가 제공하는 모든 서비스의 이용 조건 및 절차를 규정함을 목적으로 합니다.</p>
-
-        <h2>2. 서비스의 내용</h2>
-        <p>본 사이트는 성경 구절 제공, 신앙 점검 테스트, AI 제자상 분석 등 신앙 생활을 돕는 콘텐츠를 무료로 제공합니다.</p>
-
-        <h2>3. 책임의 한계</h2>
-        <p>본 사이트에서 제공하는 모든 정보는 참고용이며, 서비스 이용 중 발생한 개인의 판단에 따른 결과에 대해 운영자는 책임을 지지 않습니다.</p>
-
-        <h2>4. 저작권</h2>
-        <p>사이트 내 디자인 및 독창적인 콘텐츠의 저작권은 '오늘의 성경 구절'에 있습니다.</p>
-
-        <a href="index.html" class="test-page-link-button">홈으로 돌아가기</a>
+        <div class="card" style="margin-top: 40px; margin-bottom: 40px; padding: 40px;">
+            <h1 data-i18n="terms_title">이용약관</h1>
+            <p data-i18n="terms_content">영국 데일리 바이블에 오신 것을 환영합니다. 본 사이트는 성경 구절, 신앙 점검, AI 분석 등의 콘텐츠를 무료로 제공합니다. 모든 정보는 참고용입니다.</p>
+            
+            <a href="index.html" class="primary-btn" style="display: inline-block; margin-top: 30px;" data-i18n="btn_go_home">홈으로 돌아가기</a>
+        </div>
     </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p data-i18n="footer_rights">© 2026 British Daily Bible. All rights reserved.</p>
+                <nav class="footer-nav">
+                    <a href="privacy.html" data-i18n="nav_privacy">Privacy</a>
+                    <a href="terms.html" data-i18n="nav_terms">Terms</a>
+                    <a href="about.html" data-i18n="nav_about">About</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script src="translations.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
