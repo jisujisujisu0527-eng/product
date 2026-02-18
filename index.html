@@ -14,113 +14,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="site_logo">British Daily Bible</title>
     
-    <meta name="description" content="Global spiritual platform for daily Bible verses and community prayers.">
     <link rel="canonical" href="https://dailybible.uk">
-    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-    <!-- Main Loader with Emergency Exit -->
-    <div id="main-loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FDFBF7; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;">
-        <i class="fas fa-cross fa-3x" style="color: #B08968; margin-bottom: 20px; animation: pulse 2s infinite;"></i>
-        <div style="font-family: 'EB Garamond', serif; color: #34495E; font-size: 1.2rem;">Daily Bible</div>
-    </div>
 
-    <script>
-        // Emergency Loader Release: 4 seconds fallback
-        setTimeout(function() {
-            var loader = document.getElementById('main-loader');
-            if (loader && loader.style.display !== 'none') {
-                loader.style.opacity = '0';
-                setTimeout(function() { loader.style.display = 'none'; }, 500);
-                console.warn("⚠️ Emergency loader removal triggered.");
-            }
-        }, 4000);
-    </script>
-
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <div class="nav-logo"><a href="index.html" data-i18n="site_logo">British Daily Bible</a></div>
-                <ul class="nav-links">
-                    <li><a href="index.html" data-i18n="nav_home">Home</a></li>
-                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Test</a></li>
-                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Check</a></li>
-                    <li><a href="community.html" data-i18n="nav_community">Community</a></li>
-                    <li><a href="chat.html" data-i18n="nav_chat">Paul AI</a></li>
-                    <li><a href="blog.html" data-i18n="nav_blog">Blog</a></li>
-                </ul>
-                <div class="lang-switcher">
-                    <div id="streak-badge" style="display:none; margin-right: 15px; font-size: 0.8rem; font-weight: bold; color: #E65100;">
-                        <i class="fas fa-fire"></i> <span id="streak-count">0</span>
-                    </div>
-                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
-                        <option value="en">EN</option><option value="ko">KO</option>
-                    </select>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <main>
-        <div class="container">
-            <section class="global-stats-board card" style="margin-top: 40px; text-align: center;">
-                <h2 data-i18n="prayer_chain_title" class="classic-serif" style="border:none;">🌏 Global Prayer Chain</h2>
-                <div style="font-size: 3rem; font-weight: 700; color: #B08968; margin: 15px 0;" id="prayer-counter">0</div>
-                <button id="global-prayer-btn" onclick="lightGlobalCandle()" class="primary-btn">
-                    <i class="fas fa-hands-praying"></i> <span data-i18n="btn_i_prayed_global">Join Prayer Now</span>
-                </button>
-            </section>
-
-            <section class="hero-section">
-                <h1 data-i18n="main_title" class="classic-serif">Daily Spiritual Rest</h1>
-                <div class="mood-container">
-                    <button onclick="getVerseByMood('anxious')" class="mood-btn">😰 Anxious</button>
-                    <button onclick="getVerseByMood('lonely')" class="mood-btn">🏚️ Lonely</button>
-                    <button onclick="getVerseByMood('grateful')" class="mood-btn">🙏 Grateful</button>
-                    <button onclick="getVerseByMood('joyful')" class="mood-btn">✨ Joyful</button>
-                </div>
-
-                <div class="bible-app grid-3">
-                    <div class="card">
-                        <h3 class="classic-serif" data-i18n="daily_bible">Today's Word</h3>
-                        <p id="bible-text" style="font-family: 'EB Garamond', serif; font-size: 1.4rem; font-style: italic;">"..."</p>
-                        <small id="bible-ref"></small>
-                    </div>
-                    <div class="card"><h3 class="classic-serif" data-i18n="daily_prayer">Prayer</h3><p id="prayer-text">...</p></div>
-                    <div class="card"><h3 class="classic-serif" data-i18n="daily_mission">Mission</h3><p id="mission-text">...</p></div>
-                </div>
-                <button onclick="downloadVerseCard()" class="primary-btn" style="margin-top: 20px; background: #B08968;">
-                    <i class="fas fa-download"></i> <span data-i18n="btn_generate_card">Save Card</span>
-                </button>
-            </section>
-
-            <section class="card" style="margin-bottom: 60px; border: 1px solid #B08968; text-align: center;">
-                <h2 data-i18n="ai_companion_title">🕊️ AI Faith Companion</h2>
-                <div style="max-width: 600px; margin: 0 auto;">
-                    <input type="text" id="user-worry" class="input-box" data-i18n="input_placeholder" placeholder="Ask Paul...">
-                    <button onclick="askFaithCompanion()" class="primary-btn" style="margin-top: 15px;" data-i18n="ai_companion_btn">Seek Guidance</button>
-                    <p id="ai-response" style="margin-top: 20px; font-style: italic; color: #7F8C8D;"></p>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <footer style="padding: 60px 0; text-align: center; border-top: 1px solid rgba(0,0,0,0.05);">
-        <p data-i18n="footer_rights">© 2026 British Daily Bible.</p>
-        <nav style="margin-top: 20px; display: flex; justify-content: center; gap: 30px;">
-            <a href="privacy.html" data-i18n="nav_privacy" style="text-decoration:none; color: #34495E;">Privacy</a>
-            <a href="terms.html" data-i18n="nav_terms" style="text-decoration:none; color: #34495E;">Terms</a>
-            <a href="about.html" data-i18n="nav_about" style="text-decoration:none; color: #34495E;">About</a>
-        </nav>
-    </footer>
-
-    <!-- Firebase SDKs (Compat) -->
+    <!-- Firebase SDK (Compat) -->
     <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    
+    <style>
+        #main-loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #FDFBF7; display: flex; flex-direction: column; justify-content: center;
+            align-items: center; z-index: 9999; transition: opacity 0.5s;
+        }
+        #main-loader i { color: #B08968; margin-bottom: 20px; animation: pulse 2s infinite; }
+    </style>
+</head>
+<body>
+    <div id="main-loader">
+        <i class="fas fa-cross fa-3x"></i>
+        <p style="font-family: 'EB Garamond', serif; color: #34495E;">Loading Grace...</p>
+    </div>
+
+    <!-- Everything inside app-content (Initially Hidden) -->
+    <div id="app-content" style="display: none;">
+        <header>
+            <div class="container">
+                <nav class="navbar">
+                    <div class="nav-logo"><a href="index.html" data-i18n="site_logo">British Daily Bible</a></div>
+                    <ul class="nav-links">
+                        <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+                        <li><a href="disciple-test.html" data-i18n="nav_test">AI Test</a></li>
+                        <li><a href="faith-checkup.html" data-i18n="nav_checkup">Check</a></li>
+                        <li><a href="community.html" data-i18n="nav_community">Community</a></li>
+                        <li><a href="chat.html" data-i18n="nav_chat">Paul AI</a></li>
+                        <li><a href="blog.html" data-i18n="nav_blog">Blog</a></li>
+                    </ul>
+                    <div class="lang-switcher">
+                        <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
+                            <option value="en">EN</option><option value="ko">KO</option>
+                        </select>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <div class="container">
+                <section class="global-stats-board card" style="margin-top: 40px; text-align: center;">
+                    <h2 data-i18n="prayer_chain_title" class="classic-serif">🌏 Global Prayer Chain</h2>
+                    <div style="font-size: 3rem; font-weight: 700; color: #B08968; margin: 15px 0;" id="prayer-counter">0</div>
+                    <button id="global-prayer-btn" onclick="lightGlobalCandle()" class="primary-btn">
+                        <i class="fas fa-hands-praying"></i> <span data-i18n="btn_i_prayed_global">Join Prayer Now</span>
+                    </button>
+                </section>
+
+                <section class="hero-section">
+                    <h1 data-i18n="main_title" class="classic-serif">Daily Spiritual Rest</h1>
+                    <div class="mood-container">
+                        <button onclick="getVerseByMood('anxious')" class="mood-btn">😰 Anxious</button>
+                        <button onclick="getVerseByMood('grateful')" class="mood-btn">🙏 Grateful</button>
+                        <button onclick="getVerseByMood('joyful')" class="mood-btn">✨ Joyful</button>
+                    </div>
+                    <div class="bible-app grid-3">
+                        <div class="card"><h3 data-i18n="daily_bible">Word</h3><p id="bible-text">...</p><small id="bible-ref"></small></div>
+                        <div class="card"><h3 data-i18n="daily_prayer">Prayer</h3><p id="prayer-text">...</p></div>
+                        <div class="card"><h3 data-i18n="daily_mission">Mission</h3><p id="mission-text">...</p></div>
+                    </div>
+                    <button onclick="downloadVerseCard()" class="primary-btn" style="margin-top: 20px; background: #B08968;"><i class="fas fa-download"></i> Save Card</button>
+                </section>
+            </div>
+        </main>
+
+        <footer style="padding: 60px 0; text-align: center; border-top: 1px solid #eee;">
+            <p data-i18n="footer_rights">© 2026 British Daily Bible.</p>
+        </footer>
+    </div>
+
+    <!-- Logic Scripts -->
     <script src="translations.js"></script>
-    <script defer src="firebase-firestore-service.js"></script>
-    <script defer src="main.js"></script>
+    <script src="firebase-firestore-service.js" defer></script>
+    <script src="main.js" defer></script>
 </body>
 </html>

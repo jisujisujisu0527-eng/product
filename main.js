@@ -1,28 +1,22 @@
-// dailybible.uk - Integrated Logic (Global Window Version)
+// dailybible.uk - App Logic
 
 let currentLang = localStorage.getItem('user_lang') || (navigator.language.startsWith('ko') ? 'ko' : 'en');
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Initial UI
+    // Basic UI Setup
     window.applyLanguage(currentLang);
     if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
     
-    // 2. Initial Content
     loadDailyContent();
-    updateFaithStreak();
     
-    // 3. Monitor Firebase Connection
-    const checkFirebase = setInterval(() => {
-        if (window.db && window.SiteManager) {
-            clearInterval(checkFirebase);
-            window.SiteManager.modules.store = true;
+    // Firebase Dependent Logic
+    const checkReady = setInterval(() => {
+        if (window.db && window.SiteManager && window.SiteManager.isReady) {
+            clearInterval(checkReady);
             watchGlobalPrayer();
-            window.SiteManager.hideLoader();
         }
     }, 500);
 });
-
-// --- Core functions (Card, Language, Daily) ---
 
 window.applyLanguage = function(lang) {
     currentLang = lang; localStorage.setItem('user_lang', lang);
@@ -41,67 +35,43 @@ window.applyLanguage = function(lang) {
 };
 
 function loadDailyContent() {
-    const today = new Date().toDateString();
     const fallback = {
-        en: { text: "The Lord is my shepherd; I shall not want.", ref: "Psalm 23:1" },
-        ko: { text: "여호와는 나의 목자시니 내게 부족함이 없으리로다", ref: "시편 23:1" }
+        en: { text: "The Lord is my shepherd.", ref: "Psalm 23:1", prayer: "Bless our day.", mission: "Be kind." },
+        ko: { text: "여호와는 나의 목자시니.", ref: "시편 23:1", prayer: "오늘을 축복하소서.", mission: "친절을 베푸세요." }
     };
     const item = fallback[currentLang] || fallback['en'];
     const bText = document.getElementById('bible-text');
     const bRef = document.getElementById('bible-ref');
+    const pText = document.getElementById('prayer-text');
+    const mText = document.getElementById('mission-text');
     if (bText) bText.textContent = `"${item.text}"`;
     if (bRef) bRef.textContent = item.ref;
+    if (pText) pText.textContent = item.prayer;
+    if (mText) mText.textContent = item.mission;
 }
 
-window.getVerseByMood = function(mood) {
-    alert("Mood selected: " + mood);
-};
-
-window.downloadVerseCard = function() {
-    alert("Card generation ready.");
-};
-
-window.askFaithCompanion = function() {
-    const worry = document.getElementById('user-worry').value;
-    const resEl = document.getElementById('ai-response');
-    if(resEl) resEl.textContent = "Seeking wisdom for: " + worry;
-};
-
-// --- Firebase Features ---
-
 window.lightGlobalCandle = async function() {
-    if (!window.db || window.SiteManager.isMockMode) return;
+    if (!window.db) return;
     const statsRef = window.db.collection("stats").doc("global_prayer");
     try {
         await window.db.runTransaction(async (t) => {
             const doc = await t.get(statsRef);
             const newCount = (doc.exists ? (doc.data().totalCount || 0) : 0) + 1;
-            t.update(statsRef, { totalCount: newCount, lastCountry: currentLang.toUpperCase() });
+            t.update(statsRef, { totalCount: newCount });
         });
-    } catch (e) { console.error("Prayer Transaction Error", e); }
+    } catch (e) { console.log("Offline mode: Prayer not synced"); }
 };
 
 function watchGlobalPrayer() {
     if (!window.db) return;
     window.db.collection("stats").doc("global_prayer").onSnapshot(doc => {
         if (doc.exists) {
-            const data = doc.data();
             const counter = document.getElementById('prayer-counter');
-            if (counter) counter.textContent = (data.totalCount || 0).toLocaleString();
+            if (counter) counter.textContent = (doc.data().totalCount || 0).toLocaleString();
         }
     });
 }
 
-function updateFaithStreak() {
-    const countEl = document.getElementById('streak-count');
-    const badge = document.getElementById('streak-badge');
-    if (countEl && badge) {
-        countEl.textContent = localStorage.getItem('faith_streak') || "1";
-        badge.style.display = 'inline-flex';
-    }
-}
-
-window.toggleTheme = function() {
-    document.body.classList.toggle('dark-mode');
-    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-};
+window.downloadVerseCard = function() { alert("Card Save Enabled"); };
+window.getVerseByMood = function(m) { alert("Curation: " + m); };
+window.askFaithCompanion = function() { alert("Simulated response"); };
