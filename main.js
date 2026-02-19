@@ -93,34 +93,54 @@ function loadDailyContent() {
 }
 
 /**
- * 글로벌 기도 참여 로직 (Gemini 조언 기반)
+ * 글로벌 기도 참여 로직 (Gemini 정교화 조언 적용)
  */
-window.participateInPrayer = async function() {
+window.handlePrayerClick = async function(event) {
     if (!window.db) {
         document.getElementById("prayer-board").scrollIntoView({ behavior: 'smooth' });
         return;
     }
     
+    const btn = event.currentTarget;
     const prayerDocRef = window.db.collection("stats").doc("prayer-chain");
     
     try {
-        // 카운트 +1 업데이트 (increment 사용)
+        // 1. 버튼 비활성화 (광클 방지)
+        btn.disabled = true;
+        btn.style.opacity = "0.7";
+        btn.style.cursor = "not-allowed";
+
+        // 2. 파이어베이스 내부 함수로 숫자 +1 증가 (원자적 연산)
         await prayerDocRef.update({
             totalPrayers: firebase.firestore.FieldValue.increment(1)
         });
-        console.log("기도 체인 참여 완료!");
-    } catch (error) {
-        console.error("업데이트 실패 (문서가 없을 수 있음):", error);
-        // 문서가 없는 경우 생성
-        await prayerDocRef.set({ totalPrayers: 1 }, { merge: true });
-    }
 
-    // 기도 게시판으로 부드럽게 이동
-    document.getElementById("prayer-board").scrollIntoView({ behavior: 'smooth' });
+        // 3. 업데이트 완료 후 게시판으로 부드럽게 이동
+        document.getElementById("prayer-board").scrollIntoView({ behavior: 'smooth' });
+        
+        // 4. 버튼 다시 활성화 (2초 후)
+        setTimeout(() => { 
+            btn.disabled = false; 
+            btn.style.opacity = "1";
+            btn.style.cursor = "pointer";
+        }, 2000);
+
+    } catch (error) {
+        console.error("카운트 업데이트 실패:", error);
+        // 문서가 없는 경우 초기 생성 시도
+        try {
+            await prayerDocRef.set({ totalPrayers: 1 }, { merge: true });
+            document.getElementById("prayer-board").scrollIntoView({ behavior: 'smooth' });
+        } catch(e) {
+            alert("연결이 원활하지 않습니다. 다시 시도해주세요!");
+        }
+        btn.disabled = false;
+        btn.style.opacity = "1";
+    }
 };
 
 /**
- * 실시간 기도 카운터 감시
+ * 실시간 기도 카운터 감시 (onSnapshot 사용)
  */
 function watchGlobalPrayer() {
     if (!window.db) return;
@@ -129,6 +149,7 @@ function watchGlobalPrayer() {
             const counter = document.getElementById('prayer-counter');
             if (counter) {
                 const total = doc.data().totalPrayers || 0;
+                // 세 자리마다 콤마 추가
                 counter.textContent = total.toLocaleString();
             }
         }
