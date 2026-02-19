@@ -9,6 +9,8 @@ const translations = {
         btn_generate_card: "말씀 카드 저장", streak_text: "일 연속 동행",
         ai_companion_title: "🕊️ AI 신앙 상담", ai_companion_btn: "말씀 듣기",
         prayer_request_title: "🙏 중보기도 요청", btn_submit_prayer: "기도 요청하기", btn_pray_for_this: "함께 기도함",
+        contact_form_title: "🤝 제휴 및 중보기도 문의", label_category: "문의 구분", opt_partnership: "제휴 문의", opt_intercession: "중보기도 요청 (비공개)", opt_other: "기타 문의",
+        label_name: "이름 / 단체명", label_email: "이메일 주소", label_message: "내용", placeholder_message: "문의하시거나 요청하실 내용을 적어주세요...", btn_send: "메시지 보내기",
         test_header: "AI 제자상 분석기", checkup_title: "📋 주간 신앙 자가진단", dashboard_title: "신앙 대시보드",
         footer_rights: "© 2026 영국 데일리 바이블.", save_success: "성공적으로 저장되었습니다!"
     },
@@ -22,6 +24,8 @@ const translations = {
         btn_generate_card: "Save Card", streak_text: "Day Streak",
         ai_companion_title: "🕊️ AI Faith Companion", ai_companion_btn: "Seek Guidance",
         prayer_request_title: "🙏 Prayer Requests", btn_submit_prayer: "Submit Request", btn_pray_for_this: "I prayed",
+        contact_form_title: "🤝 Partnership & Intercession", label_category: "Category", opt_partnership: "Partnership Inquiry", opt_intercession: "Intercessory Prayer Request", opt_other: "Other Inquiry",
+        label_name: "Name / Organization", label_email: "Email Address", label_message: "Message", placeholder_message: "Your message...", btn_send: "Send Message",
         test_header: "AI Disciple Analyzer", checkup_title: "📋 Faith Self-Check", dashboard_title: "Faith Dashboard",
         footer_rights: "© 2026 British Daily Bible.", save_success: "Saved successfully!"
     }

@@ -38,6 +38,35 @@
             <button onclick="submitPrayerRequest()" class="primary-btn" style="width: 100%; margin-top: 15px;" data-i18n="btn_submit_prayer">Submit Request</button>
         </div>
         <div id="prayer-wall-list"></div>
+
+        <hr style="margin: 60px 0; border: 0; border-top: 1px dashed #B08968;">
+
+        <div class="card" style="max-width: 700px; margin: 0 auto;">
+            <h2 data-i18n="contact_form_title" style="text-align: center; margin-bottom: 25px;">🤝 Partnership & Intercession</h2>
+            <form action="https://formspree.io/f/mnjbvgdq" method="POST">
+                <div style="margin-bottom: 15px;">
+                    <label data-i18n="label_category" style="display: block; margin-bottom: 5px; color: #34495E; font-weight: 600;">Category</label>
+                    <select name="category" class="input-box" required style="width: 100%; border: 1px solid #E0D7C6; padding: 12px; border-radius: 8px; background: #fff;">
+                        <option value="Partnership" data-i18n="opt_partnership">Partnership Inquiry</option>
+                        <option value="Intercession" data-i18n="opt_intercession">Intercessory Prayer Request</option>
+                        <option value="Other" data-i18n="opt_other">Other Inquiry</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label data-i18n="label_name" style="display: block; margin-bottom: 5px; color: #34495E; font-weight: 600;">Name / Organization</label>
+                    <input type="text" name="name" class="input-box" required placeholder="Name" data-i18n="placeholder_name">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label data-i18n="label_email" style="display: block; margin-bottom: 5px; color: #34495E; font-weight: 600;">Email Address</label>
+                    <input type="email" name="_replyto" class="input-box" required placeholder="example@email.com">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label data-i18n="label_message" style="display: block; margin-bottom: 5px; color: #34495E; font-weight: 600;">Message</label>
+                    <textarea name="message" class="input-box" required placeholder="Your message..." style="height: 150px;" data-i18n="placeholder_message"></textarea>
+                </div>
+                <button type="submit" class="primary-btn" style="width: 100%;" data-i18n="btn_send">Send Message</button>
+            </form>
+        </div>
     </main>
 
     <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
