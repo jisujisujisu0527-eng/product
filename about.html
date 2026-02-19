@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="nav_about">사이트 소개</title>
+    <title data-i18n="nav_about">About | British Daily Bible</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -12,83 +12,37 @@
     <header>
         <div class="container">
             <nav class="navbar">
-                <div class="nav-logo">
-                    <a href="index.html" data-i18n="site_logo">British Daily Bible</a>
-                </div>
+                <div class="nav-logo"><a href="index.html" data-i18n="site_logo">British Daily Bible</a></div>
                 <ul class="nav-links">
                     <li><a href="index.html" data-i18n="nav_home">Home</a></li>
-                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Disciple</a></li>
-                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Faith Check</a></li>
-                    <li><a href="faith-dashboard.html" data-i18n="nav_dashboard">Dashboard</a></li>
+                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Test</a></li>
+                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Check</a></li>
                     <li><a href="community.html" data-i18n="nav_community">Community</a></li>
-                    <li><a href="chat.html" data-i18n="nav_chat">Apostle Chat</a></li>
+                    <li><a href="chat.html" data-i18n="nav_chat">Paul AI</a></li>
+                    <li><a href="blog.html" data-i18n="nav_blog">Blog</a></li>
                 </ul>
                 <div class="lang-switcher">
-                    <div id="streak-badge" style="display:none; margin-right: 15px; font-size: 0.8rem; font-weight: bold; color: #E65100;">
-                        <i class="fas fa-fire"></i> <span id="streak-count">0</span>
-                    </div>
-                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 5px 10px; border-radius: 15px; background: var(--bg-light); border: 1px solid var(--accent-color); color: var(--primary-color); font-family: inherit;">
-                        <option value="en">EN</option>
-                        <option value="ko">KO</option>
-                        <option value="fr">FR</option>
-                        <option value="es">ES</option>
+                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
+                        <option value="en">EN</option><option value="ko">KO</option>
                     </select>
                 </div>
             </nav>
         </div>
     </header>
 
-    <main>
-        <div class="container">
-            <h1 data-i18n="about_title">사이트 소개: 오늘의 성경 구절 & 신앙 성장 플랫폼</h1>
-            
-            <section class="site-purpose-section card" style="margin-top: 20px;">
-                <h2 data-i18n="vision_title">우리의 비전</h2>
-                <p data-i18n="vision_desc" class="site-purpose">이 사이트는 바쁜 현대 사회를 살아가는 모든 크리스천들이 매일의 삶 속에서 하나님의 말씀을 잊지 않고, 기도를 통해 주님과 동행하는 삶을 살 수 있도록 돕기 위해 설립되었습니다.</p>
-            </section>
-
-            <section class="service-description card" style="margin-top: 20px;">
-                <h2 data-i18n="services_title">제공하는 서비스</h2>
-                <ul>
-                    <li data-i18n="service_1">오늘의 성경 구절: 매일 새로운 말씀과 기도 구절을 통해 영적 에너지를 공급받습니다.</li>
-                    <li data-i18n="service_2">제자상 테스트: 성경적 기준을 바탕으로 현재 자신의 제자도를 다각도로 분석해 봅니다.</li>
-                    <li data-i18n="service_3">신앙 점검: 자신의 영적 상태를 기록하고 추이를 확인하여 균형 잡힌 신앙 성장을 돕습니다.</li>
-                    <li data-i18n="service_4">신앙 대시보드: 개인화된 데이터를 통해 자신의 영적 여정을 한눈에 파악할 수 있습니다.</li>
-                </ul>
-            </section>
-
-            <section class="verse-section card" style="margin-top: 20px;">
-                <h2 data-i18n="meditation_title">묵상을 위한 말씀</h2>
-                <div class="verse-item">
-                    <h3>빌립보서 4:6-7</h3>
-                    <p class="verse-text">"쉬지 말고 기도하라, 너희의 필요를 주께 아뢰고 감사함으로 간구하라. 그리하면 평강이 너희 마음을 지키리라."</p>
-                </div>
-            </section>
-
-            <section class="how-to-use card" style="margin-top: 20px; margin-bottom: 40px;">
-                <h2 data-i18n="how_to_use_title">사이트 활용 방법</h2>
-                <p data-i18n="how_to_use_desc">1. 매일 아침 메인 페이지 방문하여 '오늘의 구절'로 하루를 시작하세요. 2. '신앙 점검' 메뉴를 통해 오늘 하루 주님과의 관계를 기록하세요. 3. '제자상 테스트'를 통해 내가 보완해야 할 영적 영역이 무엇인지 확인해 보세요.</p>
-            </section>
+    <main class="container" style="padding: 80px 0; text-align: center;">
+        <h1 data-i18n="nav_about" class="classic-serif" style="font-size: 3rem; margin-bottom: 30px;">소개</h1>
+        <div class="card" style="max-width: 800px; margin: 0 auto; line-height: 2; color: #34495E;">
+            <p><strong>영국 데일리 바이블(British Daily Bible)</strong>은 매일의 삶 속에서 주님과 동행하기 원하는 성도들을 위한 공간입니다.</p>
+            <p>우리는 인공지능 기술과 성경의 진리를 결합하여, 현대적인 방식으로 복음을 경험하고 나눌 수 있도록 돕습니다.</p>
         </div>
     </main>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <p data-i18n="footer_rights">© 2026 British Daily Bible. All rights reserved.</p>
-                <nav class="footer-nav">
-                    <a href="privacy.html" data-i18n="nav_privacy">Privacy</a>
-                    <a href="terms.html" data-i18n="nav_terms">Terms</a>
-                    <a href="about.html" data-i18n="nav_about">About</a>
-                </nav>
-            </div>
-        </div>
+    <footer style="padding: 60px 0; text-align: center; border-top: 1px solid #eee;">
+        <p data-i18n="footer_rights">© 2026 British Daily Bible.</p>
     </footer>
 
-    <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
     <script src="translations.js"></script>
-    <script defer src="firebase-firestore-service.js"></script>
-    <script defer src="main.js"></script>
+    <script src="main.js" defer></script>
 </body>
 </html>

@@ -3,106 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="nav_chat">Chat with Paul</title>
+    <title data-i18n="nav_chat">Paul AI | British Daily Bible</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .chat-container { max-width: 600px; margin: 40px auto; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid #eee; }
-        .chat-header { background: #4a3b2a; padding: 30px; text-align: center; color: white; }
-        .chat-header img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #fff; margin-bottom: 15px; background: #fff; }
-        .chat-window { height: 450px; overflow-y: auto; padding: 20px; background: #fdfaf5; display: flex; flex-direction: column; gap: 15px; }
-        .msg { padding: 12px 18px; border-radius: 15px; max-width: 80%; line-height: 1.6; }
-        .bot-msg { background: #fff; align-self: flex-start; border: 1px solid #eee; color: #444; border-bottom-left-radius: 2px; }
-        .user-msg { background: #B08968; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .chat-input-area { display: flex; padding: 20px; background: white; border-top: 1px solid #eee; gap: 10px; }
-    </style>
 </head>
 <body>
-    <div id="main-loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-light); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;">
-        <i class="fas fa-cross fa-3x" style="color: var(--accent-color); margin-bottom: 20px; animation: pulse 2s infinite;"></i>
-        <div data-i18n="nav_chat" style="font-family: 'Lora', serif; color: var(--primary-color); font-size: 1.2rem;">Chat with Paul</div>
-    </div>
-
     <header>
         <div class="container">
             <nav class="navbar">
-                <div class="nav-logo">
-                    <a href="index.html" data-i18n="site_logo">British Daily Bible</a>
-                </div>
+                <div class="nav-logo"><a href="index.html" data-i18n="site_logo">British Daily Bible</a></div>
                 <ul class="nav-links">
                     <li><a href="index.html" data-i18n="nav_home">Home</a></li>
-                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Disciple</a></li>
-                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Faith Check</a></li>
-                    <li><a href="faith-dashboard.html" data-i18n="nav_dashboard">Dashboard</a></li>
+                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Test</a></li>
+                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Check</a></li>
                     <li><a href="community.html" data-i18n="nav_community">Community</a></li>
-                    <li><a href="chat.html" data-i18n="nav_chat">Apostle Chat</a></li>
+                    <li><a href="chat.html" data-i18n="nav_chat">Paul AI</a></li>
+                    <li><a href="blog.html" data-i18n="nav_blog">Blog</a></li>
                 </ul>
                 <div class="lang-switcher">
-                    <div id="streak-badge" style="display:none; margin-right: 15px; font-size: 0.8rem; font-weight: bold; color: #E65100;">
-                        <i class="fas fa-fire"></i> <span id="streak-count">0</span>
-                    </div>
-                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 5px 10px; border-radius: 15px; background: var(--bg-light); border: 1px solid var(--accent-color); color: var(--primary-color); font-family: inherit;">
-                        <option value="en">EN</option>
-                        <option value="ko">KO</option>
-                        <option value="fr">FR</option>
-                        <option value="es">ES</option>
+                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
+                        <option value="en">EN</option><option value="ko">KO</option>
                     </select>
                 </div>
             </nav>
         </div>
     </header>
 
-    <main>
-        <div class="container">
-            <div class="chat-container">
-                <div class="chat-header">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Paul&top=shortHair&topProbability=100&facialHair=beardMajestic&facialHairProbability=100&clothes=graphicShirt&clothColor=65c9ff" alt="Apostle Paul">
-                    <h2 data-i18n="chat_title">Chat with Paul</h2>
-                    <p data-i18n="chat_subtitle">Grace and peace to you</p>
+    <main class="container" style="padding: 40px 0;">
+        <div class="card" style="height: 600px; display: flex; flex-direction: column;">
+            <h2 class="classic-serif" style="text-align: center; margin-bottom: 20px;"><i class="fas fa-dove"></i> <span data-i18n="nav_chat">Paul AI</span></h2>
+            <div id="chat-box" style="flex: 1; overflow-y: auto; padding: 20px; background: #fdfbf7; border-radius: 10px; border: 1px solid #eee;">
+                <div class="message ai" style="margin-bottom: 15px;">
+                    <p style="background: #E0D7C6; padding: 10px 15px; border-radius: 15px 15px 15px 0; display: inline-block; max-width: 80%; color: #34495E;">안녕하세요! 저는 바울 AI입니다. 오늘 어떤 고민이나 나누고 싶은 말씀이 있으신가요?</p>
                 </div>
-                <div id="chat-window" class="chat-window">
-                    <div class="msg bot-msg" data-i18n="chat_welcome">Welcome message...</div>
-                </div>
-                <div class="chat-input-area">
-                    <input type="text" id="chat-input" class="input-box" data-i18n="chat_placeholder" placeholder="Ask Paul..." style="margin-bottom: 0;">
-                    <button onclick="sendChatMessage()" class="primary-btn">
-                        <i class="fas fa-paper-plane"></i> <span data-i18n="chat_send">Send</span>
-                    </button>
-                </div>
+            </div>
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <input type="text" id="chat-input" class="input-box" placeholder="메시지를 입력하세요..." style="flex: 1;">
+                <button class="primary-btn" onclick="sendMessage()" style="padding: 10px 25px;"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
     </main>
 
     <script src="translations.js"></script>
-    <script type="module" src="firebase-firestore-service.js"></script>
-    <script type="module" src="main.js" defer></script>
-    <script type="module">
-        const t = (key) => (translations[currentLang] || translations['en'])[key] || key;
-
-        window.sendChatMessage = async function() {
+    <script src="main.js" defer></script>
+    <script>
+        function sendMessage() {
             const input = document.getElementById('chat-input');
-            const message = input.value.trim();
-            if (!message) return;
-            appendMessage('user-msg', message);
-            input.value = '';
+            const box = document.getElementById('chat-box');
+            if(!input.value.trim()) return;
+            
+            box.innerHTML += `<div class="message user" style="margin-bottom: 15px; text-align: right;">
+                <p style="background: #B08968; color: white; padding: 10px 15px; border-radius: 15px 15px 0 15px; display: inline-block; max-width: 80%;">${input.value}</p>
+            </div>`;
+            input.value = "";
+            box.scrollTop = box.scrollHeight;
+            
             setTimeout(() => {
-                const list = {
-                    ko: ["아무 것도 염려하지 말고 다만 모든 일에 기도와 간구로..."],
-                    en: ["Do not be anxious about anything, but in everything by prayer..."]
-                };
-                const res = (list[currentLang] || list['en'])[0];
-                appendMessage('bot-msg', res);
-            }, 800);
-        };
-
-        function appendMessage(type, text) {
-            const win = document.getElementById('chat-window');
-            const div = document.createElement('div');
-            div.className = `msg ${type}`;
-            div.textContent = text;
-            win.appendChild(div);
-            win.scrollTop = win.scrollHeight;
+                box.innerHTML += `<div class="message ai" style="margin-bottom: 15px;">
+                    <p style="background: #E0D7C6; padding: 10px 15px; border-radius: 15px 15px 15px 0; display: inline-block; max-width: 80%; color: #34495E;">기도하며 고민해보고 답변 드릴게요. (AI 연동 준비 중)</p>
+                </div>`;
+                box.scrollTop = box.scrollHeight;
+            }, 1000);
         }
     </script>
 </body>
