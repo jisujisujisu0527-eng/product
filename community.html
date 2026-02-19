@@ -31,16 +31,6 @@
     </header>
 
     <main class="container" style="padding: 60px 0;">
-        <h1 data-i18n="prayer_request_title" style="text-align: center; margin-bottom: 40px;">🙏 Prayer Requests</h1>
-        <div class="card" style="max-width: 700px; margin: 0 auto 60px;">
-            <input type="text" id="prayer-name" class="input-box" data-i18n="placeholder_name" placeholder="Name">
-            <textarea id="prayer-content" class="input-box" data-i18n="placeholder_prayer" placeholder="Prayer request..." style="height: 120px; margin-top: 15px;"></textarea>
-            <button onclick="submitPrayerRequest()" class="primary-btn" style="width: 100%; margin-top: 15px;" data-i18n="btn_submit_prayer">Submit Request</button>
-        </div>
-        <div id="prayer-wall-list"></div>
-
-        <hr style="margin: 60px 0; border: 0; border-top: 1px dashed #B08968;">
-
         <div class="card" style="max-width: 700px; margin: 0 auto;">
             <h2 data-i18n="contact_form_title" style="text-align: center; margin-bottom: 25px;">🤝 Partnership & Intercession</h2>
             <form action="https://formspree.io/f/mnjbvgdq" method="POST">
@@ -69,38 +59,7 @@
         </div>
     </main>
 
-    <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
     <script src="translations.js"></script>
-    <script defer src="firebase-firestore-service.js"></script>
     <script defer src="main.js"></script>
-    <script>
-        window.submitPrayerRequest = async function() {
-            const name = document.getElementById('prayer-name').value.trim();
-            const content = document.getElementById('prayer-content').value.trim();
-            if(!content) return;
-            try {
-                await window.db.collection("prayer_requests").add({
-                    name: name || "Anonymous", content, timestamp: firebase.firestore.FieldValue.serverTimestamp(), prayCount: 0
-                });
-                document.getElementById('prayer-content').value = '';
-            } catch (e) { console.error(e); }
-        };
-        document.addEventListener('DOMContentLoaded', () => {
-            const check = setInterval(() => {
-                if(window.db) {
-                    clearInterval(check);
-                    window.db.collection("prayer_requests").orderBy("timestamp", "desc").limit(20).onSnapshot(snap => {
-                        const list = document.getElementById('prayer-wall-list');
-                        list.innerHTML = "";
-                        snap.forEach(doc => {
-                            const data = doc.data();
-                            list.innerHTML += `<div class="card" style="margin-bottom:15px;"><strong>${data.name}</strong><p>${data.content}</p></div>`;
-                        });
-                    });
-                }
-            }, 500);
-        });
-    </script>
 </body>
 </html>
