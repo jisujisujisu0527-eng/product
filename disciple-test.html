@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="nav_test">AI Disciple Test | British Daily Bible</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="canonical" href="https://dailybible.uk/disciple-test.html">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <!-- TensorFlow.js and Teachable Machine Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
@@ -15,7 +15,7 @@
 <body>
     <div id="main-loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FDFBF7; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;">
         <i class="fas fa-cross fa-3x" style="color: #B08968; margin-bottom: 20px; animation: pulse 2s infinite;"></i>
-        <div style="font-family: 'EB Garamond', serif; color: #34495E; font-size: 1.2rem;">AI Test</div>
+        <div style="font-family: 'EB Garamond', serif; color: #34495E; font-size: 1.2rem;">AI Test Loading...</div>
     </div>
 
     <header>
@@ -42,57 +42,66 @@
     <main class="container" style="padding: 60px 0;">
         <section class="test-header card text-center" style="text-align: center; margin-bottom: 30px;">
             <h1 data-i18n="test_header">AI 제자상 분석기</h1>
-            <p data-i18n="test_desc">당신의 사진을 업로드하여 성경 속 어떤 제자를 닮았는지 확인해보세요.</p>
+            <p data-i18n="test_desc">성경 속 어떤 제자의 형상을 닮았는지 분석합니다.</p>
         </section>
 
         <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
-            <div id="upload-area" style="border: 2px dashed #B08968; padding: 40px; border-radius: 15px; cursor: pointer; background: #fffcf9;" onclick="document.getElementById('file-input').click()">
-                <i class="fas fa-cloud-upload-alt fa-3x" style="color: #B08968; margin-bottom: 15px;"></i>
-                <p data-i18n="upload_text">클릭하여 사진 업로드</p>
+            <!-- Upload Area -->
+            <div id="upload-area" style="border: 2px dashed #B08968; padding: 50px 20px; border-radius: 15px; cursor: pointer; background: #fffcf9;" onclick="document.getElementById('file-input').click()">
+                <i class="fas fa-image fa-3x" style="color: #B08968; margin-bottom: 15px;"></i>
+                <p style="font-weight: 600; color: #34495E;" data-i18n="upload_text">클릭하여 얼굴 사진 업로드</p>
                 <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="handleFileUpload(event)">
             </div>
 
-            <div id="image-preview-container" style="display: none; margin-top: 25px;">
-                <img id="image-preview" src="#" alt="Preview" style="max-width: 100%; border-radius: 10px; border: 1px solid #eee;">
-                <div id="loading-spinner" style="display: none; margin-top: 20px;">
+            <!-- Preview Area -->
+            <div id="preview-area" style="display: none; margin-top: 25px;">
+                <img id="image-preview" src="#" alt="Preview" style="max-width: 100%; max-height: 400px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <div id="analyzing-status" style="display: none; margin-top: 20px;">
                     <i class="fas fa-spinner fa-spin fa-2x" style="color: #B08968;"></i>
-                    <p data-i18n="analyzing">분석 중...</p>
+                    <p data-i18n="analyzing" style="margin-top: 10px;">분석 중입니다...</p>
                 </div>
-                <button id="analyze-btn" class="primary-btn" style="width: 100%; margin-top: 20px;" onclick="predict()" data-i18n="btn_analyze">분석하기</button>
+                <button id="predict-btn" class="primary-btn" style="width: 100%; margin-top: 20px;" onclick="predict()" data-i18n="btn_analyze">제자상 분석하기</button>
             </div>
 
-            <div id="result-container" style="display: none; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-                <h2 data-i18n="result_title">분석 결과</h2>
-                <div id="label-container" style="margin-top: 15px; font-weight: 600; color: #34495E; font-size: 1.2rem;"></div>
-                <p id="result-desc" style="margin-top: 15px; color: #7F8C8D; line-height: 1.6;"></p>
-                <button class="primary-btn" style="margin-top: 20px; background: #967E76;" onclick="location.reload()">다시 하기</button>
+            <!-- Result Area -->
+            <div id="result-area" style="display: none; margin-top: 30px; padding-top: 30px; border-top: 2px solid #f9f9f9;">
+                <h2 data-i18n="result_title" style="color: #B08968;">분석 결과</h2>
+                <div id="label-container" style="margin-top: 20px; font-size: 1.5rem; font-weight: 700; color: #34495E;"></div>
+                <div id="result-desc" style="margin-top: 20px; line-height: 1.8; color: #5D6D7E; text-align: left; background: #fdfbf7; padding: 20px; border-radius: 10px;"></div>
+                <button class="primary-btn" style="margin-top: 30px; background: #967E76;" onclick="location.reload()">다른 사진으로 테스트</button>
             </div>
         </div>
     </main>
 
     <script src="translations.js"></script>
-    <script defer src="main.js"></script>
+    <script src="main.js"></script>
     
     <script type="text/javascript">
-        // Teachable Machine 모델 URL (자신의 모델 URL로 변경 가능)
-        // 예: "https://teachablemachine.withgoogle.com/models/m7BfM9Q6N/"
-        const URL = "https://teachablemachine.withgoogle.com/models/m7BfM9Q6N/"; 
+        // Teachable Machine 모델 링크 (업데이트된 모델 사용)
+        const URL = "https://teachablemachine.withgoogle.com/models/m7BfM9Q6N/";
 
-        let model, labelContainer, maxPredictions;
+        let model, maxPredictions;
 
-        // 모델 로드
-        async function loadModel() {
-            const modelURL = URL + "model.json";
-            const metadataURL = URL + "metadata.json";
+        async function initModel() {
             try {
+                const modelURL = URL + "model.json";
+                const metadataURL = URL + "metadata.json";
                 model = await tmImage.load(modelURL, metadataURL);
                 maxPredictions = model.getTotalClasses();
+                console.log("Model loaded successfully");
+                
+                // 로딩 화면 제거
+                const loader = document.getElementById('main-loader');
+                if(loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 500);
+                }
             } catch (e) {
                 console.error("Model load failed", e);
+                alert("모델 로딩에 실패했습니다. 페이지를 새로고침 해주세요.");
             }
         }
 
-        // 이미지 업로드 처리
         function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -101,65 +110,58 @@
             reader.onload = function(e) {
                 const img = document.getElementById('image-preview');
                 img.src = e.target.result;
-                document.getElementById('image-preview-container').style.display = 'block';
+                document.getElementById('preview-area').style.display = 'block';
                 document.getElementById('upload-area').style.display = 'none';
-                document.getElementById('result-container').style.display = 'none';
+                document.getElementById('result-area').style.display = 'none';
             }
             reader.readAsDataURL(file);
         }
 
-        // 분석 실행
         async function predict() {
             if (!model) {
-                document.getElementById('loading-spinner').style.display = 'block';
-                await loadModel();
+                await initModel();
             }
             
             const img = document.getElementById('image-preview');
-            document.getElementById('loading-spinner').style.display = 'block';
-            document.getElementById('analyze-btn').style.display = 'none';
+            const status = document.getElementById('analyzing-status');
+            const btn = document.getElementById('predict-btn');
+            
+            status.style.display = 'block';
+            btn.style.display = 'none';
 
-            // 모델 예측
+            // 인공지능 예측 수행
             const prediction = await model.predict(img);
             
-            // 가장 높은 확률의 결과 찾기
-            let highestProb = 0;
-            let bestMatch = "";
+            // 가장 확률이 높은 결과 정렬
+            prediction.sort((a, b) => b.probability - a.probability);
+            const topResult = prediction[0];
 
-            for (let i = 0; i < maxPredictions; i++) {
-                if (prediction[i].probability > highestProb) {
-                    highestProb = prediction[i].probability;
-                    bestMatch = prediction[i].className;
-                }
-            }
-
-            // 결과 표시
-            displayResult(bestMatch, highestProb);
+            displayResult(topResult.className, topResult.probability);
         }
 
         function displayResult(label, probability) {
-            const labelDiv = document.getElementById('label-container');
-            const descP = document.getElementById('result-desc');
+            document.getElementById('analyzing-status').style.display = 'none';
+            document.getElementById('result-area').style.display = 'block';
             
-            document.getElementById('loading-spinner').style.display = 'none';
-            document.getElementById('result-container').style.display = 'block';
+            const labelContainer = document.getElementById('label-container');
+            const descContainer = document.getElementById('result-desc');
+            const probPercent = (probability * 100).toFixed(1);
 
-            const probPercent = (probability * 100).toFixed(0);
-            labelDiv.innerHTML = `${label} (${probPercent}%)`;
+            labelContainer.innerHTML = `${label} <span style="font-size: 1rem; color: #999;">(${probPercent}%)</span>`;
 
-            // 레이블에 따른 간단한 설명 (translations.js에 넣어서 확장 가능)
-            const descriptions = {
-                "Peter": "당신은 열정적이고 행동력이 넘치는 베드로를 닮았네요!",
-                "John": "당신은 사랑이 많고 깊은 통찰력을 가진 요한을 닮았습니다.",
-                "Paul": "당신은 논리적이고 복음 전파에 뜨거운 바울을 닮았군요.",
-                "Default": "당신은 하나님께서 사랑하시는 귀한 제자의 형상을 품고 있습니다."
+            // 결과별 상세 설명
+            const results = {
+                "Peter": "<strong>열정의 사도 베드로</strong><br>당신은 누구보다 뜨거운 열정과 실천력을 가진 베드로를 닮았군요! 때로는 실수를 하기도 하지만, 주님을 향한 그 진실한 사랑은 그 누구보다 강합니다. 당신의 그 뜨거운 마음이 세상을 변화시키는 원동력이 될 것입니다.",
+                "John": "<strong>사랑의 사도 요한</strong><br>당신은 깊은 통찰력과 따뜻한 사랑을 가진 요한을 닮았습니다. 주님의 품에 기대어 그분의 마음을 가장 잘 이해했던 요한처럼, 당신은 주변 사람들에게 주님의 사랑을 잔잔하게 흘려보내는 귀한 통로가 될 것입니다.",
+                "Paul": "<strong>이방인의 사도 바울</strong><br>당신은 논리적이고 복음 전파에 대한 뚜렷한 소명을 가진 바울을 닮았군요! 고난 앞에서도 굴하지 않고 푯대를 향해 달려가는 당신의 굳건한 신앙은 많은 이들에게 선한 영향력을 끼칠 것입니다.",
+                "Andrew": "<strong>인도의 사도 안드레</strong><br>당신은 묵묵히 사람들을 주님께로 인도하는 안드레를 닮았습니다. 화려하지 않아도 한 영혼을 귀하게 여기며 주님께 데려오는 당신의 섬김은 하늘나라에서 크게 빛날 것입니다."
             };
 
-            descP.innerHTML = descriptions[label] || descriptions["Default"];
+            descContainer.innerHTML = results[label] || "<strong>신실한 제자의 상</strong><br>당신은 주님을 따르는 귀한 제자의 형상을 품고 있습니다. 각기 다른 달란트대로 주님께서 당신을 통해 일하실 것을 기대합니다.";
         }
 
-        // 페이지 로드 시 모델 미리 로드 (선택 사항)
-        window.addEventListener('DOMContentLoaded', loadModel);
+        // 초기화 실행
+        initModel();
     </script>
 </body>
 </html>
