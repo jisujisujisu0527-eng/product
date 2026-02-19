@@ -7,9 +7,10 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="canonical" href="https://dailybible.uk/disciple-test.html">
     <link rel="stylesheet" href="style.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- TensorFlow.js and Teachable Machine Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 </head>
 <body>
     <div id="main-loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FDFBF7; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease;">
@@ -39,17 +40,126 @@
     </header>
 
     <main class="container" style="padding: 60px 0;">
-        <section class="test-header card text-center" style="text-align: center;">
+        <section class="test-header card text-center" style="text-align: center; margin-bottom: 30px;">
             <h1 data-i18n="test_header">AI 제자상 분석기</h1>
-            <p data-i18n="test_desc">나의 얼굴상에 담긴 제자의 모습은 무엇일까요?</p>
+            <p data-i18n="test_desc">당신의 사진을 업로드하여 성경 속 어떤 제자를 닮았는지 확인해보세요.</p>
         </section>
-        <!-- 테스트 로직... (기존 로직 유지) -->
+
+        <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <div id="upload-area" style="border: 2px dashed #B08968; padding: 40px; border-radius: 15px; cursor: pointer; background: #fffcf9;" onclick="document.getElementById('file-input').click()">
+                <i class="fas fa-cloud-upload-alt fa-3x" style="color: #B08968; margin-bottom: 15px;"></i>
+                <p data-i18n="upload_text">클릭하여 사진 업로드</p>
+                <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="handleFileUpload(event)">
+            </div>
+
+            <div id="image-preview-container" style="display: none; margin-top: 25px;">
+                <img id="image-preview" src="#" alt="Preview" style="max-width: 100%; border-radius: 10px; border: 1px solid #eee;">
+                <div id="loading-spinner" style="display: none; margin-top: 20px;">
+                    <i class="fas fa-spinner fa-spin fa-2x" style="color: #B08968;"></i>
+                    <p data-i18n="analyzing">분석 중...</p>
+                </div>
+                <button id="analyze-btn" class="primary-btn" style="width: 100%; margin-top: 20px;" onclick="predict()" data-i18n="btn_analyze">분석하기</button>
+            </div>
+
+            <div id="result-container" style="display: none; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                <h2 data-i18n="result_title">분석 결과</h2>
+                <div id="label-container" style="margin-top: 15px; font-weight: 600; color: #34495E; font-size: 1.2rem;"></div>
+                <p id="result-desc" style="margin-top: 15px; color: #7F8C8D; line-height: 1.6;"></p>
+                <button class="primary-btn" style="margin-top: 20px; background: #967E76;" onclick="location.reload()">다시 하기</button>
+            </div>
+        </div>
     </main>
 
-    <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
     <script src="translations.js"></script>
-    <script defer src="firebase-firestore-service.js"></script>
     <script defer src="main.js"></script>
+    
+    <script type="text/javascript">
+        // Teachable Machine 모델 URL (자신의 모델 URL로 변경 가능)
+        // 예: "https://teachablemachine.withgoogle.com/models/m7BfM9Q6N/"
+        const URL = "https://teachablemachine.withgoogle.com/models/m7BfM9Q6N/"; 
+
+        let model, labelContainer, maxPredictions;
+
+        // 모델 로드
+        async function loadModel() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+            try {
+                model = await tmImage.load(modelURL, metadataURL);
+                maxPredictions = model.getTotalClasses();
+            } catch (e) {
+                console.error("Model load failed", e);
+            }
+        }
+
+        // 이미지 업로드 처리
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('image-preview');
+                img.src = e.target.result;
+                document.getElementById('image-preview-container').style.display = 'block';
+                document.getElementById('upload-area').style.display = 'none';
+                document.getElementById('result-container').style.display = 'none';
+            }
+            reader.readAsDataURL(file);
+        }
+
+        // 분석 실행
+        async function predict() {
+            if (!model) {
+                document.getElementById('loading-spinner').style.display = 'block';
+                await loadModel();
+            }
+            
+            const img = document.getElementById('image-preview');
+            document.getElementById('loading-spinner').style.display = 'block';
+            document.getElementById('analyze-btn').style.display = 'none';
+
+            // 모델 예측
+            const prediction = await model.predict(img);
+            
+            // 가장 높은 확률의 결과 찾기
+            let highestProb = 0;
+            let bestMatch = "";
+
+            for (let i = 0; i < maxPredictions; i++) {
+                if (prediction[i].probability > highestProb) {
+                    highestProb = prediction[i].probability;
+                    bestMatch = prediction[i].className;
+                }
+            }
+
+            // 결과 표시
+            displayResult(bestMatch, highestProb);
+        }
+
+        function displayResult(label, probability) {
+            const labelDiv = document.getElementById('label-container');
+            const descP = document.getElementById('result-desc');
+            
+            document.getElementById('loading-spinner').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+
+            const probPercent = (probability * 100).toFixed(0);
+            labelDiv.innerHTML = `${label} (${probPercent}%)`;
+
+            // 레이블에 따른 간단한 설명 (translations.js에 넣어서 확장 가능)
+            const descriptions = {
+                "Peter": "당신은 열정적이고 행동력이 넘치는 베드로를 닮았네요!",
+                "John": "당신은 사랑이 많고 깊은 통찰력을 가진 요한을 닮았습니다.",
+                "Paul": "당신은 논리적이고 복음 전파에 뜨거운 바울을 닮았군요.",
+                "Default": "당신은 하나님께서 사랑하시는 귀한 제자의 형상을 품고 있습니다."
+            };
+
+            descP.innerHTML = descriptions[label] || descriptions["Default"];
+        }
+
+        // 페이지 로드 시 모델 미리 로드 (선택 사항)
+        window.addEventListener('DOMContentLoaded', loadModel);
+    </script>
 </body>
 </html>
