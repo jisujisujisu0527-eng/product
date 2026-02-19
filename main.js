@@ -1,6 +1,6 @@
 // dailybible.uk - App Logic
 
-// 1. 언어 설정 초기화 (Gemini 조언 적용: 로컬 스토리지 -> 브라우저 설정 -> 기본값 'ko')
+// 1. 언어 설정 초기화 (Gemini 조언 적용)
 let currentLang = localStorage.getItem('user-lang') || 
                   (navigator.language.startsWith('ko') ? 'ko' : 'en');
 
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 기본 언어 적용
     window.applyLanguage(currentLang);
     
-    // 테마 설정 (선택 사항)
+    // 테마 설정
     if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
     
     // 일일 콘텐츠 로드
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(checkReady);
             watchGlobalPrayer();
             
-            // 스트릭 업데이트 및 표시 (Gemini 조언 기반)
+            // 스트릭 업데이트 및 표시
             try {
                 const count = await window.updateStreak();
                 const container = document.getElementById('streak-container');
@@ -45,6 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (e) { console.error("Streak sync failed"); }
         }
     }, 500);
+
+    // Disqus 초기화
+    initDisqus();
 });
 
 /**
@@ -52,16 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 window.applyLanguage = function(lang) {
     currentLang = lang;
-    localStorage.setItem('user-lang', lang); // 일관된 키 사용
+    localStorage.setItem('user-lang', lang);
     document.documentElement.lang = lang;
     
     const select = document.getElementById('lang-select');
     if (select) select.value = lang;
 
-    // 모든 [data-i18n] 요소에 번역 적용
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        // translate 함수를 사용하여 Fallback(영어) 자동 지원
         const translatedText = window.translate(key, lang);
         
         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
@@ -71,55 +72,51 @@ window.applyLanguage = function(lang) {
         }
     });
 
-    // 콘텐츠 재로드 (언어 변경 시 필요)
     loadDailyContent();
 };
 
 /**
- * 일일 콘텐츠 로드 (번역 누락 방지 로직 포함)
+ * 일일 콘텐츠 로드
  */
 function loadDailyContent() {
     const fallback = {
         en: { text: "The Lord is my shepherd; I shall not want.", ref: "Psalm 23:1", prayer: "Bless our day with your grace.", mission: "Be kind to everyone you meet today." },
         ko: { text: "여호와는 나의 목자시니 내게 부족함이 없으리로다.", ref: "시편 23:1", prayer: "오늘 하루를 당신의 은혜로 축복하소서.", mission: "오늘 만나는 모든 이에게 친절을 베푸세요." }
     };
-    
-    // 지원하지 않는 언어일 경우 영어를 기본값으로 사용
     const item = fallback[currentLang] || fallback['en'];
+    const elements = { bText: 'bible-text', bRef: 'bible-ref', pText: 'prayer-text', mText: 'mission-text' };
     
-    const bText = document.getElementById('bible-text');
-    const bRef = document.getElementById('bible-ref');
-    const pText = document.getElementById('prayer-text');
-    const mText = document.getElementById('mission-text');
-    
-    if (bText) bText.textContent = `"${item.text}"`;
-    if (bRef) bRef.textContent = item.ref;
-    if (pText) pText.textContent = item.prayer;
-    if (mText) mText.textContent = item.mission;
+    if (document.getElementById(elements.bText)) document.getElementById(elements.bText).textContent = `"${item.text}"`;
+    if (document.getElementById(elements.bRef)) document.getElementById(elements.bRef).textContent = item.ref;
+    if (document.getElementById(elements.pText)) document.getElementById(elements.pText).textContent = item.prayer;
+    if (document.getElementById(elements.mText)) document.getElementById(elements.mText).textContent = item.mission;
 }
 
 /**
- * 글로벌 기도 카운터 업데이트
+ * 글로벌 기도 참여 로직 (Gemini 조언 기반)
  */
-window.lightGlobalCandle = async function() {
-    if (!window.db) return;
-    const statsRef = window.db.collection("stats").doc("global_prayer");
-    try {
-        await window.db.runTransaction(async (t) => {
-            const doc = await t.get(statsRef);
-            const currentTotal = doc.exists ? (doc.data().totalCount || 0) : 0;
-            t.set(statsRef, { totalCount: currentTotal + 1 }, { merge: true });
-        });
-        // 성공 시 로컬 카운터 즉시 업데이트 (사용자 경험 개선)
-        const counter = document.getElementById('prayer-counter');
-        if (counter) {
-            const currentVal = parseInt(counter.textContent.replace(/,/g, '')) || 0;
-            counter.textContent = (currentVal + 1).toLocaleString();
-        }
-    } catch (e) { 
-        console.error("Sync failed:", e);
-        alert(window.translate('save_success') || "Prayed!");
+window.participateInPrayer = async function() {
+    if (!window.db) {
+        document.getElementById("prayer-board").scrollIntoView({ behavior: 'smooth' });
+        return;
     }
+    
+    const prayerDocRef = window.db.collection("stats").doc("prayer-chain");
+    
+    try {
+        // 카운트 +1 업데이트 (increment 사용)
+        await prayerDocRef.update({
+            totalPrayers: firebase.firestore.FieldValue.increment(1)
+        });
+        console.log("기도 체인 참여 완료!");
+    } catch (error) {
+        console.error("업데이트 실패 (문서가 없을 수 있음):", error);
+        // 문서가 없는 경우 생성
+        await prayerDocRef.set({ totalPrayers: 1 }, { merge: true });
+    }
+
+    // 기도 게시판으로 부드럽게 이동
+    document.getElementById("prayer-board").scrollIntoView({ behavior: 'smooth' });
 };
 
 /**
@@ -127,18 +124,28 @@ window.lightGlobalCandle = async function() {
  */
 function watchGlobalPrayer() {
     if (!window.db) return;
-    window.db.collection("stats").doc("global_prayer").onSnapshot(doc => {
+    window.db.collection("stats").doc("prayer-chain").onSnapshot(doc => {
         if (doc.exists) {
             const counter = document.getElementById('prayer-counter');
             if (counter) {
-                const total = doc.data().totalCount || 0;
+                const total = doc.data().totalPrayers || 0;
                 counter.textContent = total.toLocaleString();
             }
         }
     }, err => console.error("Snapshot error:", err));
 }
 
-// 나머지 헬퍼 함수들
+/**
+ * Disqus 익명 게시판 초기화
+ */
+function initDisqus() {
+    const d = document, s = d.createElement('script');
+    s.src = 'https://bible-sound2.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+}
+
+// 헬퍼 함수
 window.downloadVerseCard = function() { alert(window.translate('save_success')); };
 window.getVerseByMood = function(mood) { 
     const msg = window.translate('loading');

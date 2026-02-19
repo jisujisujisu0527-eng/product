@@ -62,11 +62,18 @@
 
         <main>
             <div class="container">
-                <section class="global-stats-board card" style="margin-top: 40px; text-align: center;">
-                    <h2 data-i18n="prayer_chain_title" class="classic-serif">🌏 Global Prayer Chain</h2>
-                    <div style="font-size: 3rem; font-weight: 700; color: #B08968; margin: 15px 0;" id="prayer-counter">0</div>
-                    <button id="global-prayer-btn" onclick="lightGlobalCandle()" class="primary-btn">
-                        <i class="fas fa-hands-praying"></i> <span data-i18n="btn_i_prayed_global">Join Prayer Now</span>
+                <!-- Improved Global Prayer Chain Section -->
+                <section class="global-stats-board card" style="margin-top: 40px; text-align: center; background: linear-gradient(to bottom, #FDFBF7, #FFF5E6); border: 1px solid #E0D7C6; padding: 50px 20px;">
+                    <h2 data-i18n="prayer_chain_title" class="classic-serif" style="font-size: 2.2rem; color: #34495E;">🌏 Global Prayer Chain</h2>
+                    <p style="color: #7F8C8D; margin-top: 10px; font-style: italic;" data-i18n="prayer_chain_desc">전 세계 성도들이 함께 기도의 불을 지피고 있습니다.</p>
+                    
+                    <div style="margin: 30px 0;">
+                        <span style="font-size: 1rem; color: #B08968; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;" data-i18n="total_prayers_label">지금까지 쌓인 기도의 향연</span><br>
+                        <span id="prayer-counter" style="font-size: 4rem; font-weight: 800; color: #E67E22; text-shadow: 1px 1px 2px rgba(0,0,0,0.05);">0</span>
+                    </div>
+
+                    <button id="global-prayer-btn" onclick="participateInPrayer()" class="primary-btn" style="padding: 18px 45px; font-size: 1.2rem; background: #E67E22; box-shadow: 0 10px 20px rgba(230,126,34,0.2);">
+                        <i class="fas fa-fire"></i> <span data-i18n="btn_i_prayed_global">지금 기도 올리기 & 참여하기</span>
                     </button>
                 </section>
 
@@ -87,6 +94,12 @@
                         <div class="card"><h3 data-i18n="daily_mission">Mission</h3><p id="mission-text">...</p></div>
                     </div>
                     <button onclick="downloadVerseCard()" class="primary-btn" style="margin-top: 20px; background: #B08968;"><i class="fas fa-download"></i> Save Card</button>
+                </section>
+
+                <!-- Prayer Board (Disqus) -->
+                <section id="prayer-board" class="card" style="margin-top: 40px; padding: 40px 20px;">
+                    <h3 style="border-bottom: 2px solid #E67E22; padding-bottom: 15px; margin-bottom: 30px; color: #34495E; font-family: 'EB Garamond', serif; font-size: 1.8rem;" data-i18n="prayer_board_title">🙏 최신 기도 제목</h3>
+                    <div id="disqus_thread"></div>
                 </section>
             </div>
         </main>
