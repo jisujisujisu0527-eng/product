@@ -1,13 +1,12 @@
-// firebase-firestore-service.js (Emergency Start Version)
+// firebase-firestore-service.js (Enhanced with Streak)
 
-// 1. 설정값 (실제 키로 교체 필요)
 const firebaseConfig = {
     apiKey: "YOUR_REAL_API_KEY_HERE",
     authDomain: "dailybible-uk.firebaseapp.com",
     projectId: "dailybible-uk",
     storageBucket: "dailybible-uk.appspot.com",
-    messagingSenderId: "SENDER_ID",
-    appId: "APP_ID"
+    messagingSenderId: "813854124317",
+    appId: "1:813854124317:web:8662908a8a6be7b8c8d8e8"
 };
 
 window.SiteManager = {
@@ -24,41 +23,74 @@ window.SiteManager = {
             setTimeout(() => {
                 loader.style.display = 'none';
                 if (content) content.style.display = 'block';
-                console.log("🚀 App Started (Mode: " + (window.db ? "Online" : "Offline") + ")");
             }, 500);
-        } else {
-            if (content) content.style.display = 'block';
+        } else if (content) {
+            content.style.display = 'block';
         }
     }
 };
 
-// 2. 2.5초 강제 실행 타이머 (접속 장애 최종 방어선)
-setTimeout(() => window.SiteManager.startApp(), 2500);
+setTimeout(() => window.SiteManager.startApp(), 3000);
 
-// 3. Firebase 초기화 시도
 try {
-    if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("YOUR_REAL")) {
-        throw new Error("Missing API Key");
-    }
     firebase.initializeApp(firebaseConfig);
     window.db = firebase.firestore();
-    
-    // DB 연결 확인 후 앱 실행
-    window.db.collection("stats").doc("global_prayer").get()
-        .then(() => { window.SiteManager.startApp(); })
-        .catch(() => { window.SiteManager.startApp(); });
+    window.SiteManager.startApp();
 } catch (error) {
-    console.warn("🚀 Firebase Init Error (Entering Offline Mode):", error.message);
-    // Mock DB to prevent main.js crashes
-    window.db = {
-        collection: () => ({
-            doc: () => ({
-                onSnapshot: () => {}, get: () => Promise.resolve({ exists: false }),
-                update: () => Promise.resolve(), set: () => Promise.resolve()
-            }),
-            orderBy: () => ({ limit: () => ({ onSnapshot: () => {} }) })
-        }),
-        runTransaction: async () => {}
-    };
+    console.warn("🚀 Entering Offline Mode:", error.message);
+    window.db = null;
     window.SiteManager.startApp();
 }
+
+/**
+ * 스트릭 업데이트 함수 (Gemini 조언 기반)
+ */
+window.updateStreak = async function() {
+    // 1. 사용자 고유 ID (없으면 생성)
+    let uid = localStorage.getItem('user_uid');
+    if (!uid) {
+        uid = 'guest_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('user_uid', uid);
+    }
+
+    if (!window.db) return 0;
+
+    const userRef = window.db.collection("users").doc(uid);
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+    
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+    try {
+        const doc = await userRef.get();
+        let currentStreak = 0;
+
+        if (doc.exists) {
+            const data = doc.data();
+            const lastLoginDate = data.lastLoginDate;
+            currentStreak = data.streakCount || 0;
+
+            if (lastLoginDate === todayStr) {
+                // 이미 오늘 체크인함
+            } else if (lastLoginDate === yesterdayStr) {
+                // 연속 출석 성공
+                currentStreak += 1;
+                await userRef.update({ streakCount: currentStreak, lastLoginDate: todayStr });
+            } else {
+                // 하루 이상 건너뜀
+                currentStreak = 1;
+                await userRef.update({ streakCount: currentStreak, lastLoginDate: todayStr });
+            }
+        } else {
+            // 신규 유저
+            currentStreak = 1;
+            await userRef.set({ streakCount: 1, lastLoginDate: todayStr, createdAt: todayStr });
+        }
+        return currentStreak;
+    } catch (e) {
+        console.error("Streak Update Error:", e);
+        return 0;
+    }
+};

@@ -27,11 +27,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // 일일 콘텐츠 로드
     loadDailyContent();
     
-    // Firebase 데이터 동기화 감시
-    const checkReady = setInterval(() => {
+    // Firebase 데이터 동기화 감시 및 스트릭 업데이트
+    const checkReady = setInterval(async () => {
         if (window.db) {
             clearInterval(checkReady);
             watchGlobalPrayer();
+            
+            // 스트릭 업데이트 및 표시 (Gemini 조언 기반)
+            try {
+                const count = await window.updateStreak();
+                const container = document.getElementById('streak-container');
+                const countEl = document.getElementById('streak-count');
+                if (container && countEl && count > 0) {
+                    countEl.textContent = count;
+                    container.style.display = 'inline-flex';
+                }
+            } catch (e) { console.error("Streak sync failed"); }
         }
     }, 500);
 });
