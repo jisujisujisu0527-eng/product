@@ -14,7 +14,8 @@ const translations = {
         test_header: "AI 제자상 분석기", test_desc: "당신의 사진을 업로드하여 성경 속 어떤 제자를 닮았는지 확인해보세요.", 
         upload_text: "클릭하여 사진 업로드", analyzing: "분석 중...", btn_analyze: "분석하기", result_title: "분석 결과",
         checkup_title: "📋 주간 신앙 자가진단", dashboard_title: "신앙 대시보드",
-        footer_rights: "© 2026 영국 데일리 바이블.", save_success: "성공적으로 저장되었습니다!"
+        footer_rights: "© 2026 영국 데일리 바이블.", save_success: "성공적으로 저장되었습니다!",
+        placeholder_name: "이름", placeholder_prayer: "기도 제목을 입력하세요..."
     },
     en: {
         nav_home: "Home", nav_test: "AI Disciple", nav_checkup: "Faith Check", nav_dashboard: "Dashboard", nav_community: "Community", nav_chat: "Paul AI", nav_blog: "Blog",
@@ -31,6 +32,31 @@ const translations = {
         test_header: "AI Disciple Analyzer", test_desc: "Upload your photo to see which disciple from the Bible you resemble.",
         upload_text: "Click to upload photo", analyzing: "Analyzing...", btn_analyze: "Analyze Now", result_title: "Analysis Result",
         checkup_title: "📋 Faith Self-Check", dashboard_title: "Faith Dashboard",
-        footer_rights: "© 2026 British Daily Bible.", save_success: "Saved successfully!"
+        footer_rights: "© 2026 British Daily Bible.", save_success: "Saved successfully!",
+        placeholder_name: "Name", placeholder_prayer: "Enter your prayer request..."
     }
 };
+
+/**
+ * 텍스트 번역 함수 (Gemini 조언 적용)
+ * @param {string} key 번역 키
+ * @param {string} lang 언어 (선택 사항)
+ * @returns {string} 번역된 텍스트 또는 기본값
+ */
+function translate(key, lang = null) {
+    if (!lang) {
+        lang = localStorage.getItem('user-lang') || navigator.language.split('-')[0];
+    }
+    if (!translations[lang]) lang = 'ko'; // 지원하지 않는 언어면 한국어 기본
+
+    // 1. 선택한 언어에서 찾기
+    // 2. 없으면 영어(en)에서 찾기 (Fallback)
+    // 3. 그것도 없으면 키값 그대로 반환 (누락 방지)
+    return (translations[lang] && translations[lang][key]) || 
+           (translations['en'] && translations['en'][key]) || 
+           key;
+}
+
+// 전역 범위에 노출
+window.translate = translate;
+window.translations = translations;
