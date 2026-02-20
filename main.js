@@ -96,8 +96,16 @@ async function loadDailyContent() {
         mText: document.getElementById('mission-text') 
     };
 
+    const cardElements = {
+        date: document.getElementById('card-date'),
+        word: document.getElementById('card-word'),
+        ref: document.getElementById('card-ref')
+    };
+
     // UI 요소가 없으면 중단
     if (!elements.bText) return;
+
+    let finalData = fallback[currentLang] || fallback['en'];
 
     // 3. Firestore에서 데이터 가져오기 시도
     if (window.db) {
@@ -109,29 +117,92 @@ async function loadDailyContent() {
                 const data = docSnap.data();
                 const lang = currentLang || 'en';
                 
-                // 다국어 필드가 있으면 해당 언어 사용, 없으면 영어 사용
                 const wordObj = data.word || {};
                 const prayerObj = data.prayer || {};
                 const missionObj = data.mission || {};
                 const refObj = data.ref || {};
 
-                elements.bText.textContent = `"${wordObj[lang] || wordObj['en'] || fallback[lang].word}"`;
-                elements.bRef.textContent = refObj[lang] || refObj['en'] || fallback[lang].ref;
-                elements.pText.textContent = prayerObj[lang] || prayerObj['en'] || fallback[lang].prayer;
-                elements.mText.textContent = missionObj[lang] || missionObj['en'] || fallback[lang].mission;
-                return; // 성공 시 종료
+                finalData = {
+                    word: wordObj[lang] || wordObj['en'] || fallback[lang].word,
+                    ref: refObj[lang] || refObj['en'] || fallback[lang].ref,
+                    prayer: prayerObj[lang] || prayerObj['en'] || fallback[lang].prayer,
+                    mission: missionObj[lang] || missionObj['en'] || fallback[lang].mission
+                };
             }
         } catch (error) {
             console.error("Firestore daily_content fetch error:", error);
         }
     }
 
-    // 4. Firestore 실패 시 또는 데이터 없을 시 폴백 적용
-    const item = fallback[currentLang] || fallback['en'];
-    elements.bText.textContent = `"${item.word}"`;
-    elements.bRef.textContent = item.ref;
-    elements.pText.textContent = item.prayer;
-    elements.mText.textContent = item.mission;
+    // 4. 화면 UI 업데이트
+    elements.bText.textContent = `"${finalData.word}"`;
+    elements.bRef.textContent = finalData.ref;
+    elements.pText.textContent = finalData.prayer;
+    elements.mText.textContent = finalData.mission;
+
+    // 5. 숨겨진 카드(이미지 저장용) 업데이트
+    if (cardElements.word) {
+        cardElements.date.textContent = dateKey.replace(/-/g, '.');
+        cardElements.word.textContent = `"${finalData.word}"`;
+        cardElements.ref.textContent = `- ${finalData.ref} -`;
+    }
+}
+
+/**
+ * 오늘의 말씀 카드 다운로드 (html2canvas)
+ */
+window.downloadVerseCard = function() {
+    const card = document.getElementById('wordCard');
+    if (!card) return;
+
+    const btn = event.currentTarget;
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+
+    html2canvas(card, {
+        useCORS: true,
+        allowTaint: false,
+        scale: 2, // 고해상도 출력
+        backgroundColor: '#000000'
+    }).then(canvas => {
+        const dateKey = new Date().toLocaleDateString('sv-SE');
+        const fileName = `DailyBible-${dateKey}.jpg`;
+
+        // 모바일 공유 API 지원 여부 확인
+        if (navigator.share && navigator.canShare) {
+            canvas.toBlob(blob => {
+                const file = new File([blob], fileName, { type: 'image/jpeg' });
+                if (navigator.canShare({ files: [file] })) {
+                    navigator.share({
+                        files: [file],
+                        title: 'Daily Bible Word',
+                        text: 'Sharing today\'s grace with you.'
+                    }).catch(err => console.error("Share failed:", err));
+                } else {
+                    saveFallback(canvas, fileName);
+                }
+            }, 'image/jpeg', 0.9);
+        } else {
+            saveFallback(canvas, fileName);
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }).catch(err => {
+        console.error("Canvas generation failed:", err);
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        alert("Failed to generate image. Please try again.");
+    });
+};
+
+function saveFallback(canvas, fileName) {
+    const imageData = canvas.toDataURL("image/jpeg", 0.9);
+    const link = document.createElement('a');
+    link.href = imageData;
+    link.download = fileName;
+    link.click();
 }
 
 /**
