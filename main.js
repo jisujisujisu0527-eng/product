@@ -151,14 +151,19 @@ async function loadDailyContent() {
 /**
  * 오늘의 말씀 카드 다운로드 (html2canvas)
  */
-window.downloadVerseCard = function() {
+window.downloadVerseCard = function(event) {
     const card = document.getElementById('wordCard');
     if (!card) return;
 
-    const btn = event.currentTarget;
-    const originalText = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+    // 이벤트 객체에서 버튼 요소 가져오기
+    const btn = event ? event.currentTarget : null;
+    let originalText = "";
+    
+    if (btn) {
+        originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+    }
 
     html2canvas(card, {
         useCORS: true,
@@ -178,7 +183,10 @@ window.downloadVerseCard = function() {
                         files: [file],
                         title: 'Daily Bible Word',
                         text: 'Sharing today\'s grace with you.'
-                    }).catch(err => console.error("Share failed:", err));
+                    }).catch(err => {
+                        console.error("Share failed, falling back to download:", err);
+                        saveFallback(canvas, fileName);
+                    });
                 } else {
                     saveFallback(canvas, fileName);
                 }
@@ -187,12 +195,16 @@ window.downloadVerseCard = function() {
             saveFallback(canvas, fileName);
         }
 
-        btn.disabled = false;
-        btn.innerHTML = originalText;
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
     }).catch(err => {
         console.error("Canvas generation failed:", err);
-        btn.disabled = false;
-        btn.innerHTML = originalText;
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
         alert("Failed to generate image. Please try again.");
     });
 };
@@ -202,7 +214,9 @@ function saveFallback(canvas, fileName) {
     const link = document.createElement('a');
     link.href = imageData;
     link.download = fileName;
+    document.body.appendChild(link); // 일부 브라우저 호환성을 위해 추가
     link.click();
+    document.body.removeChild(link);
 }
 
 /**
@@ -280,7 +294,6 @@ function initDisqus() {
 }
 
 // 헬퍼 함수
-window.downloadVerseCard = function() { alert(window.translate('save_success')); };
 window.getVerseByMood = function(mood) { 
     const msg = window.translate('loading');
     alert(`${mood}: ${msg}`); 
