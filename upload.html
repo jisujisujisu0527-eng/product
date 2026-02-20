@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>콘텐츠 벌크 업로드 - British Daily Bible</title>
+    <!-- Firebase SDK (Compat) - main.js와 동일한 버전 사용 권장 -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 50px; text-align: center; background: #f4f7f6; }
+        .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto; }
+        h1 { color: #34495E; }
+        p { color: #7F8C8D; line-height: 1.6; }
+        #uploadBtn {
+            padding: 20px 40px; font-size: 1.2rem; background: #3498DB; color: white;
+            border: none; border-radius: 50px; cursor: pointer; transition: background 0.3s;
+            margin-top: 30px;
+        }
+        #uploadBtn:hover { background: #2980B9; }
+        #uploadBtn:disabled { background: #BDC3C7; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📅 30일치 데이터 벌크 업로드</h1>
+        <p>
+            ChatGPT로 생성한 JSON 데이터를 Firebase Firestore에 한 번에 업로드합니다.<br>
+            <b>admin-upload.js</b> 파일에 데이터를 먼저 입력한 후 아래 버튼을 눌러주세요.
+        </p>
+        <p><small>(F12를 눌러 콘솔창에서 상세 진행 상황을 확인할 수 있습니다.)</small></p>
+        
+        <button id="uploadBtn">데이터 업로드 시작</button>
+        
+        <div style="margin-top: 40px;">
+            <a href="index.html" style="color: #3498DB; text-decoration: none;">← 메인 페이지로 돌아가기</a>
+        </div>
+    </div>
+
+    <script src="admin-upload.js"></script>
+</body>
+</html>

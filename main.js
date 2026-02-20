@@ -76,20 +76,62 @@ window.applyLanguage = function(lang) {
 };
 
 /**
- * 일일 콘텐츠 로드
+ * 일일 콘텐츠 로드 (Firestore 연동 및 폴백 처리)
  */
-function loadDailyContent() {
+async function loadDailyContent() {
+    // 1. 사용자 현지 시간 기준 'YYYY-MM-DD' 생성 (sv-SE 로케일은 YYYY-MM-DD 형식을 반환함)
+    const now = new Date();
+    const dateKey = now.toLocaleDateString('sv-SE');
+
+    // 2. 기본 폴백 데이터 정의
     const fallback = {
-        en: { text: "The Lord is my shepherd; I shall not want.", ref: "Psalm 23:1", prayer: "Bless our day with your grace.", mission: "Be kind to everyone you meet today." },
-        ko: { text: "여호와는 나의 목자시니 내게 부족함이 없으리로다.", ref: "시편 23:1", prayer: "오늘 하루를 당신의 은혜로 축복하소서.", mission: "오늘 만나는 모든 이에게 친절을 베푸세요." }
+        en: { word: "The Lord is my shepherd; I shall not want.", ref: "Psalm 23:1", prayer: "Bless our day with your grace.", mission: "Be kind to everyone you meet today." },
+        ko: { word: "여호와는 나의 목자시니 내게 부족함이 없으리로다.", ref: "시편 23:1", prayer: "오늘 하루를 당신의 은혜로 축복하소서.", mission: "오늘 만나는 모든 이에게 친절을 베푸세요." }
     };
+
+    const elements = { 
+        bText: document.getElementById('bible-text'), 
+        bRef: document.getElementById('bible-ref'), 
+        pText: document.getElementById('prayer-text'), 
+        mText: document.getElementById('mission-text') 
+    };
+
+    // UI 요소가 없으면 중단
+    if (!elements.bText) return;
+
+    // 3. Firestore에서 데이터 가져오기 시도
+    if (window.db) {
+        try {
+            const docRef = window.db.collection("daily_content").doc(dateKey);
+            const docSnap = await docRef.get();
+
+            if (docSnap.exists) {
+                const data = docSnap.data();
+                const lang = currentLang || 'en';
+                
+                // 다국어 필드가 있으면 해당 언어 사용, 없으면 영어 사용
+                const wordObj = data.word || {};
+                const prayerObj = data.prayer || {};
+                const missionObj = data.mission || {};
+                const refObj = data.ref || {};
+
+                elements.bText.textContent = `"${wordObj[lang] || wordObj['en'] || fallback[lang].word}"`;
+                elements.bRef.textContent = refObj[lang] || refObj['en'] || fallback[lang].ref;
+                elements.pText.textContent = prayerObj[lang] || prayerObj['en'] || fallback[lang].prayer;
+                elements.mText.textContent = missionObj[lang] || missionObj['en'] || fallback[lang].mission;
+                return; // 성공 시 종료
+            }
+        } catch (error) {
+            console.error("Firestore daily_content fetch error:", error);
+        }
+    }
+
+    // 4. Firestore 실패 시 또는 데이터 없을 시 폴백 적용
     const item = fallback[currentLang] || fallback['en'];
-    const elements = { bText: 'bible-text', bRef: 'bible-ref', pText: 'prayer-text', mText: 'mission-text' };
-    
-    if (document.getElementById(elements.bText)) document.getElementById(elements.bText).textContent = `"${item.text}"`;
-    if (document.getElementById(elements.bRef)) document.getElementById(elements.bRef).textContent = item.ref;
-    if (document.getElementById(elements.pText)) document.getElementById(elements.pText).textContent = item.prayer;
-    if (document.getElementById(elements.mText)) document.getElementById(elements.mText).textContent = item.mission;
+    elements.bText.textContent = `"${item.word}"`;
+    elements.bRef.textContent = item.ref;
+    elements.pText.textContent = item.prayer;
+    elements.mText.textContent = item.mission;
 }
 
 /**
