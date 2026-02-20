@@ -62,6 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initDisqus();
 });
 
+// 자정이 지날 경우를 대비해 1시간마다 자동 갱신 체크
+setInterval(() => {
+    loadDailyContent();
+}, 1000 * 60 * 60);
+
 /**
  * 전역 언어 적용 함수
  */
@@ -91,9 +96,9 @@ window.applyLanguage = function(lang) {
  * 일일 콘텐츠 로드 (Firestore 연동 및 폴백 처리)
  */
 async function loadDailyContent() {
-    // 1. 사용자 현지 시간 기준 'YYYY-MM-DD' 생성 (범용 형식)
-    const today = new Date();
-    const dateKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    // 1. 사용자 현지 시간 기준 'YYYY-MM-DD' 생성 (정밀 포맷)
+    const now = new Date();
+    const dateKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
     // 2. 기본 폴백 데이터 정의
     const fallback = {
@@ -140,6 +145,9 @@ async function loadDailyContent() {
                     prayer: prayerObj[lang] || prayerObj['en'] || fallback[lang].prayer,
                     mission: missionObj[lang] || missionObj['en'] || fallback[lang].mission
                 };
+                console.log(`Content loaded for: ${dateKey}`);
+            } else {
+                console.log(`No data for ${dateKey}, using fallback.`);
             }
         } catch (error) {
             console.error("Firestore daily_content fetch error:", error);
@@ -183,8 +191,8 @@ window.downloadVerseCard = function(event) {
         scale: 2, // 고해상도 출력
         backgroundColor: '#000000'
     }).then(canvas => {
-        const today = new Date();
-        const dateKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        const now = new Date();
+        const dateKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         const fileName = `DailyBible-${dateKey}.jpg`;
 
         // 모바일 공유 API 지원 여부 확인
@@ -250,8 +258,8 @@ function watchGlobalPrayer() {
     }, err => console.error("Global Snapshot error:", err));
 
     // 2. 오늘 참여자 카운트 감시 (범용 날짜 형식 사용)
-    const today = new Date();
-    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     
     window.db.collection("prayer_stats").doc(todayStr).onSnapshot(doc => {
         const todayCounter = document.getElementById('prayer-count-display');
@@ -278,8 +286,8 @@ async function handleJoinPrayer(event) {
     if (!prayerBtn || prayerBtn.disabled) return;
 
     // 범용 날짜 형식
-    const today = new Date();
-    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     
     const globalRef = window.db.collection("stats").doc("prayer-chain");
     const todayRef = window.db.collection("prayer_stats").doc(todayStr);
@@ -313,6 +321,7 @@ async function handleJoinPrayer(event) {
             if (prayerBtn) {
                 prayerBtn.disabled = false;
                 prayerBtn.style.opacity = "1";
+                prayerBtn.style.cursor = "pointer";
                 prayerBtn.innerHTML = originalContent;
                 if (window.applyLanguage) window.applyLanguage(currentLang);
             }
