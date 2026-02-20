@@ -92,16 +92,24 @@
             <div class="container">
                 <!-- Improved Global Prayer Chain Section -->
                 <section class="global-stats-board card" style="margin-top: 40px; text-align: center; background: #fffaf0; border: 1px solid #ffe4b5; padding: 50px 20px; border-radius: 15px;">
-                    <h2 data-i18n="prayer_chain_title" class="classic-serif" style="color: #333; margin-bottom: 10px;">🙏 현재 함께한 기도 체인</h2>
+                    <h2 data-i18n="prayer_chain_title" class="classic-serif" style="color: #333; margin-bottom: 10px;">🙏 기도의 등불을 밝힙니다</h2>
                     
-                    <div style="margin: 20px 0;">
-                        <span id="prayer-counter" style="font-size: 4rem; font-weight: 900; color: #ff4500; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">
-                            0
-                        </span>
-                        <p style="color: #888; margin-top: 5px;" data-i18n="prayer_count_desc">번의 기도가 하늘로 향했습니다</p>
+                    <div style="display: flex; justify-content: center; gap: 40px; margin: 30px 0; flex-wrap: wrap;">
+                        <!-- 오늘 참여자 -->
+                        <div>
+                            <p style="color: #E67E22; font-weight: bold; margin-bottom: 5px;">오늘 함께한 성도</p>
+                            <span id="today-prayer-counter" style="font-size: 3.5rem; font-weight: 900; color: #E67E22; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">0</span>
+                            <span style="color: #E67E22; font-weight: bold;">명</span>
+                        </div>
+                        <!-- 전체 누적 -->
+                        <div style="border-left: 1px solid #ffe4b5; padding-left: 40px;">
+                            <p style="color: #888; font-weight: bold; margin-bottom: 5px;">누적 기도 향연</p>
+                            <span id="prayer-counter" style="font-size: 3.5rem; font-weight: 900; color: #ff4500; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">0</span>
+                            <span style="color: #ff4500; font-weight: bold;">회</span>
+                        </div>
                     </div>
 
-                    <button id="global-prayer-btn" onclick="handlePrayerClick(event)" class="primary-btn" style="padding: 18px 35px; font-size: 1.2rem; font-weight: bold; background-color: #ff4500; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,69,0,0.3); transition: transform 0.2s;">
+                    <button id="global-prayer-btn" onclick="handlePrayerClick(event)" class="primary-btn" style="padding: 18px 45px; font-size: 1.2rem; font-weight: bold; background-color: #ff4500; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,69,0,0.3); transition: transform 0.2s;">
                         <span data-i18n="btn_i_prayed_global">지금 기도 올리기 & 참여하기 🔥</span>
                     </button>
                 </section>
