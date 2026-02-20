@@ -94,17 +94,15 @@ window.applyLanguage = function(lang) {
 };
 
 /**
- * 일일 콘텐츠 로드 (오늘 날짜 로드 최적화 버전)
+ * 일일 콘텐츠 로드 (한글+영어 통합 출력 버전)
  */
 async function loadDailyContent() {
-    // 1. 오늘 날짜를 'YYYY-MM-DD' 형식으로 정확히 생성
+    // 1. 오늘 날짜를 'YYYY-MM-DD' 형식으로 생성
     const now = new Date();
     const y = now.getFullYear();
     const m = String(now.getMonth() + 1).padStart(2, '0');
     const d = String(now.getDate()).padStart(2, '0');
     const todayId = `${y}-${m}-${d}`; 
-
-    console.log("🔄 Loading Today's Grace:", todayId);
 
     // 2. UI 요소 참조
     const elements = { 
@@ -130,54 +128,121 @@ async function loadDailyContent() {
 
             if (docSnap.exists) {
                 const data = docSnap.data();
-                const lang = currentLang || 'ko';
                 
-                const wordObj = data.word || {};
-                const prayerObj = data.prayer || {};
-                const missionObj = data.mission || {};
-                const refObj = data.ref || {};
+                // 한국어와 영어를 통합하여 표시
+                const wordKo = data.word?.ko || "";
+                const wordEn = data.word?.en || "";
+                const refKo = data.ref?.ko || "";
+                const refEn = data.ref?.en || "";
+                const prayerKo = data.prayer?.ko || "";
+                const prayerEn = data.prayer?.en || "";
+                const missionKo = data.mission?.ko || "";
+                const missionEn = data.mission?.en || "";
 
-                // 성공적으로 가져온 데이터로 UI 업데이트
-                const finalWord = wordObj[lang] || wordObj['en'] || "";
-                const finalRef = refObj[lang] || refObj['en'] || "";
-                const finalPrayer = prayerObj[lang] || prayerObj['en'] || "";
-                const finalMission = missionObj[lang] || missionObj['en'] || "";
+                // 메인 화면 업데이트 (한글 + 영어)
+                elements.word.innerHTML = `"${wordKo}"<br><small style="color:gray; font-style:italic;">"${wordEn}"</small>`;
+                if (elements.ref) {
+                    elements.ref.innerHTML = `${refKo} / ${refEn}`;
+                }
+                elements.prayer.innerHTML = `${prayerKo}<br><small style="color:gray;">${prayerEn}</small>`;
+                elements.mission.innerHTML = `${missionKo}<br><small style="color:gray;">${missionEn}</small>`;
 
-                elements.word.innerHTML = finalWord;
-                if (elements.ref) elements.ref.innerHTML = finalRef;
-                elements.prayer.innerHTML = finalPrayer;
-                elements.mission.innerHTML = finalMission;
-
-                // 말씀 카드 동기화
+                // 말씀 카드 동기화 (이미지 저장용)
                 if (cardElements.word) {
                     cardElements.date.textContent = todayId.replace(/-/g, '.');
-                    cardElements.word.innerHTML = `"${finalWord}"`;
-                    cardElements.ref.innerHTML = `- ${finalRef} -`;
+                    cardElements.word.innerHTML = `"${wordKo}"<br><span style="font-size:0.8em; opacity:0.8;">"${wordEn}"</span>`;
+                    cardElements.ref.innerHTML = `- ${refKo || refEn} -`;
                 }
                 
-                console.log("✅ Success: Content updated for", todayId);
-                return; // 로드 성공 시 폴백 실행 안 함
+                console.log("✅ Bilingual content loaded for", todayId);
+                return;
             } else {
                 console.warn("⚠️ Firestore Document NOT FOUND for:", todayId);
-                elements.word.innerHTML = `<span style='color:#888;'>오늘의 말씀을 불러오는 중입니다... (${todayId})</span>`;
+                elements.word.innerHTML = `<span style='color:#888;'>오늘의 말씀을 준비 중입니다... (${todayId})</span>`;
             }
         } catch (error) {
             console.error("❌ Firestore fetch error:", error);
         }
     }
 
-    // 4. 폴백 (데이터 로딩 실패 또는 없을 때 최소한의 노출)
-    if (!elements.word.innerHTML || elements.word.innerHTML.includes('...')) {
-        const fallback = {
-            en: { word: "The Lord is my shepherd; I shall not want.", ref: "Psalm 23:1", prayer: "Bless our day with your grace.", mission: "Be kind to everyone you meet today." },
-            ko: { word: "여호와는 나의 목자시니 내게 부족함이 없으리로다.", ref: "시편 23:1", prayer: "오늘 하루를 당신의 은혜로 축복하소서.", mission: "오늘 만나는 모든 이에게 친절을 베푸세요." }
-        };
-        const item = fallback[currentLang] || fallback['en'];
-        elements.word.innerHTML = item.word;
-        if (elements.ref) elements.ref.innerHTML = item.ref;
-        elements.prayer.innerHTML = item.prayer;
-        elements.mission.innerHTML = item.mission;
+    // 4. 폴백 (데이터 없을 때)
+    const fallback = {
+        ko: "내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라 (빌 4:13)",
+        en: "I can do all things through Christ who strengthens me. (Phil 4:13)"
+    };
+    elements.word.innerHTML = `${fallback.ko}<br><small style="color:gray;">${fallback.en}</small>`;
+}
+
+/**
+ * 오늘의 말씀 카드 다운로드 (html2canvas)
+ */
+window.downloadVerseCard = function(event) {
+    const card = document.getElementById('wordCard');
+    if (!card) return;
+
+    // 이벤트 객체에서 버튼 요소 가져오기
+    const btn = event ? event.currentTarget : null;
+    let originalText = "";
+    
+    if (btn) {
+        originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
     }
+
+    html2canvas(card, {
+        useCORS: true,
+        allowTaint: false,
+        scale: 2, // 고해상도 출력
+        backgroundColor: '#000000'
+    }).then(canvas => {
+        const now = new Date();
+        const dateKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        const fileName = `DailyBible-${dateKey}.jpg`;
+
+        // 모바일 공유 API 지원 여부 확인
+        if (navigator.share && navigator.canShare) {
+            canvas.toBlob(blob => {
+                const file = new File([blob], fileName, { type: 'image/jpeg' });
+                if (navigator.canShare({ files: [file] })) {
+                    navigator.share({
+                        files: [file],
+                        title: 'Daily Bible Word',
+                        text: 'Sharing today\'s grace with you.'
+                    }).catch(err => {
+                        console.error("Share failed, falling back to download:", err);
+                        saveFallback(canvas, fileName);
+                    });
+                } else {
+                    saveFallback(canvas, fileName);
+                }
+            }, 'image/jpeg', 0.9);
+        } else {
+            saveFallback(canvas, fileName);
+        }
+
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+    }).catch(err => {
+        console.error("Canvas generation failed:", err);
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+        alert("Failed to generate image. Please try again.");
+    });
+};
+
+function saveFallback(canvas, fileName) {
+    const imageData = canvas.toDataURL("image/jpeg", 0.9);
+    const link = document.createElement('a');
+    link.href = imageData;
+    link.download = fileName;
+    document.body.appendChild(link); // 일부 브라우저 호환성을 위해 추가
+    link.click();
+    document.body.removeChild(link);
 }
 
 /**
@@ -271,78 +336,6 @@ async function handleJoinPrayer(event) {
 
 // 전역 스코프 노출 (갤럭시 브라우저 대응)
 window.joinPrayer = handleJoinPrayer;
-
-/**
- * 오늘의 말씀 카드 다운로드 (html2canvas)
- */
-window.downloadVerseCard = function(event) {
-    const card = document.getElementById('wordCard');
-    if (!card) return;
-
-    // 이벤트 객체에서 버튼 요소 가져오기
-    const btn = event ? event.currentTarget : null;
-    let originalText = "";
-    
-    if (btn) {
-        originalText = btn.innerHTML;
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-    }
-
-    html2canvas(card, {
-        useCORS: true,
-        allowTaint: false,
-        scale: 2, // 고해상도 출력
-        backgroundColor: '#000000'
-    }).then(canvas => {
-        const now = new Date();
-        const dateKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-        const fileName = `DailyBible-${dateKey}.jpg`;
-
-        // 모바일 공유 API 지원 여부 확인
-        if (navigator.share && navigator.canShare) {
-            canvas.toBlob(blob => {
-                const file = new File([blob], fileName, { type: 'image/jpeg' });
-                if (navigator.canShare({ files: [file] })) {
-                    navigator.share({
-                        files: [file],
-                        title: 'Daily Bible Word',
-                        text: 'Sharing today\'s grace with you.'
-                    }).catch(err => {
-                        console.error("Share failed, falling back to download:", err);
-                        saveFallback(canvas, fileName);
-                    });
-                } else {
-                    saveFallback(canvas, fileName);
-                }
-            }, 'image/jpeg', 0.9);
-        } else {
-            saveFallback(canvas, fileName);
-        }
-
-        if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = originalText;
-        }
-    }).catch(err => {
-        console.error("Canvas generation failed:", err);
-        if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = originalText;
-        }
-        alert("Failed to generate image. Please try again.");
-    });
-};
-
-function saveFallback(canvas, fileName) {
-    const imageData = canvas.toDataURL("image/jpeg", 0.9);
-    const link = document.createElement('a');
-    link.href = imageData;
-    link.download = fileName;
-    document.body.appendChild(link); // 일부 브라우저 호환성을 위해 추가
-    link.click();
-    document.body.removeChild(link);
-}
 
 /**
  * Disqus 익명 게시판 초기화
