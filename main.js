@@ -94,7 +94,7 @@ window.applyLanguage = function(lang) {
 };
 
 /**
- * 일일 콘텐츠 로드 (한글+영어 통합 출력 버전)
+ * 일일 콘텐츠 로드 (한글+영어 통합 출력 - 정밀 보정 버전)
  */
 async function loadDailyContent() {
     // 1. 오늘 날짜를 'YYYY-MM-DD' 형식으로 생성
@@ -120,6 +120,8 @@ async function loadDailyContent() {
 
     if (!elements.word) return;
 
+    let success = false;
+
     // 3. Firestore에서 오늘 날짜 문서 가져오기
     if (window.db) {
         try {
@@ -129,7 +131,7 @@ async function loadDailyContent() {
             if (docSnap.exists) {
                 const data = docSnap.data();
                 
-                // 한국어와 영어를 통합하여 표시
+                // 데이터 매핑 (필드명이 정확해야 함: word, ref, prayer, mission)
                 const wordKo = data.word?.ko || "";
                 const wordEn = data.word?.en || "";
                 const refKo = data.ref?.ko || "";
@@ -139,13 +141,19 @@ async function loadDailyContent() {
                 const missionKo = data.mission?.ko || "";
                 const missionEn = data.mission?.en || "";
 
-                // 메인 화면 업데이트 (한글 + 영어)
-                elements.word.innerHTML = `"${wordKo}"<br><small style="color:gray; font-style:italic;">"${wordEn}"</small>`;
-                if (elements.ref) {
-                    elements.ref.innerHTML = `${refKo} / ${refEn}`;
+                // 화면 업데이트 (비어있지 않을 때만 업데이트하여 'Loading' 제거)
+                if (wordKo || wordEn) {
+                    elements.word.innerHTML = `${wordKo}<br><small style="color:gray; font-style:italic;">${wordEn}</small>`;
                 }
-                elements.prayer.innerHTML = `${prayerKo}<br><small style="color:gray;">${prayerEn}</small>`;
-                elements.mission.innerHTML = `${missionKo}<br><small style="color:gray;">${missionEn}</small>`;
+                if (elements.ref && (refKo || refEn)) {
+                    elements.ref.innerHTML = refKo && refEn ? `${refKo} / ${refEn}` : (refKo || refEn);
+                }
+                if (prayerKo || prayerEn) {
+                    elements.prayer.innerHTML = `${prayerKo}<br><small style="color:gray;">${prayerEn}</small>`;
+                }
+                if (missionKo || missionEn) {
+                    elements.mission.innerHTML = `${missionKo}<br><small style="color:gray;">${missionEn}</small>`;
+                }
 
                 // 말씀 카드 동기화 (이미지 저장용)
                 if (cardElements.word) {
@@ -154,23 +162,32 @@ async function loadDailyContent() {
                     cardElements.ref.innerHTML = `- ${refKo || refEn} -`;
                 }
                 
-                console.log("✅ Bilingual content loaded for", todayId);
-                return;
+                console.log("✅ Bilingual content fully loaded for", todayId);
+                success = true;
             } else {
                 console.warn("⚠️ Firestore Document NOT FOUND for:", todayId);
-                elements.word.innerHTML = `<span style='color:#888;'>오늘의 말씀을 준비 중입니다... (${todayId})</span>`;
             }
         } catch (error) {
             console.error("❌ Firestore fetch error:", error);
         }
     }
 
-    // 4. 폴백 (데이터 없을 때)
-    const fallback = {
-        ko: "내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라 (빌 4:13)",
-        en: "I can do all things through Christ who strengthens me. (Phil 4:13)"
-    };
-    elements.word.innerHTML = `${fallback.ko}<br><small style="color:gray;">${fallback.en}</small>`;
+    // 4. 폴백 (데이터 로드 실패 시 'Loading'을 기본값으로 교체)
+    if (!success) {
+        const fallback = {
+            word: { ko: "내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라", en: "I can do all things through Christ who strengthens me." },
+            ref: { ko: "빌립보서 4:13", en: "Philippians 4:13" },
+            prayer: { ko: "주님, 오늘 하루도 당신의 인도하심을 신뢰하게 하소서.", en: "Lord, help me trust Your guidance today." },
+            mission: { ko: "지친 동료나 친구에게 격려의 메시지 보내기", en: "Send an encouraging message to a friend." }
+        };
+
+        elements.word.innerHTML = `${fallback.word.ko}<br><small style="color:gray;">${fallback.word.en}</small>`;
+        if (elements.ref) elements.ref.innerHTML = `${fallback.ref.ko} / ${fallback.ref.en}`;
+        elements.prayer.innerHTML = `${fallback.prayer.ko}<br><small style="color:gray;">${fallback.prayer.en}</small>`;
+        elements.mission.innerHTML = `${fallback.mission.ko}<br><small style="color:gray;">${fallback.mission.en}</small>`;
+        
+        console.log("ℹ️ Fallback content applied.");
+    }
 }
 
 /**
