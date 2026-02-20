@@ -94,16 +94,23 @@ window.applyLanguage = function(lang) {
 };
 
 /**
- * 일일 콘텐츠 로드 (정밀 로컬 날짜 매칭 및 ID 동기화)
+ * 일일 콘텐츠 로드 (하루 앞당기기 로직 적용 및 ID 동기화)
  */
 async function loadDailyContent() {
-    // 1. 사용자 현지 시간 기준 YYYY-MM-DD 생성 (ISO 형식이지만 로컬 시간 반영)
+    // 1. 날짜 계산
     const now = new Date();
-    const offset = now.getTimezoneOffset() * 60000;
-    const localISOTime = (new Date(now - offset)).toISOString().slice(0, 10);
-    const dateKey = localISOTime; 
+    
+    // [오늘 날짜 키]
+    const todayOffset = now.getTimezoneOffset() * 60000;
+    const todayDateKey = (new Date(now - todayOffset)).toISOString().slice(0, 10);
 
-    console.log("🔄 Fetching spiritual content for date (local):", dateKey);
+    // [하루 앞당긴 날짜 키 (내일)]
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
+    const tomorrowOffset = tomorrow.getTimezoneOffset() * 60000;
+    const shiftedDateKey = (new Date(tomorrow - tomorrowOffset)).toISOString().slice(0, 10);
+
+    console.log("📅 Today:", todayDateKey, "| 🚀 Target (Shifted):", shiftedDateKey);
 
     // 2. 기본 폴백 데이터 정의
     const fallback = {
@@ -124,16 +131,26 @@ async function loadDailyContent() {
         ref: document.getElementById('card-ref')
     };
 
-    // UI 요소가 없으면 중단
     if (!elements.word) return;
 
     let finalData = fallback[currentLang] || fallback['en'];
+    let usedDateKey = todayDateKey; // 실제 표시될 날짜 (이미지용)
 
-    // 3. Firestore에서 오늘 날짜 문서 가져오기
+    // 3. Firestore에서 데이터 가져오기 시도
     if (window.db) {
         try {
-            const docRef = window.db.collection("daily_content").doc(dateKey);
-            const docSnap = await docRef.get();
+            // 우선순위 1: 하루 앞당긴 날짜 (shiftedDateKey) 시도
+            let docRef = window.db.collection("daily_content").doc(shiftedDateKey);
+            let docSnap = await docRef.get();
+
+            if (!docSnap.exists) {
+                console.log("ℹ️ No shifted data found, trying today's date...");
+                // 우선순위 2: 오늘 날짜 (todayDateKey) 시도
+                docRef = window.db.collection("daily_content").doc(todayDateKey);
+                docSnap = await docRef.get();
+            } else {
+                usedDateKey = shiftedDateKey; // 앞당긴 데이터 성공 시 해당 날짜 사용
+            }
 
             if (docSnap.exists) {
                 const data = docSnap.data();
@@ -150,16 +167,16 @@ async function loadDailyContent() {
                     prayer: prayerObj[lang] || prayerObj['en'] || fallback[lang].prayer,
                     mission: missionObj[lang] || missionObj['en'] || fallback[lang].mission
                 };
-                console.log("✅ Success: Spiritual content loaded from Firestore for", dateKey);
+                console.log("✅ Success: Content loaded for", usedDateKey);
             } else {
-                console.warn("⚠️ Warning: No content found for ID", dateKey, "in Firestore. Please check your data entry.");
+                console.warn("⚠️ Warning: No content found for both today and tomorrow in Firestore.");
             }
         } catch (error) {
             console.error("❌ Firestore Error:", error);
         }
     }
 
-    // 4. 화면 UI 업데이트 (innerHTML로 HTML 태그 지원)
+    // 4. 화면 UI 업데이트
     elements.word.innerHTML = finalData.word;
     if (elements.ref) elements.ref.innerHTML = finalData.ref;
     elements.prayer.innerHTML = finalData.prayer;
@@ -167,7 +184,8 @@ async function loadDailyContent() {
 
     // 5. 숨겨진 카드(이미지 저장용) 업데이트
     if (cardElements.word) {
-        cardElements.date.textContent = dateKey.replace(/-/g, '.');
+        // 이미지는 실제 접속한 '오늘' 날짜를 찍어주는 것이 자연스러우므로 todayDateKey 사용
+        cardElements.date.textContent = todayDateKey.replace(/-/g, '.');
         cardElements.word.innerHTML = `"${finalData.word}"`;
         cardElements.ref.innerHTML = `- ${finalData.ref} -`;
     }
