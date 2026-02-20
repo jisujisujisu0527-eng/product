@@ -95,10 +95,10 @@
                     <h2 data-i18n="prayer_chain_title" class="classic-serif" style="color: #333; margin-bottom: 10px;">🙏 기도의 등불을 밝힙니다</h2>
                     
                     <div style="display: flex; justify-content: center; gap: 40px; margin: 30px 0; flex-wrap: wrap;">
-                        <!-- 오늘 참여자 -->
+                        <!-- 오늘 참여자 (ID: prayer-count-display) -->
                         <div>
                             <p style="color: #E67E22; font-weight: bold; margin-bottom: 5px;">오늘 함께한 성도</p>
-                            <span id="today-prayer-counter" style="font-size: 3.5rem; font-weight: 900; color: #E67E22; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">0</span>
+                            <span id="prayer-count-display" style="font-size: 3.5rem; font-weight: 900; color: #E67E22; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">0</span>
                             <span style="color: #E67E22; font-weight: bold;">명</span>
                         </div>
                         <!-- 전체 누적 -->
@@ -109,7 +109,7 @@
                         </div>
                     </div>
 
-                    <button id="global-prayer-btn" onclick="handlePrayerClick(event)" class="primary-btn" style="padding: 18px 45px; font-size: 1.2rem; font-weight: bold; background-color: #ff4500; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,69,0,0.3); transition: transform 0.2s;">
+                    <button id="prayer-btn" class="primary-btn" style="padding: 18px 45px; font-size: 1.2rem; font-weight: bold; background-color: #ff4500; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,69,0,0.3); transition: transform 0.2s; touch-action: manipulation; -webkit-tap-highlight-color: transparent;">
                         <span data-i18n="btn_i_prayed_global">지금 기도 올리기 & 참여하기 🔥</span>
                     </button>
                 </section>

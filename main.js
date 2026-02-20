@@ -46,6 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 500);
 
+    // 기도 버튼 이벤트 바인딩 (addEventListener 방식)
+    const prayerBtn = document.getElementById('prayer-btn');
+    if (prayerBtn) {
+        prayerBtn.addEventListener('click', handleJoinPrayer);
+    }
+
     // Disqus 초기화
     initDisqus();
 });
@@ -236,10 +242,10 @@ function watchGlobalPrayer() {
         }
     }, err => console.error("Global Snapshot error:", err));
 
-    // 2. 오늘 참여자 카운트 감시
+    // 2. 오늘 참여자 카운트 감시 (요청하신 ID 'prayer-count-display' 사용)
     const todayStr = new Date().toLocaleDateString('sv-SE');
     window.db.collection("prayer_stats").doc(todayStr).onSnapshot(doc => {
-        const todayCounter = document.getElementById('today-prayer-counter');
+        const todayCounter = document.getElementById('prayer-count-display');
         if (todayCounter) {
             const count = doc.exists ? (doc.data().count || 0) : 0;
             todayCounter.textContent = count.toLocaleString();
@@ -248,57 +254,59 @@ function watchGlobalPrayer() {
 }
 
 /**
- * 글로벌 기도 참여 로직 (전체 + 오늘 날짜 동시 증가)
+ * 글로벌 기도 참여 로직 (addEventListener 방식 적용)
  */
-window.handlePrayerClick = async function(event) {
+async function handleJoinPrayer(event) {
     if (!window.db) {
         document.getElementById("prayer-board").scrollIntoView({ behavior: 'smooth' });
         return;
     }
     
-    const btn = event.currentTarget;
+    const prayerBtn = document.getElementById('prayer-btn');
+    if (!prayerBtn || prayerBtn.disabled) return;
+
     const todayStr = new Date().toLocaleDateString('sv-SE');
-    
     const globalRef = window.db.collection("stats").doc("prayer-chain");
     const todayRef = window.db.collection("prayer_stats").doc(todayStr);
-    
-    try {
-        btn.disabled = true;
-        btn.style.opacity = "0.7";
-        btn.style.cursor = "not-allowed";
 
-        // Firestore Batch 사용 (두 군데를 한 번에 업데이트)
+    // 버튼 시각적 피드백 (Snippet 참고)
+    const originalContent = prayerBtn.innerHTML;
+    prayerBtn.disabled = true;
+    prayerBtn.style.opacity = "0.6";
+    prayerBtn.style.cursor = "not-allowed";
+    
+    // 한국어/영어에 따른 텍스트 피드백
+    const processingText = currentLang === 'ko' ? "참여 중..." : "Joining...";
+    const originalBtnSpan = prayerBtn.querySelector('span[data-i18n]');
+    if (originalBtnSpan) originalBtnSpan.innerText = processingText;
+
+    try {
+        // Firestore Batch 사용
         const batch = window.db.batch();
-        
-        // 전체 카운트 증가
-        batch.set(globalRef, { 
-            totalPrayers: firebase.firestore.FieldValue.increment(1) 
-        }, { merge: true });
-        
-        // 오늘 카운트 증가
-        batch.set(todayRef, { 
-            count: firebase.firestore.FieldValue.increment(1) 
-        }, { merge: true });
+        batch.set(globalRef, { totalPrayers: firebase.firestore.FieldValue.increment(1) }, { merge: true });
+        batch.set(todayRef, { count: firebase.firestore.FieldValue.increment(1) }, { merge: true });
 
         await batch.commit();
 
         // 성공 시 이동
         document.getElementById("prayer-board").scrollIntoView({ behavior: 'smooth' });
-        
-        // 쿨다운 후 버튼 다시 활성화
-        setTimeout(() => { 
-            btn.disabled = false; 
-            btn.style.opacity = "1";
-            btn.style.cursor = "pointer";
-        }, 2000);
 
     } catch (error) {
         console.error("기도 참여 실패:", error);
-        btn.disabled = false;
-        btn.style.opacity = "1";
-        btn.style.cursor = "pointer";
+    } finally {
+        // 2초 후 버튼 복구 (도배 방지)
+        setTimeout(() => {
+            if (prayerBtn) {
+                prayerBtn.disabled = false;
+                prayerBtn.style.opacity = "1";
+                prayerBtn.style.cursor = "pointer";
+                prayerBtn.innerHTML = originalContent;
+                // 다시 번역 적용 (HTML을 갈아끼웠으므로)
+                window.applyLanguage(currentLang);
+            }
+        }, 2000);
     }
-};
+}
 
 /**
  * Disqus 익명 게시판 초기화
