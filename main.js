@@ -94,17 +94,16 @@ window.applyLanguage = function(lang) {
 };
 
 /**
- * 일일 콘텐츠 로드 (정밀 날짜 매칭 및 innerHTML 적용)
+ * 일일 콘텐츠 로드 (정밀 로컬 날짜 매칭 및 ID 동기화)
  */
 async function loadDailyContent() {
-    // 1. 현재 접속 시간 기준 YYYY-MM-DD 생성 (자정 대응 정밀 포맷)
+    // 1. 사용자 현지 시간 기준 YYYY-MM-DD 생성 (ISO 형식이지만 로컬 시간 반영)
     const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const dateKey = `${year}-${month}-${day}`; 
+    const offset = now.getTimezoneOffset() * 60000;
+    const localISOTime = (new Date(now - offset)).toISOString().slice(0, 10);
+    const dateKey = localISOTime; 
 
-    console.log("Fetching content for date:", dateKey);
+    console.log("🔄 Fetching spiritual content for date (local):", dateKey);
 
     // 2. 기본 폴백 데이터 정의
     const fallback = {
@@ -113,10 +112,10 @@ async function loadDailyContent() {
     };
 
     const elements = { 
-        bText: document.getElementById('bible-text'), 
-        bRef: document.getElementById('bible-ref'), 
-        pText: document.getElementById('prayer-text'), 
-        mText: document.getElementById('mission-text') 
+        word: document.getElementById('today-word'), 
+        ref: document.getElementById('today-ref'), 
+        prayer: document.getElementById('today-prayer'), 
+        mission: document.getElementById('today-mission') 
     };
 
     const cardElements = {
@@ -126,7 +125,7 @@ async function loadDailyContent() {
     };
 
     // UI 요소가 없으면 중단
-    if (!elements.bText) return;
+    if (!elements.word) return;
 
     let finalData = fallback[currentLang] || fallback['en'];
 
@@ -151,20 +150,20 @@ async function loadDailyContent() {
                     prayer: prayerObj[lang] || prayerObj['en'] || fallback[lang].prayer,
                     mission: missionObj[lang] || missionObj['en'] || fallback[lang].mission
                 };
-                console.log("✅ Daily content updated from Firestore for", dateKey);
+                console.log("✅ Success: Spiritual content loaded from Firestore for", dateKey);
             } else {
-                console.warn("⚠️ No document found for", dateKey, "in 'daily_content'. Check your Firestore!");
+                console.warn("⚠️ Warning: No content found for ID", dateKey, "in Firestore. Please check your data entry.");
             }
         } catch (error) {
-            console.error("❌ Firestore fetch error:", error);
+            console.error("❌ Firestore Error:", error);
         }
     }
 
-    // 4. 화면 UI 업데이트 (innerHTML 사용하여 HTML 태그 허용)
-    elements.bText.innerHTML = `"${finalData.word}"`;
-    elements.bRef.innerHTML = finalData.ref;
-    elements.pText.innerHTML = finalData.prayer;
-    elements.mText.innerHTML = finalData.mission;
+    // 4. 화면 UI 업데이트 (innerHTML로 HTML 태그 지원)
+    elements.word.innerHTML = finalData.word;
+    if (elements.ref) elements.ref.innerHTML = finalData.ref;
+    elements.prayer.innerHTML = finalData.prayer;
+    elements.mission.innerHTML = finalData.mission;
 
     // 5. 숨겨진 카드(이미지 저장용) 업데이트
     if (cardElements.word) {
@@ -198,10 +197,8 @@ window.downloadVerseCard = function(event) {
         backgroundColor: '#000000'
     }).then(canvas => {
         const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const dateKey = `${year}-${month}-${day}`;
+        const offset = now.getTimezoneOffset() * 60000;
+        const dateKey = (new Date(now - offset)).toISOString().slice(0, 10);
         const fileName = `DailyBible-${dateKey}.jpg`;
 
         // 모바일 공유 API 지원 여부 확인
@@ -268,7 +265,8 @@ function watchGlobalPrayer() {
 
     // 2. 오늘 참여자 카운트 감시 (범용 날짜 형식 사용)
     const now = new Date();
-    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const offset = now.getTimezoneOffset() * 60000;
+    const todayStr = (new Date(now - offset)).toISOString().slice(0, 10);
     
     window.db.collection("prayer_stats").doc(todayStr).onSnapshot(doc => {
         const todayCounter = document.getElementById('prayer-count-display');
@@ -296,7 +294,8 @@ async function handleJoinPrayer(event) {
 
     // 범용 날짜 형식
     const now = new Date();
-    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const offset = now.getTimezoneOffset() * 60000;
+    const todayStr = (new Date(now - offset)).toISOString().slice(0, 10);
     
     const globalRef = window.db.collection("stats").doc("prayer-chain");
     const todayRef = window.db.collection("prayer_stats").doc(todayStr);
