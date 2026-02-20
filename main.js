@@ -46,10 +46,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 500);
 
-    // 기도 버튼 이벤트 바인딩 (addEventListener 방식 - 갤럭시 브라우저 최적화)
+    // 기도 버튼 이벤트 바인딩 (갤럭시 & 아이폰 통합 최적화)
     const prayerBtn = document.getElementById('prayer-btn');
     if (prayerBtn) {
-        prayerBtn.addEventListener('click', handleJoinPrayer, { passive: false });
+        // 데스크탑/아이폰 클릭
+        prayerBtn.onclick = handleJoinPrayer;
+        // 갤럭시 터치 (click보다 먼저 반응)
+        prayerBtn.addEventListener('touchend', (e) => {
+            if (prayerBtn.disabled) return;
+            handleJoinPrayer(e);
+        }, { passive: false });
     }
 
     // Disqus 초기화
@@ -85,9 +91,9 @@ window.applyLanguage = function(lang) {
  * 일일 콘텐츠 로드 (Firestore 연동 및 폴백 처리)
  */
 async function loadDailyContent() {
-    // 1. 사용자 현지 시간 기준 'YYYY-MM-DD' 생성 (sv-SE 로케일은 YYYY-MM-DD 형식을 반환함)
-    const now = new Date();
-    const dateKey = now.toLocaleDateString('sv-SE');
+    // 1. 사용자 현지 시간 기준 'YYYY-MM-DD' 생성 (범용 형식)
+    const today = new Date();
+    const dateKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
     // 2. 기본 폴백 데이터 정의
     const fallback = {
@@ -177,7 +183,8 @@ window.downloadVerseCard = function(event) {
         scale: 2, // 고해상도 출력
         backgroundColor: '#000000'
     }).then(canvas => {
-        const dateKey = new Date().toLocaleDateString('sv-SE');
+        const today = new Date();
+        const dateKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
         const fileName = `DailyBible-${dateKey}.jpg`;
 
         // 모바일 공유 API 지원 여부 확인
@@ -242,8 +249,10 @@ function watchGlobalPrayer() {
         }
     }, err => console.error("Global Snapshot error:", err));
 
-    // 2. 오늘 참여자 카운트 감시 (요청하신 ID 'prayer-count-display' 사용)
-    const todayStr = new Date().toLocaleDateString('sv-SE');
+    // 2. 오늘 참여자 카운트 감시 (범용 날짜 형식 사용)
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    
     window.db.collection("prayer_stats").doc(todayStr).onSnapshot(doc => {
         const todayCounter = document.getElementById('prayer-count-display');
         if (todayCounter) {
@@ -254,10 +263,10 @@ function watchGlobalPrayer() {
 }
 
 /**
- * 글로벌 기도 참여 로직 (addEventListener + 갤럭시 브라우저 최적화)
+ * 글로벌 기도 참여 로직 (갤럭시 & 아이폰 통합 최적화)
  */
 async function handleJoinPrayer(event) {
-    // 갤럭시 브라우저 호환성: 기본 동작 및 전파 방지
+    // 갤럭시/아이폰 기본 동작 및 버블링 방지
     if (event) {
         if (event.cancelable) event.preventDefault();
         event.stopPropagation();
@@ -268,15 +277,17 @@ async function handleJoinPrayer(event) {
     const prayerBtn = document.getElementById('prayer-btn');
     if (!prayerBtn || prayerBtn.disabled) return;
 
-    const todayStr = new Date().toLocaleDateString('sv-SE');
+    // 범용 날짜 형식
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    
     const globalRef = window.db.collection("stats").doc("prayer-chain");
     const todayRef = window.db.collection("prayer_stats").doc(todayStr);
 
     // 버튼 시각적 피드백
     const originalContent = prayerBtn.innerHTML;
     prayerBtn.disabled = true;
-    prayerBtn.style.opacity = "0.5";
-    prayerBtn.style.cursor = "not-allowed";
+    prayerBtn.style.opacity = "0.6";
     
     const processingText = currentLang === 'ko' ? "참여 중..." : "Joining...";
     const btnSpan = prayerBtn.querySelector('span[data-i18n]');
@@ -297,14 +308,13 @@ async function handleJoinPrayer(event) {
     } catch (error) {
         console.error("Prayer batch update failed:", error);
     } finally {
-        // 1.5초 후 버튼 복구 (도배 방지 및 갤럭시 브라우저 대응)
+        // 1.5초 후 버튼 복구 (갤럭시 지연 대응)
         setTimeout(() => {
             if (prayerBtn) {
                 prayerBtn.disabled = false;
                 prayerBtn.style.opacity = "1";
-                prayerBtn.style.cursor = "pointer";
                 prayerBtn.innerHTML = originalContent;
-                window.applyLanguage(currentLang);
+                if (window.applyLanguage) window.applyLanguage(currentLang);
             }
         }, 1500);
     }
