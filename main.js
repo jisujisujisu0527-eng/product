@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 자정이 지날 경우를 대비해 1시간마다 자동 갱신 체크
 setInterval(() => {
+    console.log("Checking for daily content update...");
     loadDailyContent();
 }, 1000 * 60 * 60);
 
@@ -93,12 +94,17 @@ window.applyLanguage = function(lang) {
 };
 
 /**
- * 일일 콘텐츠 로드 (Firestore 연동 및 폴백 처리)
+ * 일일 콘텐츠 로드 (정밀 날짜 매칭 및 innerHTML 적용)
  */
 async function loadDailyContent() {
-    // 1. 사용자 현지 시간 기준 'YYYY-MM-DD' 생성 (정밀 포맷)
+    // 1. 현재 접속 시간 기준 YYYY-MM-DD 생성 (자정 대응 정밀 포맷)
     const now = new Date();
-    const dateKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const dateKey = `${year}-${month}-${day}`; 
+
+    console.log("Fetching content for date:", dateKey);
 
     // 2. 기본 폴백 데이터 정의
     const fallback = {
@@ -124,7 +130,7 @@ async function loadDailyContent() {
 
     let finalData = fallback[currentLang] || fallback['en'];
 
-    // 3. Firestore에서 데이터 가져오기 시도
+    // 3. Firestore에서 오늘 날짜 문서 가져오기
     if (window.db) {
         try {
             const docRef = window.db.collection("daily_content").doc(dateKey);
@@ -145,26 +151,26 @@ async function loadDailyContent() {
                     prayer: prayerObj[lang] || prayerObj['en'] || fallback[lang].prayer,
                     mission: missionObj[lang] || missionObj['en'] || fallback[lang].mission
                 };
-                console.log(`Content loaded for: ${dateKey}`);
+                console.log("✅ Daily content updated from Firestore for", dateKey);
             } else {
-                console.log(`No data for ${dateKey}, using fallback.`);
+                console.warn("⚠️ No document found for", dateKey, "in 'daily_content'. Check your Firestore!");
             }
         } catch (error) {
-            console.error("Firestore daily_content fetch error:", error);
+            console.error("❌ Firestore fetch error:", error);
         }
     }
 
-    // 4. 화면 UI 업데이트
-    elements.bText.textContent = `"${finalData.word}"`;
-    elements.bRef.textContent = finalData.ref;
-    elements.pText.textContent = finalData.prayer;
-    elements.mText.textContent = finalData.mission;
+    // 4. 화면 UI 업데이트 (innerHTML 사용하여 HTML 태그 허용)
+    elements.bText.innerHTML = `"${finalData.word}"`;
+    elements.bRef.innerHTML = finalData.ref;
+    elements.pText.innerHTML = finalData.prayer;
+    elements.mText.innerHTML = finalData.mission;
 
     // 5. 숨겨진 카드(이미지 저장용) 업데이트
     if (cardElements.word) {
         cardElements.date.textContent = dateKey.replace(/-/g, '.');
-        cardElements.word.textContent = `"${finalData.word}"`;
-        cardElements.ref.textContent = `- ${finalData.ref} -`;
+        cardElements.word.innerHTML = `"${finalData.word}"`;
+        cardElements.ref.innerHTML = `- ${finalData.ref} -`;
     }
 }
 
@@ -192,7 +198,10 @@ window.downloadVerseCard = function(event) {
         backgroundColor: '#000000'
     }).then(canvas => {
         const now = new Date();
-        const dateKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const dateKey = `${year}-${month}-${day}`;
         const fileName = `DailyBible-${dateKey}.jpg`;
 
         // 모바일 공유 API 지원 여부 확인
