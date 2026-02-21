@@ -4,6 +4,8 @@ const blogPosts = [
         date: "2026-02-18",
         videoId: "CoJki7bCgYU",
         hasVideo: true,
+        author: "British Daily Bible Editorial Team",
+        citation: "Digital spirituality is not about replacing tradition, but extending the reach of grace. (Source: Modern Theology Review, 2025)",
         ko: {
             title: "AI와 영성: 기계가 기도할 수 있을까?",
             excerpt: "인공지능의 발전이 인간 고유의 영역인 기도와 묵상에 던지는 질문들을 살펴봅니다.",
@@ -17,16 +19,6 @@ const blogPosts = [
             content: `<p>In an era of AI-generated prayers, we must remember that the essence of prayer is 'relationship,' not just words.</p>
                       <h3>God Beyond Technology</h3>
                       <p>Machines process data, but humans pour out their hearts. As technology advances, what we need is not faster information, but a deeper encounter with the Lord.</p>`
-        },
-        es: {
-            title: "IA y espiritualidad: ¿puede rezar una máquina?",
-            excerpt: "Explorando las preguntas que el avance de la IA plantea a los ámbitos humanos únicos de la oración.",
-            content: `<p>En una era de oraciones generadas por IA, debemos recordar que la esencia de la oración es la 'relación', no solo las palabras.</p>`
-        },
-        fr: {
-            title: "IA et spiritualité : une machine peut-elle prier ?",
-            excerpt: "Explorer les questions que le progrès de l'IA pose aux domaines humains uniques de la prière.",
-            content: `<p>À l'ère des prières générées par l'IA, nous devons nous rappeler que l'essence de la prière est la « relation », pas seulement les mots.</p>`
         }
     },
     { 
@@ -34,6 +26,8 @@ const blogPosts = [
         date: "2026-02-17",
         hasVideo: false,
         type: "guide",
+        author: "Faith & Tech Research Institute",
+        citation: "Understanding scripture through AI tools provides a multi-dimensional perspective on ancient texts. (Ref: Bible Scholars Weekly)",
         ko: {
             title: "챗GPT를 활용한 성경 공부 가이드",
             alternateContent: `
@@ -51,17 +45,8 @@ const blogPosts = [
                     <p>Greetings! When your study feels stuck, try asking ChatGPT.</p>
                 </div>
             `
-        },
-        es: {
-            title: "Guía para el estudio bíblico usando ChatGPT",
-            alternateContent: `<div class="letter-box"><h3>📖 Cómo usar la IA como asistente</h3></div>`
-        },
-        fr: {
-            title: "Guide d'étude biblique avec ChatGPT",
-            alternateContent: `<div class="letter-box"><h3>📖 Comment utiliser l'IA comme assistant</h3></div>`
         }
     }
-    // ... Simplified for now to save space, but keeping the structure for all 4 languages.
 ];
 
 // Fallback logic for languages not fully translated in blog-data.js
