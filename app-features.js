@@ -18,7 +18,7 @@ const firebaseConfig = {
 
 // Initialize Firebase v9 Modular
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db = getFirestore(app, "main");
 const auth = getAuth(app);
 
 /**
