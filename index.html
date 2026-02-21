@@ -106,29 +106,21 @@
     </style>
 </head>
 
-        /* Hidden Verse Card Template */
-        #wordCard {
-            position: absolute; left: -9999px; top: -9999px;
-            width: 500px; height: 600px; padding: 60px;
-            display: flex; flex-direction: column; justify-content: center;
-            align-items: center; text-align: center; color: white;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                        url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80');
-            background-size: cover; background-position: center; border-radius: 0;
-        }
-        #card-date { font-family: 'EB Garamond', serif; font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9; letter-spacing: 2px; }
-        #card-word { font-family: 'EB Garamond', serif; font-size: 2rem; font-weight: bold; margin-bottom: 30px; word-break: keep-all; line-height: 1.5; }
-        #card-ref { font-family: 'Inter', sans-serif; font-size: 1.1rem; opacity: 0.8; font-style: italic; }
-        .card-footer { margin-top: 40px; font-size: 0.8rem; opacity: 0.6; letter-spacing: 1px; }
+<style>
+    /* Hidden Verse Card Template */ 
+    #wordCard { position: absolute; left: -9999px; top: -9999px; width: 500px; height: 600px; padding: 60px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'); background-size: cover; background-position: center; border-radius: 0; } 
+    #card-date { font-family: 'EB Garamond', serif; font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9; letter-spacing: 2px; } 
+    #card-word { font-family: 'EB Garamond', serif; font-size: 2rem; font-weight: bold; margin-bottom: 30px; word-break: keep-all; line-height: 1.5; } 
+    #card-ref { font-family: 'Inter', sans-serif; font-size: 1.1rem; opacity: 0.8; font-style: italic; } 
+    .card-footer { margin-top: 40px; font-size: 0.8rem; opacity: 0.6; letter-spacing: 1px; }
     </style>
-</head>
-<body>
-    <!-- Verse Card Template (Used for image generation) -->
+    
     <div id="wordCard">
         <div id="card-date">2026.02.22</div>
-        <p id="card-word">"여호와는 나의 목자시니..."</p>
-        <p id="card-ref">- 시편 23:1 -</p>
+        <div id="card-word">"여호와는 나의 목자시니..."</div>
+        <div id="card-ref">- 시편 23:1 -</div>
         <div class="card-footer">britishdailybible.uk</div>
+    </div> </div>
     </div>
 
     <div id="main-loader">
@@ -224,11 +216,11 @@
 
     <!-- Logic Scripts -->
     <script src="translations.js"></script>
-    <script src="firebase-firestore-service.js" defer></script>
-    <script src="main.js" defer></script>
+    <script type="module" src="firebase-config.js" defer></script>
+    <script type="module" src="firebase-firestore-service.js" defer></script>
+    <script type="module" src="app-features.js?v=2.2" defer></script>
+    <script type="module" src="main.js" defer></script>
 
-    <!-- PWA & New Features (Modular) -->
-    <script type="module" src="app-features.js?v=2.0"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {

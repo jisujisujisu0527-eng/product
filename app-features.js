@@ -1,26 +1,10 @@
 // app-features.js - Final Robust Version for Mobile Compatibility
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+import { db, auth } from './firebase-config.js';
 import { 
-    getFirestore, collection, addDoc, getDocs, query, orderBy, limit, 
+    collection, addDoc, getDocs, query, orderBy, limit, 
     updateDoc, increment, doc, serverTimestamp, setDoc, getDoc
 } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-
-// 1. Firebase Configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDCuBvNfOKXIvQuOtGYrvSHQYyZcpt9LT0",
-  authDomain: "kims-88433.firebaseapp.com",
-  projectId: "kims-88433",
-  storageBucket: "kims-88433.firebasestorage.app",
-  messagingSenderId: "842717872672",
-  appId: "1:842717872672:web:f37e14c7c1fb024c0f3245",
-  measurementId: "G-8YPXQN7Z3M"
-};
-
-// 2. Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app, "main");
-const auth = getAuth(app);
+import { onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
 /**
  * 3. Helper: Date Formatter (Local Time YYYY-MM-DD)

@@ -1,14 +1,5 @@
 // firebase-firestore-service.js (Enhanced with Streak)
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDCuBvNfOKXIvQuOtGYrvSHQYyZcpt9LT0",
-  authDomain: "kims-88433.firebaseapp.com",
-  projectId: "kims-88433",
-  storageBucket: "kims-88433.firebasestorage.app",
-  messagingSenderId: "842717872672",
-  appId: "1:842717872672:web:f37e14c7c1fb024c0f3245",
-  measurementId: "G-8YPXQN7Z3M"
-};
+import { db } from './firebase-config.js';
 
 window.SiteManager = {
     isReady: false,
@@ -33,15 +24,9 @@ window.SiteManager = {
 
 setTimeout(() => window.SiteManager.startApp(), 3000);
 
-try {
-    firebase.initializeApp(firebaseConfig);
-    window.db = firebase.firestore();
-    window.SiteManager.startApp();
-} catch (error) {
-    console.warn("🚀 Entering Offline Mode:", error.message);
-    window.db = null;
-    window.SiteManager.startApp();
-}
+// Global db mapping for compatibility
+window.db = db;
+window.SiteManager.startApp();
 
 /**
  * 스트릭 업데이트 함수 (Gemini 조언 기반)
