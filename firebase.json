@@ -7,6 +7,41 @@
     "public": ".",
     "cleanUrls": true,
     "trailingSlash": false,
+    "redirects": [
+      {
+        "source": "https://kims-88433.web.app{,/**}",
+        "destination": "https://dailybible.uk/:splat",
+        "type": 301
+      },
+      {
+        "source": "https://kims-88433.firebaseapp.com{,/**}",
+        "destination": "https://dailybible.uk/:splat",
+        "type": 301
+      }
+    ],
+    "headers": [
+      {
+        "source": "/**",
+        "headers": [
+          {
+            "key": "Strict-Transport-Security",
+            "value": "max-age=31536000; includeSubDomains; preload"
+          },
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "key": "X-Frame-Options",
+            "value": "SAMEORIGIN"
+          },
+          {
+            "key": "X-XSS-Protection",
+            "value": "1; mode=block"
+          }
+        ]
+      }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",

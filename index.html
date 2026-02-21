@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- DNS & Font Optimization -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
     <!-- Google tag (gtag.js) -->
@@ -13,12 +19,18 @@
     </script>
     
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="site_logo">British Daily Bible - Daily Verse & Prayer Community</title>
     <meta name="description" content="Start your day with God's Word. Join the global prayer network, receive daily Bible verses, and track your spiritual journey with British Daily Bible.">
     <meta name="keywords" content="Daily Bible, Bible Verse, Prayer, Christian Community, British Bible, Spiritual Growth, Meditation">
     <meta name="author" content="British Daily Bible">
     <link rel="canonical" href="https://dailybible.uk">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.svg">
 
     <!-- Social Media (Open Graph) -->
     <meta property="og:type" content="website">
@@ -29,24 +41,17 @@
     <meta property="og:locale" content="en_GB">
     <meta property="og:locale:alternate" content="ko_KR">
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="British Daily Bible">
-    <meta name="twitter:description" content="Daily Bible verses and global prayer community.">
-    <meta name="twitter:image" content="https://dailybible.uk/favicon.svg">
-
     <!-- PWA Settings -->
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="favicon.svg">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Daily Bible">
     <meta name="theme-color" content="#B08968">
 
     <!-- Styles & Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
 
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
@@ -69,6 +74,11 @@
       "name": "British Daily Bible",
       "url": "https://dailybible.uk",
       "logo": "https://dailybible.uk/favicon.svg",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+44-000-000-0000",
+        "contactType": "customer service"
+      },
       "sameAs": [
         "https://www.facebook.com/britishdailybible",
         "https://twitter.com/britishdailybible"
@@ -76,13 +86,15 @@
     }
     </script>
 
-    <!-- Firebase SDK (Compat) -->
+    <!-- Logic Scripts -->
+    <script src="translations.js" defer></script>
     <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
-    
-    <!-- html2canvas for Verse Card Saving -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+    <script src="firebase-firestore-service.js" defer></script>
+    <script src="main.js" defer></script>
+    <script type="module" src="app-features.js?v=2.1" defer></script>
     
     <style>
         #main-loader {
@@ -91,6 +103,8 @@
             align-items: center; z-index: 9999; transition: opacity 0.5s;
         }
         #main-loader i { color: #B08968; margin-bottom: 20px; animation: pulse 2s infinite; }
+    </style>
+</head>
 
         /* Hidden Verse Card Template */
         #wordCard {
