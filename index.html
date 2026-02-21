@@ -22,9 +22,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="site_logo">British Daily Bible - Daily Verse & Prayer Community</title>
-    <meta name="description" content="Start your day with God's Word. Join the global prayer network, receive daily Bible verses, and track your spiritual journey with British Daily Bible.">
-    <meta name="keywords" content="Daily Bible, Bible Verse, Prayer, Christian Community, British Bible, Spiritual Growth, Meditation">
-    <meta name="author" content="British Daily Bible">
+    <meta name="description" content="Elevate your spiritual life with British Daily Bible. We provide a professionally curated global prayer network and daily scripture meditations designed to foster spiritual growth and community connection among believers worldwide.">
+    <meta name="keywords" content="Daily Bible, Bible Verse, Prayer, Christian Community, British Bible, Spiritual Growth, Meditation, AI Bible Assistant">
+    <meta name="author" content="British Daily Bible Team">
     <link rel="canonical" href="https://dailybible.uk">
 
     <!-- Favicon -->
@@ -35,8 +35,8 @@
     <!-- Social Media (Open Graph) -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://dailybible.uk">
-    <meta property="og:title" content="British Daily Bible - Start Your Day with Grace">
-    <meta property="og:description" content="Join thousands in daily prayer and scripture meditation. Share your prayer requests and grow in faith together.">
+    <meta property="og:title" content="British Daily Bible - Your Daily Spiritual Companion">
+    <meta property="og:description" content="Connect with a global community through daily prayer and faith-driven insights. Experience a deeper relationship with God through our curated spiritual content.">
     <meta property="og:image" content="https://dailybible.uk/favicon.svg">
     <meta property="og:locale" content="en_GB">
     <meta property="og:locale:alternate" content="ko_KR">
@@ -53,13 +53,19 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
 
-    <!-- Structured Data (JSON-LD) -->
+    <!-- Structured Data (JSON-LD) - Enhanced for AI/GEO -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "British Daily Bible",
+      "alternateName": "BDB",
       "url": "https://dailybible.uk",
+      "description": "A comprehensive spiritual platform providing daily bible verses, global prayer networking, and AI-driven faith checkups.",
+      "about": {
+        "@type": "Thing",
+        "name": "Christianity, Bible Study, Global Prayer"
+      },
       "potentialAction": {
         "@type": "SearchAction",
         "target": "https://dailybible.uk/search?q={search_term_string}",
@@ -74,15 +80,50 @@
       "name": "British Daily Bible",
       "url": "https://dailybible.uk",
       "logo": "https://dailybible.uk/favicon.svg",
+      "foundingDate": "2026-02-21",
+      "knowsAbout": ["Bible Theology", "Christian Prayer", "Spiritual Wellbeing"],
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+44-000-000-0000",
-        "contactType": "customer service"
+        "contactType": "customer service",
+        "availableLanguage": ["en", "ko"]
       },
       "sameAs": [
         "https://www.facebook.com/britishdailybible",
         "https://twitter.com/britishdailybible"
       ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Daily Spiritual Guidance",
+      "provider": {
+        "@type": "Organization",
+        "name": "British Daily Bible"
+      },
+      "areaServed": "Global",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Spiritual Resources",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Daily Bible Verse"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Global Prayer Network"
+            }
+          }
+        ]
+      }
     }
     </script>
 
