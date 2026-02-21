@@ -7,18 +7,6 @@
     "public": ".",
     "cleanUrls": true,
     "trailingSlash": false,
-    "redirects": [
-      {
-        "source": "https://kims-88433.web.app{,/**}",
-        "destination": "https://dailybible.uk/:splat",
-        "type": 301
-      },
-      {
-        "source": "https://kims-88433.firebaseapp.com{,/**}",
-        "destination": "https://dailybible.uk/:splat",
-        "type": 301
-      }
-    ],
     "headers": [
       {
         "source": "/**",
@@ -28,16 +16,17 @@
             "value": "max-age=31536000; includeSubDomains; preload"
           },
           {
-            "key": "X-Content-Type-Options",
-            "value": "nosniff"
-          },
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|js|css)",
+        "headers": [
           {
-            "key": "X-Frame-Options",
-            "value": "SAMEORIGIN"
-          },
-          {
-            "key": "X-XSS-Protection",
-            "value": "1; mode=block"
+            "key": "Cache-Control",
+            "value": "max-age=604800"
           }
         ]
       }
