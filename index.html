@@ -164,16 +164,16 @@
     </div> </div>
     </div>
 
-    <div id="main-loader">
-        <i class="fas fa-cross fa-3x"></i>
+    <div id="main-loader" aria-hidden="true">
+        <i class="fas fa-cross fa-3x" title="Loading Cross icon"></i>
         <p style="font-family: 'EB Garamond', serif; color: #34495E;">Loading Grace...</p>
     </div>
 
     <!-- Everything inside app-content (Initially Hidden) -->
     <div id="app-content" style="display: none;">
-        <header>
+        <header role="banner">
             <div class="container">
-                <nav class="navbar">
+                <nav class="navbar" aria-label="Main Navigation">
                     <div class="nav-logo"><a href="index.html" data-i18n="site_logo">British Daily Bible</a></div>
                     <ul class="nav-links">
                         <li><a href="index.html" data-i18n="nav_home">Home</a></li>
@@ -184,7 +184,7 @@
                         <li><a href="blog.html" data-i18n="nav_blog">Blog</a></li>
                     </ul>
                     <div class="lang-switcher">
-                        <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
+                        <select id="lang-select" onchange="applyLanguage(this.value)" aria-label="Select Language" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
                             <option value="en">EN</option><option value="ko">KO</option>
                         </select>
                     </div>
@@ -192,66 +192,74 @@
             </div>
         </header>
 
-        <main>
+        <main id="main-content" role="main">
             <div class="container">
                 <!-- Improved Global Prayer Chain Section -->
-                <section class="global-stats-board card" style="margin-top: 40px; text-align: center; background: #fffaf0; border: 1px solid #ffe4b5; padding: 50px 20px; border-radius: 15px;">
-                    <h2 data-i18n="prayer_chain_title" class="classic-serif" style="color: #333; margin-bottom: 10px;">🙏 기도의 등불을 밝힙니다</h2>
+                <section class="global-stats-board card" aria-labelledby="prayer-stats-title" style="margin-top: 40px; text-align: center; background: #fffaf0; border: 1px solid #ffe4b5; padding: 50px 20px; border-radius: 15px;">
+                    <h2 id="prayer-stats-title" data-i18n="prayer_chain_title" class="classic-serif" style="color: #333; margin-bottom: 10px;">🙏 기도의 등불을 밝힙니다</h2>
                     
                     <div style="display: flex; justify-content: center; gap: 40px; margin: 30px 0; flex-wrap: wrap;">
                         <!-- 오늘 참여자 (ID: prayer-count-display) -->
-                        <div>
+                        <div class="stat-item">
                             <p style="color: #E67E22; font-weight: bold; margin-bottom: 5px;">오늘 함께한 성도</p>
                             <span id="prayer-count-display" style="font-size: 3.5rem; font-weight: 900; color: #E67E22; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">0</span>
                             <span style="color: #E67E22; font-weight: bold;">명</span>
                         </div>
                         <!-- 전체 누적 -->
-                        <div style="border-left: 1px solid #ffe4b5; padding-left: 40px;">
+                        <div class="stat-item" style="border-left: 1px solid #ffe4b5; padding-left: 40px;">
                             <p style="color: #888; font-weight: bold; margin-bottom: 5px;">누적 기도 향연</p>
                             <span id="prayer-counter" style="font-size: 3.5rem; font-weight: 900; color: #ff4500; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">0</span>
                             <span style="color: #ff4500; font-weight: bold;">회</span>
                         </div>
                     </div>
 
-                    <button id="prayer-btn" type="button" class="primary-btn" style="padding: 18px 45px; font-size: 1.2rem; font-weight: bold; background-color: #ff4500; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,69,0,0.3); transition: transform 0.2s; touch-action: manipulation; -webkit-tap-highlight-color: transparent;">
+                    <button id="prayer-btn" type="button" class="primary-btn" aria-label="Join Prayer Chain" style="padding: 18px 45px; font-size: 1.2rem; font-weight: bold; background-color: #ff4500; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,69,0,0.3); transition: transform 0.2s; touch-action: manipulation; -webkit-tap-highlight-color: transparent;">
                         <span data-i18n="btn_i_prayed_global">지금 기도 올리기 & 참여하기 🔥</span>
                     </button>
                 </section>
 
-                <section class="hero-section">
+                <section class="hero-section" aria-labelledby="hero-title">
                     <div id="streak-container" style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px; font-weight: 700; color: #E67E22; font-size: 1.1rem; background: #FFF5E6; padding: 10px 20px; border-radius: 30px; display: inline-flex; margin-left: auto; margin-right: auto;">
                         <span id="streak-counter">🔥 로딩 중...</span>
                     </div>
-                    <h1 data-i18n="main_title" class="classic-serif">Daily Spiritual Rest</h1>
+                    <h1 id="hero-title" data-i18n="main_title" class="classic-serif">Daily Spiritual Rest</h1>
                     <div class="mood-container">
-                        <button onclick="getVerseByMood('anxious')" class="mood-btn">😰 Anxious</button>
-                        <button onclick="getVerseByMood('grateful')" class="mood-btn">🙏 Grateful</button>
-                        <button onclick="getVerseByMood('joyful')" class="mood-btn">✨ Joyful</button>
+                        <button onclick="getVerseByMood('anxious')" class="mood-btn" aria-label="Verse for Anxious mood">😰 Anxious</button>
+                        <button onclick="getVerseByMood('grateful')" class="mood-btn" aria-label="Verse for Grateful mood">🙏 Grateful</button>
+                        <button onclick="getVerseByMood('joyful')" class="mood-btn" aria-label="Verse for Joyful mood">✨ Joyful</button>
                     </div>
 
                     <!-- Daily Routine Content (Added) -->
-                    <div id="daily-content" style="margin: 20px 0; padding: 20px; background: #fdf5e6; border-radius: 10px; font-family: 'EB Garamond', serif; font-size: 1.2rem; color: #5d4037; border-left: 5px solid #b08968;">
+                    <div id="daily-content" aria-live="polite" style="margin: 20px 0; padding: 20px; background: #fdf5e6; border-radius: 10px; font-family: 'EB Garamond', serif; font-size: 1.2rem; color: #5d4037; border-left: 5px solid #b08968;">
                         Loading daily routine...
                     </div>
 
                     <div class="bible-app grid-3">
-                        <div class="card"><h3 data-i18n="daily_bible">📜 오늘의 말씀</h3><p id="today-word">Loading...</p><small id="today-ref"></small></div>
-                        <div class="card"><h3 data-i18n="daily_prayer">🙏 오늘의 기도</h3><p id="today-prayer">Loading...</p></div>
-                        <div class="card"><h3 data-i18n="daily_mission">📢 오늘의 전도</h3><p id="today-mission">Loading...</p></div>
+                        <article class="card"><h3 data-i18n="daily_bible">📜 오늘의 말씀</h3><p id="today-word">Loading...</p><small id="today-ref"></small></article>
+                        <article class="card"><h3 data-i18n="daily_prayer">🙏 오늘의 기도</h3><p id="today-prayer">Loading...</p></article>
+                        <article class="card"><h3 data-i18n="daily_mission">📢 오늘의 전도</h3><p id="today-mission">Loading...</p></article>
                     </div>
-                    <button onclick="downloadVerseCard(event)" class="primary-btn" style="margin-top: 20px; background: #B08968;"><i class="fas fa-download"></i> Save Card</button>
+                    <button onclick="downloadVerseCard(event)" class="primary-btn" style="margin-top: 20px; background: #B08968;"><i class="fas fa-download" aria-hidden="true"></i> Save Card</button>
                 </section>
 
                 <!-- Prayer Board (Disqus) -->
-                <section id="prayer-board" class="card" style="margin-top: 40px; padding: 40px 20px;">
-                    <h3 style="border-bottom: 2px solid #E67E22; padding-bottom: 15px; margin-bottom: 30px; color: #34495E; font-family: 'EB Garamond', serif; font-size: 1.8rem;" data-i18n="prayer_board_title">🙏 최신 기도 제목</h3>
+                <section id="prayer-board" class="card" aria-labelledby="prayer-board-title" style="margin-top: 40px; padding: 40px 20px;">
+                    <h3 id="prayer-board-title" style="border-bottom: 2px solid #E67E22; padding-bottom: 15px; margin-bottom: 30px; color: #34495E; font-family: 'EB Garamond', serif; font-size: 1.8rem;" data-i18n="prayer_board_title">🙏 최신 기도 제목</h3>
                     <div id="disqus_thread"></div>
                 </section>
             </div>
         </main>
 
-        <footer style="padding: 60px 0; text-align: center; border-top: 1px solid #eee;">
-            <p data-i18n="footer_rights">© 2026 British Daily Bible.</p>
+        <footer role="contentinfo" style="padding: 60px 0; text-align: center; border-top: 1px solid #eee;">
+            <div class="container">
+                <p data-i18n="footer_rights">© 2026 British Daily Bible. Shared Faith for a Better World.</p>
+                <nav class="footer-links" style="margin-top: 20px; display: flex; justify-content: center; gap: 20px;">
+                    <a href="about.html" style="color: #666; text-decoration: none;">About Us</a>
+                    <a href="privacy.html" style="color: #666; text-decoration: none;">Privacy Policy</a>
+                    <a href="terms.html" style="color: #666; text-decoration: none;">Terms of Service</a>
+                    <a href="mailto:support@dailybible.uk" style="color: #666; text-decoration: none;">Contact Us</a>
+                </nav>
+            </div>
         </footer>
     </div>
 
