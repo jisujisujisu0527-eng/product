@@ -1,3 +1,4 @@
+alert("1. 자바스크립트 로딩 성공!");
 // app-features.js - Global Prayer Network, Daily Routine, Stats, and Streak (Firebase v9 Modular)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { 
@@ -20,6 +21,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app, "main");
 const auth = getAuth(app);
+alert("2. 파이어베이스 초기화 완료!");
 
 /**
  * 🔥 Streak (연속 동행) Logic
@@ -96,6 +98,7 @@ export async function updateDailyStreak(userId) {
 
 // Auth 상태 관찰 및 익명 로그인
 onAuthStateChanged(auth, (user) => {
+    alert("3. 사용자 인증 확인 중...");
     if (user) {
         console.log("Authenticated User UID:", user.uid);
         updateDailyStreak(user.uid);
