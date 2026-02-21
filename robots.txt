@@ -1,3 +1,6 @@
 User-agent: *
 Allow: /
 Sitemap: https://dailybible.uk/sitemap.xml
+
+User-agent: Mediapartners-Google
+Allow: /

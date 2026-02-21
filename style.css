@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,700&display=swap');
-
+/* dailybible.uk - Optimized CSS */
 :root {
     --primary-color: #34495E; 
     --accent-color: #B08968;  
-    --bg-light: #FDFBF7;     /* 더 부드러운 크림색 */
+    --bg-light: #FDFBF7;
     --text-main: #2C3E50;
-    --text-muted: #7F8C8D;
+    --text-muted: #5D6D7E; /* 가독성 향상을 위해 조금 더 어둡게 조정 */
     --card-bg: #FFFFFF;
     --shadow: 0 4px 20px rgba(0,0,0,0.04);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 body.dark-mode {
@@ -21,29 +21,35 @@ body.dark-mode {
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html { scroll-behavior: smooth; font-size: 16px; }
+
 body {
-    font-family: 'Inter', sans-serif; /* 본문은 가독성 높은 샌세리프 */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background-color: var(--bg-light);
     color: var(--text-main);
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, .classic-serif { font-family: 'EB Garamond', serif; font-weight: 500; }
+h1, h2, h3, .classic-serif { font-family: 'EB Garamond', serif; font-weight: 500; line-height: 1.2; }
 
-.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; }
 
-/* Navbar */
+/* Navbar Optimization */
 .navbar {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 24px 0; border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 .nav-logo a { font-family: 'EB Garamond', serif; font-size: 1.6rem; font-weight: 700; color: var(--primary-color); text-decoration: none; }
-.nav-links { display: flex; gap: 30px; list-style: none; }
-.nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.95rem; font-weight: 500; transition: var(--transition); }
-.nav-links a:hover { color: var(--accent-color); }
+.nav-links { display: flex; gap: 24px; list-style: none; }
+.nav-links a { 
+    text-decoration: none; color: var(--text-main); font-size: 0.95rem; font-weight: 500; 
+    transition: var(--transition); padding: 8px 0; display: inline-block;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--accent-color); }
 
-/* Card Design */
+/* Card & Content */
 .card {
     background: var(--card-bg);
     border-radius: 16px;
@@ -51,61 +57,44 @@ h1, h2, h3, .classic-serif { font-family: 'EB Garamond', serif; font-weight: 500
     box-shadow: var(--shadow);
     border: 1px solid rgba(0,0,0,0.02);
     transition: var(--transition);
+    height: 100%;
 }
-.card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+.card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
 
-/* Hero Section & Moods */
-.hero-section { text-align: center; padding: 60px 0; }
-.hero-section h1 { font-size: 3.2rem; margin-bottom: 16px; color: var(--primary-color); }
-
-.mood-container { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 32px 0; }
-.mood-btn {
-    padding: 10px 24px; border-radius: 30px; border: 1px solid #E0E0E0;
-    background: white; cursor: pointer; transition: var(--transition);
-    font-family: 'Inter', sans-serif; font-size: 0.9rem;
-}
-.mood-btn:hover { border-color: var(--accent-color); background: var(--bg-light); }
-
-/* Daily Food Grid */
+/* Grid System */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin: 40px 0; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin: 40px 0; }
-@media (max-width: 850px) { .grid-3 { grid-template-columns: 1fr; } }
 
-.bible-app .card h3 { 
-    font-size: 1.3rem; color: var(--accent-color); margin-bottom: 16px; 
-    display: flex; align-items: center; gap: 8px;
+@media (max-width: 850px) { 
+    .grid-2, .grid-3 { grid-template-columns: 1fr; } 
+    .navbar { flex-direction: column; gap: 15px; text-align: center; }
+    .hero-section h1 { font-size: 2.4rem; }
 }
 
-/* Prayer Request Board */
-.prayer-form-area { max-width: 700px; margin: 0 auto 40px; }
-.input-group { margin-bottom: 16px; }
-.input-box {
-    width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid #E0E0E0;
-    font-family: 'Inter', sans-serif; font-size: 1rem; transition: var(--transition);
-}
-.input-box:focus { border-color: var(--accent-color); outline: none; box-shadow: 0 0 0 3px rgba(176, 137, 104, 0.1); }
-
-.prayer-card {
-    border-left: 4px solid var(--accent-color);
-    padding: 24px; margin-bottom: 20px; background: white; border-radius: 12px;
-}
-.prayer-author { font-weight: 600; color: var(--primary-color); font-size: 0.9rem; margin-bottom: 8px; }
-.prayer-text { font-family: 'EB Garamond', serif; font-size: 1.2rem; color: #444; }
-
-/* Buttons */
+/* Accessible Buttons */
 .primary-btn {
-    background: var(--primary-color); color: white; padding: 14px 32px;
-    border-radius: 30px; border: none; font-weight: 600; cursor: pointer; transition: var(--transition);
+    background: var(--primary-color); color: white; padding: 16px 36px;
+    border-radius: 50px; border: none; font-weight: 600; cursor: pointer; 
+    transition: var(--transition); min-width: 44px; min-height: 44px; /* Apple/Google standard */
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    text-decoration: none;
 }
-.primary-btn:hover { opacity: 0.9; transform: scale(1.02); }
+.primary-btn:hover { opacity: 0.95; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-/* Stats Badge */
-.global-stats-board {
-    background: #f8f9fa; border: none; padding: 40px; margin-bottom: 60px;
+.mood-btn {
+    padding: 12px 24px; border-radius: 30px; border: 1px solid #E0E0E0;
+    background: white; cursor: pointer; transition: var(--transition);
+    font-size: 0.95rem; min-height: 44px;
 }
+.mood-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
 
-@keyframes glow {
-    0% { box-shadow: 0 0 5px rgba(176, 137, 104, 0.2); }
-    50% { box-shadow: 0 0 20px rgba(176, 137, 104, 0.5); }
-    100% { box-shadow: 0 0 5px rgba(176, 137, 104, 0.2); }
-}
-.glow-animation { animation: glow 2s infinite; }
+/* Footer Optimization */
+footer { background: white; padding: 60px 0 calc(60px + var(--safe-area-inset-bottom)); }
+.footer-links a { transition: color 0.2s; }
+.footer-links a:hover { color: var(--accent-color) !important; }
+
+/* Utilities */
+.text-center { text-align: center; }
+.mt-40 { margin-top: 40px; }
+.mb-40 { margin-bottom: 40px; }
+.active { color: var(--accent-color) !important; font-weight: 700 !important; }

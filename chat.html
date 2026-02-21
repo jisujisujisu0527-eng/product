@@ -1,73 +1,95 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="nav_chat">Paul AI | British Daily Bible</title>
+    <title>Paul AI - Spiritual Conversation | British Daily Bible</title>
+    <meta name="description" content="Talk with Paul AI, your spiritual companion. Get bible-based insights and encouragement for your daily life challenges.">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://dailybible.uk/chat">
+
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
+    <header role="banner">
         <div class="container">
-            <nav class="navbar">
-                <div class="nav-logo"><a href="index.html" data-i18n="site_logo">British Daily Bible</a></div>
+            <nav class="navbar" aria-label="Main Navigation">
+                <div class="nav-logo"><a href="index.html">British Daily Bible</a></div>
                 <ul class="nav-links">
-                    <li><a href="index.html" data-i18n="nav_home">Home</a></li>
-                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Test</a></li>
-                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Check</a></li>
-                    <li><a href="community.html" data-i18n="nav_community">Community</a></li>
-                    <li><a href="chat.html" data-i18n="nav_chat">Paul AI</a></li>
-                    <li><a href="blog.html" data-i18n="nav_blog">Blog</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="community.html">Community</a></li>
+                    <li><a href="chat.html" class="active">Paul AI</a></li>
+                    <li><a href="blog.html">Blog</a></li>
                 </ul>
-                <div class="lang-switcher">
-                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
-                        <option value="en">EN</option><option value="ko">KO</option>
-                    </select>
-                </div>
             </nav>
         </div>
     </header>
 
-    <main class="container" style="padding: 40px 0;">
-        <div class="card" style="height: 600px; display: flex; flex-direction: column;">
-            <h2 class="classic-serif" style="text-align: center; margin-bottom: 20px;"><i class="fas fa-dove"></i> <span data-i18n="nav_chat">Paul AI</span></h2>
+    <main id="main-content" class="container" style="padding: 60px 20px;">
+        <div class="text-center mb-40">
+            <h1 class="classic-serif" style="font-size: 3rem;">Spiritual Companion Paul AI</h1>
+            <p style="color: #666; max-width: 700px; margin: 20px auto;">Seek wisdom and comfort through a bible-based conversation. Paul AI is here to help you reflect on scripture and find encouragement in every situation.</p>
+        </div>
+
+        <div class="card" style="height: 600px; display: flex; flex-direction: column; max-width: 800px; margin: 0 auto;">
             <div id="chat-box" style="flex: 1; overflow-y: auto; padding: 20px; background: #fdfbf7; border-radius: 10px; border: 1px solid #eee;">
                 <div class="message ai" style="margin-bottom: 15px;">
-                    <p style="background: #E0D7C6; padding: 10px 15px; border-radius: 15px 15px 15px 0; display: inline-block; max-width: 80%; color: #34495E;">안녕하세요! 저는 바울 AI입니다. 오늘 어떤 고민이나 나누고 싶은 말씀이 있으신가요?</p>
+                    <p style="background: #E0D7C6; padding: 12px 18px; border-radius: 15px 15px 15px 0; display: inline-block; max-width: 80%; color: #34495E; line-height: 1.5;">Greetings! I am Paul AI. How can I support your faith journey today? Do you have a specific verse or concern you'd like to discuss?</p>
                 </div>
             </div>
             <div style="margin-top: 20px; display: flex; gap: 10px;">
-                <input type="text" id="chat-input" class="input-box" placeholder="메시지를 입력하세요..." style="flex: 1;">
-                <button class="primary-btn" onclick="sendMessage()" style="padding: 10px 25px;"><i class="fas fa-paper-plane"></i></button>
+                <input type="text" id="chat-input" class="input-box" placeholder="Ask Paul AI..." style="flex: 1;">
+                <button class="primary-btn" onclick="sendMessage()" aria-label="Send Message" style="padding: 10px 25px;"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
     </main>
 
+    <footer role="contentinfo" style="padding: 60px 0; text-align: center; border-top: 1px solid #eee;">
+        <div class="container">
+            <p>© 2026 British Daily Bible. Your daily spiritual companion.</p>
+            <nav class="footer-links" style="margin-top: 20px; display: flex; justify-content: center; gap: 20px;">
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
+                <a href="about.html">About</a>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- Logic Scripts -->
     <script src="translations.js"></script>
-    <script src="main.js" defer></script>
+    <script type="module" src="main.js" defer></script>
     <script>
         function sendMessage() {
             const input = document.getElementById('chat-input');
             const box = document.getElementById('chat-box');
             if(!input.value.trim()) return;
             
+            const userMsg = input.value;
             box.innerHTML += `<div class="message user" style="margin-bottom: 15px; text-align: right;">
-                <p style="background: #B08968; color: white; padding: 10px 15px; border-radius: 15px 15px 0 15px; display: inline-block; max-width: 80%;">${input.value}</p>
+                <p style="background: #B08968; color: white; padding: 12px 18px; border-radius: 15px 15px 0 15px; display: inline-block; max-width: 80%; text-align: left;">${userMsg}</p>
             </div>`;
             input.value = "";
             box.scrollTop = box.scrollHeight;
             
             setTimeout(() => {
                 box.innerHTML += `<div class="message ai" style="margin-bottom: 15px;">
-                    <p style="background: #E0D7C6; padding: 10px 15px; border-radius: 15px 15px 15px 0; display: inline-block; max-width: 80%; color: #34495E;">기도하며 고민해보고 답변 드릴게요. (AI 연동 준비 중)</p>
+                    <p style="background: #E0D7C6; padding: 12px 18px; border-radius: 15px 15px 15px 0; display: inline-block; max-width: 80%; color: #34495E;">Thank you for sharing. Let us reflect on this together through prayer. (AI Response Integration in Progress...)</p>
                 </div>`;
                 box.scrollTop = box.scrollHeight;
             }, 1000);
         }
+        // Enter key support
+        document.getElementById('chat-input').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') sendMessage();
+        });
     </script>
 </body>
 </html>

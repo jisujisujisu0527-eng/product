@@ -1,48 +1,72 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
+    <!-- DNS & Optimization -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="nav_blog">Blog | British Daily Bible</title>
+    <title>Blog - Spiritual Insights & Faith Journey | British Daily Bible</title>
+    <meta name="description" content="Explore deep spiritual insights, bible study guides, and modern faith reflections on the British Daily Bible Blog. Stay connected with God's word.">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="canonical" href="https://dailybible.uk/blog.html">
+    <link rel="canonical" href="https://dailybible.uk/blog">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Blog - British Daily Bible">
+    <meta property="og:description" content="Nourish your soul with our latest spiritual reflections and community stories.">
+    <meta property="og:image" content="https://dailybible.uk/favicon.svg">
+
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
+    <header role="banner">
         <div class="container">
-            <nav class="navbar">
-                <div class="nav-logo"><a href="index.html" data-i18n="site_logo">British Daily Bible</a></div>
+            <nav class="navbar" aria-label="Main Navigation">
+                <div class="nav-logo"><a href="index.html">British Daily Bible</a></div>
                 <ul class="nav-links">
-                    <li><a href="index.html" data-i18n="nav_home">Home</a></li>
-                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Test</a></li>
-                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Check</a></li>
-                    <li><a href="community.html" data-i18n="nav_community">Community</a></li>
-                    <li><a href="chat.html" data-i18n="nav_chat">Paul AI</a></li>
-                    <li><a href="blog.html" data-i18n="nav_blog">Blog</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="community.html">Community</a></li>
+                    <li><a href="chat.html">Paul AI</a></li>
+                    <li><a href="blog.html" class="active">Blog</a></li>
                 </ul>
-                <div class="lang-switcher">
-                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
-                        <option value="en">EN</option><option value="ko">KO</option>
-                    </select>
-                </div>
             </nav>
         </div>
     </header>
 
-    <main class="container" style="padding: 60px 0;">
-        <h1 data-i18n="nav_blog" class="classic-serif" style="font-size: 3rem; text-align: center; margin-bottom: 40px;">Blog</h1>
-        <div id="blog-list"></div>
+    <main id="main-content" class="container" style="padding: 60px 20px;">
+        <article>
+            <h1 class="classic-serif" style="font-size: 3rem; text-align: center; margin-bottom: 20px;">Spiritual Blog</h1>
+            <p style="text-align: center; color: #666; max-width: 600px; margin: 0 auto 40px;">Deepen your faith with our curated reflections, bible study guides, and community testimonies.</p>
+            <div id="blog-list" class="grid-2">
+                <!-- Content dynamically loaded via main.js/blog-data.js -->
+                <p style="text-align: center;">Loading latest insights...</p>
+            </div>
+        </article>
     </main>
 
-    <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    <footer role="contentinfo" style="padding: 60px 0; text-align: center; border-top: 1px solid #eee;">
+        <div class="container">
+            <p>© 2026 British Daily Bible. Insights for your spiritual walk.</p>
+            <nav class="footer-links" style="margin-top: 20px; display: flex; justify-content: center; gap: 20px;">
+                <a href="about.html">About Us</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="mailto:support@dailybible.uk">Contact</a>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- Logic Scripts (Optimized) -->
     <script src="translations.js"></script>
     <script src="blog-data.js"></script>
-    <script defer src="firebase-firestore-service.js"></script>
-    <script defer src="main.js"></script>
+    <script type="module" src="firebase-config.js" defer></script>
+    <script type="module" src="firebase-firestore-service.js" defer></script>
+    <script type="module" src="app-features.js" defer></script>
+    <script type="module" src="main.js" defer></script>
 </body>
 </html>

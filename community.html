@@ -1,67 +1,87 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8260879821489900" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="nav_community">Community</title>
+    <title>Community & Partnership | British Daily Bible</title>
+    <meta name="description" content="Connect with the British Daily Bible community. Submit prayer requests, explore partnership opportunities, and share your spiritual journey.">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://dailybible.uk/community">
+
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
+    <header role="banner">
         <div class="container">
-            <nav class="navbar">
-                <div class="nav-logo"><a href="index.html" data-i18n="site_logo">British Daily Bible</a></div>
+            <nav class="navbar" aria-label="Main Navigation">
+                <div class="nav-logo"><a href="index.html">British Daily Bible</a></div>
                 <ul class="nav-links">
-                    <li><a href="index.html" data-i18n="nav_home">Home</a></li>
-                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Test</a></li>
-                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Check</a></li>
-                    <li><a href="community.html" data-i18n="nav_community">Community</a></li>
-                    <li><a href="chat.html" data-i18n="nav_chat">Paul AI</a></li>
-                    <li><a href="blog.html" data-i18n="nav_blog">Blog</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="community.html" class="active">Community</a></li>
+                    <li><a href="chat.html">Paul AI</a></li>
+                    <li><a href="blog.html">Blog</a></li>
                 </ul>
-                <div class="lang-switcher">
-                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
-                        <option value="en">EN</option><option value="ko">KO</option>
-                    </select>
-                </div>
             </nav>
         </div>
     </header>
 
-    <main class="container" style="padding: 60px 0;">
+    <main id="main-content" class="container" style="padding: 60px 20px;">
+        <div class="text-center mb-40">
+            <h1 class="classic-serif" style="font-size: 3rem;">Community of Faith</h1>
+            <p style="color: #666; max-width: 700px; margin: 20px auto;">We believe in the power of unity and shared prayer. Whether you are seeking partnership, intercession, or have a testimony to share, our community is here for you.</p>
+        </div>
+
         <div class="card" style="max-width: 700px; margin: 0 auto;">
-            <h2 data-i18n="contact_form_title" style="text-align: center; margin-bottom: 25px;">🤝 Partnership & Intercession</h2>
+            <h2 style="text-align: center; margin-bottom: 25px;">🤝 Get in Touch</h2>
             <form action="https://formspree.io/f/mnjbvgdq" method="POST">
                 <div style="margin-bottom: 15px;">
-                    <label data-i18n="label_category" style="display: block; margin-bottom: 5px; color: #34495E; font-weight: 600;">Category</label>
+                    <label style="display: block; margin-bottom: 5px; color: #34495E; font-weight: 600;">Category</label>
                     <select name="category" class="input-box" required style="width: 100%; border: 1px solid #E0D7C6; padding: 12px; border-radius: 8px; background: #fff;">
-                        <option value="Partnership" data-i18n="opt_partnership">Partnership Inquiry</option>
-                        <option value="Intercession" data-i18n="opt_intercession">Intercessory Prayer Request</option>
-                        <option value="Other" data-i18n="opt_other">Other Inquiry</option>
+                        <option value="Partnership">Partnership Inquiry</option>
+                        <option value="Intercession">Prayer Request</option>
+                        <option value="Testimony">Share Testimony</option>
+                        <option value="Other">Other Inquiry</option>
                     </select>
                 </div>
                 <div style="margin-bottom: 15px;">
-                    <label data-i18n="label_name" style="display: block; margin-bottom: 5px; color: #34495E; font-weight: 600;">Name / Organization</label>
-                    <input type="text" name="name" class="input-box" required placeholder="Name" data-i18n="placeholder_name">
+                    <label style="display: block; margin-bottom: 5px; color: #34495E; font-weight: 600;">Name / Organization</label>
+                    <input type="text" name="name" class="input-box" required placeholder="Your Name">
                 </div>
                 <div style="margin-bottom: 15px;">
-                    <label data-i18n="label_email" style="display: block; margin-bottom: 5px; color: #34495E; font-weight: 600;">Email Address</label>
+                    <label style="display: block; margin-bottom: 5px; color: #34495E; font-weight: 600;">Email Address</label>
                     <input type="email" name="_replyto" class="input-box" required placeholder="example@email.com">
                 </div>
                 <div style="margin-bottom: 20px;">
-                    <label data-i18n="label_message" style="display: block; margin-bottom: 5px; color: #34495E; font-weight: 600;">Message</label>
-                    <textarea name="message" class="input-box" required placeholder="Your message..." style="height: 150px;" data-i18n="placeholder_message"></textarea>
+                    <label style="display: block; margin-bottom: 5px; color: #34495E; font-weight: 600;">Message</label>
+                    <textarea name="message" class="input-box" required placeholder="How can we help or pray for you?" style="height: 150px;"></textarea>
                 </div>
-                <button type="submit" class="primary-btn" style="width: 100%;" data-i18n="btn_send">Send Message</button>
+                <button type="submit" class="primary-btn" style="width: 100%;">Send to Community Team</button>
             </form>
         </div>
     </main>
 
+    <footer role="contentinfo" style="padding: 60px 0; text-align: center; border-top: 1px solid #eee;">
+        <div class="container">
+            <p>© 2026 British Daily Bible. Better together in Christ.</p>
+            <nav class="footer-links" style="margin-top: 20px; display: flex; justify-content: center; gap: 20px;">
+                <a href="about.html">About Us</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms</a>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- Logic Scripts -->
     <script src="translations.js"></script>
-    <script defer src="main.js"></script>
+    <script type="module" src="firebase-config.js" defer></script>
+    <script type="module" src="main.js" defer></script>
 </body>
 </html>
