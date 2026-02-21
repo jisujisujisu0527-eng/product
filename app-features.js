@@ -87,8 +87,10 @@ export async function updateDailyStreak(userId) {
         }
 
     } catch (e) {
-        console.error("Streak Update Error:", e);
-        if (streakEl) streakEl.innerText = "🔥 동행 기록 확인 중...";
+        console.error("오류 발생: ", e);
+        if (streakEl) {
+            streakEl.innerText = "에러: " + e.message;
+        }
     }
 }
 
