@@ -1,4 +1,4 @@
-// app-features.js - Final Robust Version for Mobile Compatibility
+// app-features.js - Stabilized Version
 import { db, auth } from './firebase-config.js';
 import { 
     collection, addDoc, getDocs, query, orderBy, limit, 
@@ -7,25 +7,28 @@ import {
 import { onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
 /**
- * 3. Helper: Date Formatter (Local Time YYYY-MM-DD)
+ * 1. Helper: Date Formatter (Local Time YYYY-MM-DD)
  */
 const getLocalDateString = (date) => {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
+    try {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    } catch (e) {
+        return new Date().toISOString().split('T')[0];
+    }
 };
 
 /**
- * 4. Main Streak Logic
+ * 2. Main Streak Logic (Robust)
  */
 export async function updateDailyStreak(userId) {
-    if (!userId) return;
+    if (!userId || !db) return;
 
-    const streakEl = document.getElementById('streak-counter');
+    const streakEl = document.getElementById('streak-counter') || document.getElementById('streak-count');
     const userRef = doc(db, "users", userId);
     
-    // Calculate Today and Yesterday in Local Time
     const now = new Date();
     const todayStr = getLocalDateString(now);
     
@@ -43,25 +46,15 @@ export async function updateDailyStreak(userId) {
             const currentCount = data.streakCount || 0;
 
             if (lastVisit === todayStr) {
-                // Already visited today
                 finalStreak = currentCount;
             } else if (lastVisit === yesterdayStr) {
-                // Continuous visit
                 finalStreak = currentCount + 1;
-                await updateDoc(userRef, {
-                    streakCount: finalStreak,
-                    lastVisitDate: todayStr
-                });
+                await updateDoc(userRef, { streakCount: finalStreak, lastVisitDate: todayStr });
             } else {
-                // Streak broken or first visit in a long time
                 finalStreak = 1;
-                await updateDoc(userRef, {
-                    streakCount: 1,
-                    lastVisitDate: todayStr
-                });
+                await updateDoc(userRef, { streakCount: 1, lastVisitDate: todayStr });
             }
         } else {
-            // First time user
             finalStreak = 1;
             await setDoc(userRef, {
                 streakCount: 1,
@@ -70,40 +63,39 @@ export async function updateDailyStreak(userId) {
             });
         }
 
-        // UI Update
         if (streakEl) {
             streakEl.innerText = `🔥 ${finalStreak}일 연속 동행`;
+            const container = document.getElementById('streak-container');
+            if (container) container.style.display = 'inline-flex';
         }
+        return finalStreak;
 
     } catch (error) {
-        console.error("Firestore Streak Error:", error);
-        if (streakEl) {
-            streakEl.innerText = "에러: " + error.message;
+        console.warn("Streak Logic Error (Safe Fail):", error.message);
+        if (streakEl && streakEl.innerText.includes("로딩")) {
+            streakEl.innerText = "🔥 동행을 시작하세요";
         }
     }
 }
 
 /**
- * 5. Auth Listener & Anonymous Login
+ * 3. Auth Listener & Anonymous Login
  */
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        console.log("User Authenticated:", user.uid);
         updateDailyStreak(user.uid);
     } else {
-        console.log("Starting Anonymous Auth...");
         signInAnonymously(auth).catch(err => {
             console.error("Auth Error:", err);
-            const streakEl = document.getElementById('streak-counter');
-            if (streakEl) streakEl.innerText = "인증 에러: " + err.message;
         });
     }
 });
 
 /**
- * 6. Additional Features (Prayer, Stats)
+ * 4. Additional Features (Prayer, Stats)
  */
 export async function addPrayer(userName, content) {
+    if (!db) return;
     try {
         await addDoc(collection(db, "prayers"), {
             userName: userName || "Anonymous",
@@ -111,20 +103,21 @@ export async function addPrayer(userName, content) {
             amenCount: 0,
             createdAt: serverTimestamp()
         });
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error("Add Prayer Error:", e); }
 }
 
 export async function incrementReadingCount(countryCode) {
-    if (!countryCode) return;
+    if (!db || !countryCode) return;
     const statsRef = doc(db, "statistics", countryCode.toUpperCase());
     try {
         await setDoc(statsRef, { 
             readCount: increment(1),
             lastUpdated: serverTimestamp()
         }, { merge: true });
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error("Stats Error:", e); }
 }
 
-// Global Exports
-window.updateDailyStreak = updateDailyStreak;
+// Global Exports for main.js compatibility
+window.updateStreak = updateDailyStreak;
 window.StatsService = { incrementReadingCount };
+window.PrayerNetwork = { addPrayer };

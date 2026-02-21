@@ -1,25 +1,38 @@
-// dailybible.uk - App Logic
+// dailybible.uk - App Logic (Stabilized Version)
 
-// 1. 언어 설정 초기화 (Gemini 조언 적용)
+// 1. 전역 에러 핸들러 (안정성 강화)
+window.addEventListener('unhandledrejection', event => {
+    console.warn('Unhandled promise rejection:', event.reason);
+});
+
+// 2. 언어 설정 초기화
 let currentLang = localStorage.getItem('user-lang') || 
                   (navigator.language.startsWith('ko') ? 'ko' : 'en');
 
 document.addEventListener('DOMContentLoaded', () => {
-    // UI 로딩 화면 처리
+    // UI 로딩 화면 처리 (안전 타임아웃 포함)
     const loader = document.getElementById('main-loader');
-    if (loader) {
-        setTimeout(() => {
+    const appContent = document.getElementById('app-content');
+    
+    const hideLoader = () => {
+        if (loader && loader.style.display !== 'none') {
             loader.style.opacity = '0';
             setTimeout(() => {
                 loader.style.display = 'none';
-                const appContent = document.getElementById('app-content');
                 if (appContent) appContent.style.display = 'block';
             }, 500);
-        }, 1000);
+        }
+    };
+
+    if (loader) {
+        // 정상 로딩 (1초 후)
+        setTimeout(hideLoader, 1000);
+        // 비정상 로딩 대비 안전 장치 (5초 후 강제 실행)
+        setTimeout(hideLoader, 5000);
     }
 
     // 기본 언어 적용
-    window.applyLanguage(currentLang);
+    if (window.applyLanguage) window.applyLanguage(currentLang);
     
     // 테마 설정
     if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
@@ -27,31 +40,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // 일일 콘텐츠 로드
     loadDailyContent();
     
-    // Firebase 데이터 동기화 감시 및 스트릭 업데이트
+    // Firebase 데이터 동기화 감시 및 스트릭 업데이트 (안전한 인터벌 처리)
+    let checkAttempts = 0;
     const checkReady = setInterval(async () => {
+        checkAttempts++;
         if (window.db) {
             clearInterval(checkReady);
             watchGlobalPrayer();
             
-            // 스트릭 업데이트 및 표시
+            // 스트릭 업데이트 및 표시 (app-features.js의 로직과 연동)
             try {
-                const count = await window.updateStreak();
-                const container = document.getElementById('streak-container');
-                const countEl = document.getElementById('streak-count');
-                if (container && countEl && count > 0) {
-                    countEl.textContent = count;
-                    container.style.display = 'inline-flex';
+                if (window.updateStreak) {
+                    const count = await window.updateStreak();
+                    const container = document.getElementById('streak-container');
+                    const countEl = document.getElementById('streak-count') || document.getElementById('streak-counter');
+                    if (countEl && count > 0) {
+                        countEl.textContent = count.toString().includes('🔥') ? count : `🔥 ${count}일 연속 동행`;
+                        if (container) container.style.display = 'inline-flex';
+                    }
                 }
-            } catch (e) { console.error("Streak sync failed"); }
+            } catch (e) { console.error("Streak sync failed:", e); }
         }
+        
+        // 20번 시도(10초) 후에도 DB가 없으면 중단
+        if (checkAttempts > 20) clearInterval(checkReady);
     }, 500);
 
-    // 기도 버튼 이벤트 바인딩 (갤럭시 & 아이폰 통합 최적화)
+    // 기도 버튼 이벤트 바인딩 (안전 검사 강화)
     const prayerBtn = document.getElementById('prayer-btn');
     if (prayerBtn) {
-        // 데스크탑/아이폰 클릭
         prayerBtn.onclick = handleJoinPrayer;
-        // 갤럭시 터치 (click보다 먼저 반응)
         prayerBtn.addEventListener('touchend', (e) => {
             if (prayerBtn.disabled) return;
             handleJoinPrayer(e);
@@ -59,12 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Disqus 초기화
-    initDisqus();
+    if (document.getElementById('disqus_thread')) initDisqus();
 });
 
 // 자정이 지날 경우를 대비해 1시간마다 자동 갱신 체크
 setInterval(() => {
-    console.log("Checking for daily content update...");
     loadDailyContent();
 }, 1000 * 60 * 60);
 
@@ -81,12 +98,13 @@ window.applyLanguage = function(lang) {
 
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        const translatedText = window.translate(key, lang);
-        
-        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-            el.placeholder = translatedText;
-        } else {
-            el.textContent = translatedText;
+        if (window.translate) {
+            const translatedText = window.translate(key, lang);
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.placeholder = translatedText;
+            } else {
+                el.textContent = translatedText;
+            }
         }
     });
 
@@ -94,17 +112,12 @@ window.applyLanguage = function(lang) {
 };
 
 /**
- * 일일 콘텐츠 로드 (한글+영어 통합 출력 - 정밀 보정 버전)
+ * 일일 콘텐츠 로드 (방어적 프로그래밍 적용)
  */
 async function loadDailyContent() {
-    // 1. 오늘 날짜를 'YYYY-MM-DD' 형식으로 생성
     const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, '0');
-    const d = String(now.getDate()).padStart(2, '0');
-    const todayId = `${y}-${m}-${d}`; 
+    const todayId = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`; 
 
-    // 2. UI 요소 참조
     const elements = { 
         word: document.getElementById('today-word'), 
         ref: document.getElementById('today-ref'), 
@@ -112,260 +125,151 @@ async function loadDailyContent() {
         mission: document.getElementById('today-mission') 
     };
 
-    const cardElements = {
-        date: document.getElementById('card-date'),
-        word: document.getElementById('card-word'),
-        ref: document.getElementById('card-ref')
-    };
-
     if (!elements.word) return;
 
     let success = false;
 
-    // 3. Firestore에서 오늘 날짜 문서 가져오기
     if (window.db) {
         try {
-            const docRef = window.db.collection("daily_content").doc(todayId);
-            const docSnap = await docRef.get();
+            // v8 compat와 v9 혼용 대응 (안전하게 체크)
+            const docRef = typeof window.db.collection === 'function' 
+                ? window.db.collection("daily_content").doc(todayId)
+                : null;
 
-            if (docSnap.exists) {
-                const data = docSnap.data();
-                
-                // 데이터 매핑 (필드명이 정확해야 함: word, ref, prayer, mission)
-                const wordKo = data.word?.ko || "";
-                const wordEn = data.word?.en || "";
-                const refKo = data.ref?.ko || "";
-                const refEn = data.ref?.en || "";
-                const prayerKo = data.prayer?.ko || "";
-                const prayerEn = data.prayer?.en || "";
-                const missionKo = data.mission?.ko || "";
-                const missionEn = data.mission?.en || "";
-
-                // 화면 업데이트 (비어있지 않을 때만 업데이트하여 'Loading' 제거)
-                if (wordKo || wordEn) {
-                    elements.word.innerHTML = `${wordKo}<br><small style="color:gray; font-style:italic;">${wordEn}</small>`;
+            if (docRef) {
+                const docSnap = await docRef.get();
+                if (docSnap.exists) {
+                    const data = docSnap.data();
+                    const wordKo = data.word?.ko || "";
+                    const wordEn = data.word?.en || "";
+                    
+                    if (wordKo || wordEn) {
+                        elements.word.innerHTML = `${wordKo}<br><small style="color:gray; font-style:italic;">${wordEn}</small>`;
+                        if (elements.ref) elements.ref.innerHTML = data.ref?.ko || data.ref?.en || "";
+                        if (elements.prayer) elements.prayer.innerHTML = `${data.prayer?.ko || ""}<br><small style="color:gray;">${data.prayer?.en || ""}</small>`;
+                        if (elements.mission) elements.mission.innerHTML = `${data.mission?.ko || ""}<br><small style="color:gray;">${data.mission?.en || ""}</small>`;
+                        success = true;
+                    }
                 }
-                if (elements.ref && (refKo || refEn)) {
-                    elements.ref.innerHTML = refKo && refEn ? `${refKo} / ${refEn}` : (refKo || refEn);
-                }
-                if (prayerKo || prayerEn) {
-                    elements.prayer.innerHTML = `${prayerKo}<br><small style="color:gray;">${prayerEn}</small>`;
-                }
-                if (missionKo || missionEn) {
-                    elements.mission.innerHTML = `${missionKo}<br><small style="color:gray;">${missionEn}</small>`;
-                }
-
-                // 말씀 카드 동기화 (이미지 저장용)
-                if (cardElements.word) {
-                    cardElements.date.textContent = todayId.replace(/-/g, '.');
-                    cardElements.word.innerHTML = `"${wordKo}"<br><span style="font-size:0.8em; opacity:0.8;">"${wordEn}"</span>`;
-                    cardElements.ref.innerHTML = `- ${refKo || refEn} -`;
-                }
-                
-                console.log("✅ Bilingual content fully loaded for", todayId);
-                success = true;
-            } else {
-                console.warn("⚠️ Firestore Document NOT FOUND for:", todayId);
             }
         } catch (error) {
-            console.error("❌ Firestore fetch error:", error);
+            console.error("Firestore fetch error:", error);
         }
     }
 
-    // 4. 폴백 (데이터 로드 실패 시 'Loading'을 기본값으로 교체)
     if (!success) {
+        // 로컬 폴백 (네트워크 에러 시)
         const fallback = {
             word: { ko: "내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라", en: "I can do all things through Christ who strengthens me." },
-            ref: { ko: "빌립보서 4:13", en: "Philippians 4:13" },
-            prayer: { ko: "주님, 오늘 하루도 당신의 인도하심을 신뢰하게 하소서.", en: "Lord, help me trust Your guidance today." },
-            mission: { ko: "지친 동료나 친구에게 격려의 메시지 보내기", en: "Send an encouraging message to a friend." }
+            ref: { ko: "빌립보서 4:13", en: "Philippians 4:13" }
         };
-
         elements.word.innerHTML = `${fallback.word.ko}<br><small style="color:gray;">${fallback.word.en}</small>`;
         if (elements.ref) elements.ref.innerHTML = `${fallback.ref.ko} / ${fallback.ref.en}`;
-        elements.prayer.innerHTML = `${fallback.prayer.ko}<br><small style="color:gray;">${fallback.prayer.en}</small>`;
-        elements.mission.innerHTML = `${fallback.mission.ko}<br><small style="color:gray;">${fallback.mission.en}</small>`;
-        
-        console.log("ℹ️ Fallback content applied.");
     }
 }
 
 /**
- * 오늘의 말씀 카드 다운로드 (html2canvas)
+ * 오늘의 말씀 카드 다운로드
  */
 window.downloadVerseCard = function(event) {
     const card = document.getElementById('wordCard');
-    if (!card) return;
+    if (!card || typeof html2canvas !== 'function') return;
 
-    // 이벤트 객체에서 버튼 요소 가져오기
     const btn = event ? event.currentTarget : null;
-    let originalText = "";
+    let originalText = btn ? btn.innerHTML : "";
     
     if (btn) {
-        originalText = btn.innerHTML;
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
     }
 
-    html2canvas(card, {
-        useCORS: true,
-        allowTaint: false,
-        scale: 2, // 고해상도 출력
-        backgroundColor: '#000000'
-    }).then(canvas => {
-        const now = new Date();
-        const dateKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-        const fileName = `DailyBible-${dateKey}.jpg`;
-
-        // 모바일 공유 API 지원 여부 확인
+    html2canvas(card, { useCORS: true, scale: 2, backgroundColor: '#000000' }).then(canvas => {
+        const fileName = `DailyBible-${new Date().toISOString().split('T')[0]}.jpg`;
         if (navigator.share && navigator.canShare) {
             canvas.toBlob(blob => {
                 const file = new File([blob], fileName, { type: 'image/jpeg' });
-                if (navigator.canShare({ files: [file] })) {
-                    navigator.share({
-                        files: [file],
-                        title: 'Daily Bible Word',
-                        text: 'Sharing today\'s grace with you.'
-                    }).catch(err => {
-                        console.error("Share failed, falling back to download:", err);
-                        saveFallback(canvas, fileName);
-                    });
-                } else {
-                    saveFallback(canvas, fileName);
-                }
+                navigator.share({ files: [file], title: 'Daily Bible' }).catch(() => saveFallback(canvas, fileName));
             }, 'image/jpeg', 0.9);
         } else {
             saveFallback(canvas, fileName);
         }
-
+    }).finally(() => {
         if (btn) {
             btn.disabled = false;
             btn.innerHTML = originalText;
         }
-    }).catch(err => {
-        console.error("Canvas generation failed:", err);
-        if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = originalText;
-        }
-        alert("Failed to generate image. Please try again.");
     });
 };
 
 function saveFallback(canvas, fileName) {
-    const imageData = canvas.toDataURL("image/jpeg", 0.9);
     const link = document.createElement('a');
-    link.href = imageData;
+    link.href = canvas.toDataURL("image/jpeg", 0.9);
     link.download = fileName;
-    document.body.appendChild(link); // 일부 브라우저 호환성을 위해 추가
     link.click();
-    document.body.removeChild(link);
 }
 
 /**
- * 실시간 기도 카운터 감시 (전체 및 오늘 날짜별)
+ * 실시간 기도 카운터 감시 (안전 검사 포함)
  */
 function watchGlobalPrayer() {
-    if (!window.db) return;
+    if (!window.db || typeof window.db.collection !== 'function') return;
 
-    // 1. 전체 누적 카운트 감시
-    window.db.collection("stats").doc("prayer-chain").onSnapshot(doc => {
-        if (doc.exists) {
+    try {
+        window.db.collection("stats").doc("prayer-chain").onSnapshot(doc => {
             const counter = document.getElementById('prayer-counter');
-            if (counter) {
-                const total = doc.data().totalPrayers || 0;
-                counter.textContent = total.toLocaleString();
+            if (counter && doc.exists) {
+                counter.textContent = (doc.data().totalPrayers || 0).toLocaleString();
             }
-        }
-    }, err => console.error("Global Snapshot error:", err));
-
-    // 2. 오늘 참여자 카운트 감시 (범용 날짜 형식 사용)
-    const now = new Date();
-    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    
-    window.db.collection("prayer_stats").doc(todayStr).onSnapshot(doc => {
-        const todayCounter = document.getElementById('prayer-count-display');
-        if (todayCounter) {
-            const count = doc.exists ? (doc.data().count || 0) : 0;
-            todayCounter.textContent = count.toLocaleString();
-        }
-    }, err => console.error("Today Snapshot error:", err));
+        }, err => console.warn("Prayer count sync paused."));
+    } catch (e) { console.error("Snapshot error:", e); }
 }
 
 /**
- * 글로벌 기도 참여 로직 (갤럭시 & 아이폰 통합 최적화)
+ * 글로벌 기도 참여 로직
  */
 async function handleJoinPrayer(event) {
-    // 갤럭시/아이폰 기본 동작 및 버블링 방지
-    if (event) {
-        if (event.cancelable) event.preventDefault();
-        event.stopPropagation();
-    }
+    if (event && event.cancelable) event.preventDefault();
 
-    if (!window.db) return;
+    if (!window.db || typeof window.db.batch !== 'function') return;
     
     const prayerBtn = document.getElementById('prayer-btn');
     if (!prayerBtn || prayerBtn.disabled) return;
 
-    // 범용 날짜 형식
-    const now = new Date();
-    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    
-    const globalRef = window.db.collection("stats").doc("prayer-chain");
-    const todayRef = window.db.collection("prayer_stats").doc(todayStr);
-
-    // 버튼 시각적 피드백
+    const todayStr = new Date().toISOString().split('T')[0];
     const originalContent = prayerBtn.innerHTML;
     prayerBtn.disabled = true;
-    prayerBtn.style.opacity = "0.6";
     
-    const processingText = currentLang === 'ko' ? "참여 중..." : "Joining...";
-    const btnSpan = prayerBtn.querySelector('span[data-i18n]');
-    if (btnSpan) btnSpan.innerText = processingText;
-
     try {
-        // Firestore Batch 사용 (원자적 업데이트)
         const batch = window.db.batch();
+        const globalRef = window.db.collection("stats").doc("prayer-chain");
+        const todayRef = window.db.collection("prayer_stats").doc(todayStr);
+
         batch.set(globalRef, { totalPrayers: firebase.firestore.FieldValue.increment(1) }, { merge: true });
         batch.set(todayRef, { count: firebase.firestore.FieldValue.increment(1) }, { merge: true });
 
         await batch.commit();
-
-        // 게시판으로 부드럽게 이동
         const board = document.getElementById("prayer-board");
         if (board) board.scrollIntoView({ behavior: 'smooth' });
-
     } catch (error) {
-        console.error("Prayer batch update failed:", error);
+        console.error("Prayer failed:", error);
     } finally {
-        // 1.5초 후 버튼 복구 (갤럭시 지연 대응)
         setTimeout(() => {
             if (prayerBtn) {
                 prayerBtn.disabled = false;
-                prayerBtn.style.opacity = "1";
-                prayerBtn.style.cursor = "pointer";
                 prayerBtn.innerHTML = originalContent;
-                if (window.applyLanguage) window.applyLanguage(currentLang);
             }
         }, 1500);
     }
 }
 
-// 전역 스코프 노출 (갤럭시 브라우저 대응)
-window.joinPrayer = handleJoinPrayer;
-
-/**
- * Disqus 익명 게시판 초기화
- */
 function initDisqus() {
+    if (window.DISQUS) return;
     const d = document, s = d.createElement('script');
     s.src = 'https://bible-sound2.disqus.com/embed.js';
     s.setAttribute('data-timestamp', +new Date());
     (d.head || d.body).appendChild(s);
 }
 
-// 헬퍼 함수
 window.getVerseByMood = function(mood) { 
-    const msg = window.translate('loading');
-    alert(`${mood}: ${msg}`); 
+    if (window.translate) alert(`${mood}: ${window.translate('loading')}`); 
 };

@@ -1,6 +1,9 @@
-// firebase-firestore-service.js (Enhanced with Streak)
+// firebase-firestore-service.js (Stabilized Service Layer)
 import { db } from './firebase-config.js';
 
+/**
+ * 1. Site Infrastructure Manager
+ */
 window.SiteManager = {
     isReady: false,
     startApp: function() {
@@ -11,6 +14,7 @@ window.SiteManager = {
         const content = document.getElementById('app-content');
         
         if (loader) {
+            loader.style.transition = 'opacity 0.5s';
             loader.style.opacity = '0';
             setTimeout(() => {
                 loader.style.display = 'none';
@@ -22,61 +26,32 @@ window.SiteManager = {
     }
 };
 
-setTimeout(() => window.SiteManager.startApp(), 3000);
-
-// Global db mapping for compatibility
+// Global DB mapping for legacy compatibility
 window.db = db;
-window.SiteManager.startApp();
+
+// Safety initialization
+if (document.readyState === 'complete') {
+    window.SiteManager.startApp();
+} else {
+    window.addEventListener('load', () => window.SiteManager.startApp());
+}
 
 /**
- * 스트릭 업데이트 함수 (Gemini 조언 기반)
+ * 2. Specialized Faith Checkup Services
  */
-window.updateStreak = async function() {
-    // 1. 사용자 고유 ID (없으면 생성)
-    let uid = localStorage.getItem('user_uid');
-    if (!uid) {
-        uid = 'guest_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('user_uid', uid);
-    }
-
-    if (!window.db) return 0;
-
-    const userRef = window.db.collection("users").doc(uid);
-    const today = new Date();
-    const todayStr = today.toISOString().split('T')[0];
-    
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().split('T')[0];
-
+export async function getRecentFaithCheckups() {
+    if (!db) return [];
     try {
-        const doc = await userRef.get();
-        let currentStreak = 0;
-
-        if (doc.exists) {
-            const data = doc.data();
-            const lastLoginDate = data.lastLoginDate;
-            currentStreak = data.streakCount || 0;
-
-            if (lastLoginDate === todayStr) {
-                // 이미 오늘 체크인함
-            } else if (lastLoginDate === yesterdayStr) {
-                // 연속 출석 성공
-                currentStreak += 1;
-                await userRef.update({ streakCount: currentStreak, lastLoginDate: todayStr });
-            } else {
-                // 하루 이상 건너뜀
-                currentStreak = 1;
-                await userRef.update({ streakCount: currentStreak, lastLoginDate: todayStr });
-            }
-        } else {
-            // 신규 유저
-            currentStreak = 1;
-            await userRef.set({ streakCount: 1, lastLoginDate: todayStr, createdAt: todayStr });
-        }
-        return currentStreak;
+        // v9 modular 방식으로 데이터 조회
+        const { collection, query, orderBy, limit, getDocs } = await import("https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js");
+        const q = query(collection(db, "faith_checkups"), orderBy("timestamp", "desc"), limit(50));
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     } catch (e) {
-        console.error("Streak Update Error:", e);
-        return 0;
+        console.error("Faith Checkup Service Error:", e);
+        return [];
     }
-};
+}
+
+// Global expose
+window.getRecentFaithCheckups = getRecentFaithCheckups;
