@@ -4,7 +4,7 @@ import {
     getFirestore, collection, addDoc, getDocs, query, orderBy, limit, 
     updateDoc, increment, doc, serverTimestamp, setDoc, getDoc
 } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
 // Firebase Config
 const firebaseConfig = {
@@ -25,7 +25,6 @@ const auth = getAuth(app);
  * 🔥 Streak (연속 동행) Logic
  */
 
-// 날짜 유틸리티
 const getDateStr = (date) => date.toISOString().split('T')[0];
 const getTodayStr = () => getDateStr(new Date());
 const getYesterdayStr = () => {
@@ -41,41 +40,39 @@ export async function updateDailyStreak(userId) {
     const today = getTodayStr();
     const yesterday = getYesterdayStr();
     const streakEl = document.getElementById('streak-counter');
-    const container = document.getElementById('streak-container');
 
     try {
         const userDoc = await getDoc(userRef);
-        let streakCount = 0;
-        let lastVisitDate = "";
+        let streak = 0;
 
         if (userDoc.exists()) {
             const data = userDoc.data();
-            streakCount = data.streakCount || 0;
-            lastVisitDate = data.lastVisitDate || "";
+            const lastVisitDate = data.lastVisitDate || "";
+            streak = data.streakCount || 0;
 
             if (lastVisitDate === today) {
-                // 조건 A: 오늘 이미 방문함 -> 업데이트 없이 표시만 함 (비용 절약)
-                console.log("Streak: Already checked in today.");
+                // 오늘 이미 방문함 (기존 데이터 유지)
+                console.log("Streak: Already updated today.");
             } else if (lastVisitDate === yesterday) {
-                // 조건 B: 어제 방문함 -> 연속 기록 +1
-                streakCount += 1;
+                // 어제 방문함 (연속 성공)
+                streak += 1;
                 await updateDoc(userRef, {
-                    streakCount: streakCount,
+                    streakCount: streak,
                     lastVisitDate: today
                 });
-                console.log("Streak: Continued! New count:", streakCount);
+                console.log("Streak: Increased! Current:", streak);
             } else {
-                // 조건 C: 기록이 끊김 -> 1로 초기화
-                streakCount = 1;
+                // 연속이 끊김 (초기화)
+                streak = 1;
                 await updateDoc(userRef, {
-                    streakCount: streakCount,
+                    streakCount: streak,
                     lastVisitDate: today
                 });
                 console.log("Streak: Reset to 1.");
             }
         } else {
-            // 신규 사용자
-            streakCount = 1;
+            // 첫 방문 (문서 생성)
+            streak = 1;
             await setDoc(userRef, {
                 streakCount: 1,
                 lastVisitDate: today,
@@ -84,27 +81,25 @@ export async function updateDailyStreak(userId) {
             console.log("Streak: New user initialized.");
         }
 
-        // UI 업데이트
+        // 안전한 UI 업데이트
         if (streakEl) {
-            streakEl.textContent = `🔥 ${streakCount}일 연속 동행`;
-            if (container) container.style.display = 'inline-flex';
+            streakEl.innerText = `🔥 ${streak}일 연속 동행`;
         }
 
     } catch (e) {
         console.error("Streak Update Error:", e);
+        if (streakEl) streakEl.innerText = "🔥 동행 기록 확인 중...";
     }
 }
 
-// Auth 상태 관찰자 설정
+// Auth 상태 관찰 및 익명 로그인
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        console.log("User authenticated:", user.uid);
+        console.log("Authenticated User UID:", user.uid);
         updateDailyStreak(user.uid);
     } else {
-        console.log("User not logged in.");
-        // 익명 사용자 처리 (필요시)
-        const container = document.getElementById('streak-container');
-        if (container) container.style.display = 'none';
+        console.log("No user found. Signing in anonymously...");
+        signInAnonymously(auth).catch(err => console.error("Anonymous Sign-in Error:", err));
     }
 });
 
@@ -128,26 +123,25 @@ export async function addPrayer(userName, content) {
     }
 }
 
-// Fetch latest 20 prayers (Optimized for Spark Plan)
+// Fetch latest 20 prayers
 export async function getLatestPrayers() {
-    const q = query(collection(db, "prayers"), orderBy("createdAt", "desc"), limit(20));
-    const querySnapshot = await getDocs(q);
-    const prayers = [];
-    querySnapshot.forEach((doc) => {
-        prayers.push({ id: doc.id, ...doc.data() });
-    });
-    return prayers;
+    try {
+        const q = query(collection(db, "prayers"), orderBy("createdAt", "desc"), limit(20));
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    } catch (e) {
+        console.error("Error fetching prayers:", e);
+        return [];
+    }
 }
 
 // Increment Amen count
 export async function incrementAmen(prayerId) {
     const prayerRef = doc(db, "prayers", prayerId);
     try {
-        await updateDoc(prayerRef, {
-            amenCount: increment(1)
-        });
+        await updateDoc(prayerRef, { amenCount: increment(1) });
     } catch (e) {
-        console.error("Error updating amen count: ", e);
+        console.error("Error updating amen count:", e);
     }
 }
 
@@ -162,7 +156,6 @@ function updateDailyRoutine() {
     let message = "";
     let subMessage = "";
 
-    // Time ranges: Morning (05-12), Evening (20-05)
     if (hour >= 5 && hour < 12) {
         message = "🌅 Good Morning! Start your day with the Word.";
         subMessage = "오늘의 말씀을 묵상하며 은혜로운 아침을 시작하세요.";
@@ -191,18 +184,17 @@ export async function incrementReadingCount(countryCode) {
             readCount: increment(1),
             lastUpdated: serverTimestamp()
         }, { merge: true });
-        console.log(`Reading count incremented for ${countryCode}`);
     } catch (e) {
-        console.error("Error incrementing reading count: ", e);
+        console.error("Error incrementing reading count:", e);
     }
 }
 
-// Expose to window for access from other scripts or inline events
+// Expose to window
 window.PrayerNetwork = { addPrayer, getLatestPrayers, incrementAmen };
 window.StatsService = { incrementReadingCount };
 window.updateDailyStreak = updateDailyStreak;
 
-// Initialize Routine on load
+// Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
     updateDailyRoutine();
 });
