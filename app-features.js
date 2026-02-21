@@ -1,5 +1,4 @@
-alert("1. 자바스크립트 로딩 성공!");
-// app-features.js - Global Prayer Network, Daily Routine, Stats, and Streak (Firebase v9 Modular)
+// app-features.js - Final Robust Version for Mobile Compatibility
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { 
     getFirestore, collection, addDoc, getDocs, query, orderBy, limit, 
@@ -7,7 +6,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
-// Firebase Config
+// 1. Firebase Configuration
 const firebaseConfig = {
     apiKey: "YOUR_REAL_API_KEY_HERE",
     authDomain: "dailybible-uk.firebaseapp.com",
@@ -17,170 +16,119 @@ const firebaseConfig = {
     appId: "1:813854124317:web:8662908a8a6be7b8c8d8e8"
 };
 
-// Initialize Firebase v9 Modular
+// 2. Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app, "main");
 const auth = getAuth(app);
-alert("2. 파이어베이스 초기화 완료!");
 
 /**
- * 🔥 Streak (연속 동행) Logic
+ * 3. Helper: Date Formatter (Local Time YYYY-MM-DD)
  */
-
-const getDateStr = (date) => date.toISOString().split('T')[0];
-const getTodayStr = () => getDateStr(new Date());
-const getYesterdayStr = () => {
-    const d = new Date();
-    d.setDate(d.getDate() - 1);
-    return getDateStr(d);
+const getLocalDateString = (date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
 };
 
+/**
+ * 4. Main Streak Logic
+ */
 export async function updateDailyStreak(userId) {
     if (!userId) return;
 
-    const userRef = doc(db, "users", userId);
-    const today = getTodayStr();
-    const yesterday = getYesterdayStr();
     const streakEl = document.getElementById('streak-counter');
+    const userRef = doc(db, "users", userId);
+    
+    // Calculate Today and Yesterday in Local Time
+    const now = new Date();
+    const todayStr = getLocalDateString(now);
+    
+    const yesterday = new Date();
+    yesterday.setDate(now.getDate() - 1);
+    const yesterdayStr = getLocalDateString(yesterday);
 
     try {
         const userDoc = await getDoc(userRef);
-        let streak = 0;
+        let finalStreak = 0;
 
         if (userDoc.exists()) {
             const data = userDoc.data();
-            const lastVisitDate = data.lastVisitDate || "";
-            streak = data.streakCount || 0;
+            const lastVisit = data.lastVisitDate || "";
+            const currentCount = data.streakCount || 0;
 
-            if (lastVisitDate === today) {
-                // 오늘 이미 방문함 (기존 데이터 유지)
-                console.log("Streak: Already updated today.");
-            } else if (lastVisitDate === yesterday) {
-                // 어제 방문함 (연속 성공)
-                streak += 1;
+            if (lastVisit === todayStr) {
+                // Already visited today
+                finalStreak = currentCount;
+            } else if (lastVisit === yesterdayStr) {
+                // Continuous visit
+                finalStreak = currentCount + 1;
                 await updateDoc(userRef, {
-                    streakCount: streak,
-                    lastVisitDate: today
+                    streakCount: finalStreak,
+                    lastVisitDate: todayStr
                 });
-                console.log("Streak: Increased! Current:", streak);
             } else {
-                // 연속이 끊김 (초기화)
-                streak = 1;
+                // Streak broken or first visit in a long time
+                finalStreak = 1;
                 await updateDoc(userRef, {
-                    streakCount: streak,
-                    lastVisitDate: today
+                    streakCount: 1,
+                    lastVisitDate: todayStr
                 });
-                console.log("Streak: Reset to 1.");
             }
         } else {
-            // 첫 방문 (문서 생성)
-            streak = 1;
+            // First time user
+            finalStreak = 1;
             await setDoc(userRef, {
                 streakCount: 1,
-                lastVisitDate: today,
+                lastVisitDate: todayStr,
                 createdAt: serverTimestamp()
             });
-            console.log("Streak: New user initialized.");
         }
 
-        // 안전한 UI 업데이트
+        // UI Update
         if (streakEl) {
-            streakEl.innerText = `🔥 ${streak}일 연속 동행`;
+            streakEl.innerText = `🔥 ${finalStreak}일 연속 동행`;
         }
 
-    } catch (e) {
-        console.error("오류 발생: ", e);
+    } catch (error) {
+        console.error("Firestore Streak Error:", error);
         if (streakEl) {
-            streakEl.innerText = "에러: " + e.message;
+            streakEl.innerText = "에러: " + error.message;
         }
     }
 }
 
-// Auth 상태 관찰 및 익명 로그인
+/**
+ * 5. Auth Listener & Anonymous Login
+ */
 onAuthStateChanged(auth, (user) => {
-    alert("3. 사용자 인증 확인 중...");
     if (user) {
-        console.log("Authenticated User UID:", user.uid);
+        console.log("User Authenticated:", user.uid);
         updateDailyStreak(user.uid);
     } else {
-        console.log("No user found. Signing in anonymously...");
-        signInAnonymously(auth).catch(err => console.error("Anonymous Sign-in Error:", err));
+        console.log("Starting Anonymous Auth...");
+        signInAnonymously(auth).catch(err => {
+            console.error("Auth Error:", err);
+            const streakEl = document.getElementById('streak-counter');
+            if (streakEl) streakEl.innerText = "인증 에러: " + err.message;
+        });
     }
 });
 
 /**
- * 1. Global Prayer Network
+ * 6. Additional Features (Prayer, Stats)
  */
-
-// Add a new prayer
 export async function addPrayer(userName, content) {
     try {
-        const docRef = await addDoc(collection(db, "prayers"), {
+        await addDoc(collection(db, "prayers"), {
             userName: userName || "Anonymous",
             content: content,
             amenCount: 0,
             createdAt: serverTimestamp()
         });
-        console.log("Prayer added with ID: ", docRef.id);
-        return docRef.id;
-    } catch (e) {
-        console.error("Error adding prayer: ", e);
-    }
+    } catch (e) { console.error(e); }
 }
 
-// Fetch latest 20 prayers
-export async function getLatestPrayers() {
-    try {
-        const q = query(collection(db, "prayers"), orderBy("createdAt", "desc"), limit(20));
-        const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    } catch (e) {
-        console.error("Error fetching prayers:", e);
-        return [];
-    }
-}
-
-// Increment Amen count
-export async function incrementAmen(prayerId) {
-    const prayerRef = doc(db, "prayers", prayerId);
-    try {
-        await updateDoc(prayerRef, { amenCount: increment(1) });
-    } catch (e) {
-        console.error("Error updating amen count:", e);
-    }
-}
-
-/**
- * 2. Client-side Time-based Daily Routine
- */
-function updateDailyRoutine() {
-    const dailyContentDiv = document.getElementById('daily-content');
-    if (!dailyContentDiv) return;
-
-    const hour = new Date().getHours();
-    let message = "";
-    let subMessage = "";
-
-    if (hour >= 5 && hour < 12) {
-        message = "🌅 Good Morning! Start your day with the Word.";
-        subMessage = "오늘의 말씀을 묵상하며 은혜로운 아침을 시작하세요.";
-    } else if (hour >= 20 || hour < 5) {
-        message = "🌙 Good Night. End your day in Prayer.";
-        subMessage = "오늘 하루를 기도로 마무리하며 평안한 밤 되세요.";
-    } else {
-        message = "✨ Peace be with you throughout the day.";
-        subMessage = "일상의 모든 순간에 주님의 평강이 가득하시길 소망합니다.";
-    }
-
-    dailyContentDiv.innerHTML = `
-        <div style="font-weight: bold;">${message}</div>
-        <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">${subMessage}</div>
-    `;
-}
-
-/**
- * 3. Country-wise Bible Reading Counter
- */
 export async function incrementReadingCount(countryCode) {
     if (!countryCode) return;
     const statsRef = doc(db, "statistics", countryCode.toUpperCase());
@@ -189,17 +137,9 @@ export async function incrementReadingCount(countryCode) {
             readCount: increment(1),
             lastUpdated: serverTimestamp()
         }, { merge: true });
-    } catch (e) {
-        console.error("Error incrementing reading count:", e);
-    }
+    } catch (e) { console.error(e); }
 }
 
-// Expose to window
-window.PrayerNetwork = { addPrayer, getLatestPrayers, incrementAmen };
-window.StatsService = { incrementReadingCount };
+// Global Exports
 window.updateDailyStreak = updateDailyStreak;
-
-// Initialize on load
-document.addEventListener('DOMContentLoaded', () => {
-    updateDailyRoutine();
-});
+window.StatsService = { incrementReadingCount };
