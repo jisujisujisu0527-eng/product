@@ -16,6 +16,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="site_logo">British Daily Bible</title>
     
+    <!-- PWA Settings -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Daily Bible">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    <meta name="theme-color" content="#B08968">
+
     <link rel="canonical" href="https://dailybible.uk">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -125,6 +133,12 @@
                         <button onclick="getVerseByMood('grateful')" class="mood-btn">🙏 Grateful</button>
                         <button onclick="getVerseByMood('joyful')" class="mood-btn">✨ Joyful</button>
                     </div>
+
+                    <!-- Daily Routine Content (Added) -->
+                    <div id="daily-content" style="margin: 20px 0; padding: 20px; background: #fdf5e6; border-radius: 10px; font-family: 'EB Garamond', serif; font-size: 1.2rem; color: #5d4037; border-left: 5px solid #b08968;">
+                        Loading daily routine...
+                    </div>
+
                     <div class="bible-app grid-3">
                         <div class="card"><h3 data-i18n="daily_bible">📜 오늘의 말씀</h3><p id="today-word">Loading...</p><small id="today-ref"></small></div>
                         <div class="card"><h3 data-i18n="daily_prayer">🙏 오늘의 기도</h3><p id="today-prayer">Loading...</p></div>
@@ -150,5 +164,17 @@
     <script src="translations.js"></script>
     <script src="firebase-firestore-service.js" defer></script>
     <script src="main.js" defer></script>
+
+    <!-- PWA & New Features (Modular) -->
+    <script type="module" src="app-features.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(reg => console.log('Service Worker registered!'))
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }
+    </script>
 </body>
 </html>
