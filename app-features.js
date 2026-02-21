@@ -1,11 +1,12 @@
-// app-features.js - Global Prayer Network, Daily Routine, and Stats (Firebase v9 Modular)
+// app-features.js - Global Prayer Network, Daily Routine, Stats, and Streak (Firebase v9 Modular)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { 
     getFirestore, collection, addDoc, getDocs, query, orderBy, limit, 
-    updateDoc, increment, doc, serverTimestamp 
+    updateDoc, increment, doc, serverTimestamp, setDoc, getDoc
 } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
-// Firebase Config (Should match existing config)
+// Firebase Config
 const firebaseConfig = {
     apiKey: "YOUR_REAL_API_KEY_HERE",
     authDomain: "dailybible-uk.firebaseapp.com",
@@ -18,6 +19,94 @@ const firebaseConfig = {
 // Initialize Firebase v9 Modular
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+
+/**
+ * 🔥 Streak (연속 동행) Logic
+ */
+
+// 날짜 유틸리티
+const getDateStr = (date) => date.toISOString().split('T')[0];
+const getTodayStr = () => getDateStr(new Date());
+const getYesterdayStr = () => {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    return getDateStr(d);
+};
+
+export async function updateDailyStreak(userId) {
+    if (!userId) return;
+
+    const userRef = doc(db, "users", userId);
+    const today = getTodayStr();
+    const yesterday = getYesterdayStr();
+    const streakEl = document.getElementById('streak-counter');
+    const container = document.getElementById('streak-container');
+
+    try {
+        const userDoc = await getDoc(userRef);
+        let streakCount = 0;
+        let lastVisitDate = "";
+
+        if (userDoc.exists()) {
+            const data = userDoc.data();
+            streakCount = data.streakCount || 0;
+            lastVisitDate = data.lastVisitDate || "";
+
+            if (lastVisitDate === today) {
+                // 조건 A: 오늘 이미 방문함 -> 업데이트 없이 표시만 함 (비용 절약)
+                console.log("Streak: Already checked in today.");
+            } else if (lastVisitDate === yesterday) {
+                // 조건 B: 어제 방문함 -> 연속 기록 +1
+                streakCount += 1;
+                await updateDoc(userRef, {
+                    streakCount: streakCount,
+                    lastVisitDate: today
+                });
+                console.log("Streak: Continued! New count:", streakCount);
+            } else {
+                // 조건 C: 기록이 끊김 -> 1로 초기화
+                streakCount = 1;
+                await updateDoc(userRef, {
+                    streakCount: streakCount,
+                    lastVisitDate: today
+                });
+                console.log("Streak: Reset to 1.");
+            }
+        } else {
+            // 신규 사용자
+            streakCount = 1;
+            await setDoc(userRef, {
+                streakCount: 1,
+                lastVisitDate: today,
+                createdAt: serverTimestamp()
+            });
+            console.log("Streak: New user initialized.");
+        }
+
+        // UI 업데이트
+        if (streakEl) {
+            streakEl.textContent = `🔥 ${streakCount}일 연속 동행`;
+            if (container) container.style.display = 'inline-flex';
+        }
+
+    } catch (e) {
+        console.error("Streak Update Error:", e);
+    }
+}
+
+// Auth 상태 관찰자 설정
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log("User authenticated:", user.uid);
+        updateDailyStreak(user.uid);
+    } else {
+        console.log("User not logged in.");
+        // 익명 사용자 처리 (필요시)
+        const container = document.getElementById('streak-container');
+        if (container) container.style.display = 'none';
+    }
+});
 
 /**
  * 1. Global Prayer Network
@@ -94,8 +183,6 @@ function updateDailyRoutine() {
 /**
  * 3. Country-wise Bible Reading Counter
  */
-import { setDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-
 export async function incrementReadingCount(countryCode) {
     if (!countryCode) return;
     const statsRef = doc(db, "statistics", countryCode.toUpperCase());
@@ -113,6 +200,7 @@ export async function incrementReadingCount(countryCode) {
 // Expose to window for access from other scripts or inline events
 window.PrayerNetwork = { addPrayer, getLatestPrayers, incrementAmen };
 window.StatsService = { incrementReadingCount };
+window.updateDailyStreak = updateDailyStreak;
 
 // Initialize Routine on load
 document.addEventListener('DOMContentLoaded', () => {
