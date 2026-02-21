@@ -2,12 +2,13 @@
 
 // 1. Firebase 설정 (firebase-firestore-service.js의 값을 참조하거나 동일하게 설정)
 const firebaseConfig = {
-    apiKey: "YOUR_REAL_API_KEY_HERE",
-    authDomain: "dailybible-uk.firebaseapp.com",
-    projectId: "dailybible-uk",
-    storageBucket: "dailybible-uk.appspot.com",
-    messagingSenderId: "813854124317",
-    appId: "1:813854124317:web:8662908a8a6be7b8c8d8e8"
+  apiKey: "AIzaSyDCuBvNfOKXIvQuOtGYrvSHQYyZcpt9LT0",
+  authDomain: "kims-88433.firebaseapp.com",
+  projectId: "kims-88433",
+  storageBucket: "kims-88433.firebasestorage.app",
+  messagingSenderId: "842717872672",
+  appId: "1:842717872672:web:f37e14c7c1fb024c0f3245",
+  measurementId: "G-8YPXQN7Z3M"
 };
 
 // Firebase 초기화 (CDN 방식 호환을 위해 compat 사용 가능성이 높으므로 체크)

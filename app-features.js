@@ -8,12 +8,13 @@ import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gsta
 
 // 1. Firebase Configuration
 const firebaseConfig = {
-    apiKey: "YOUR_REAL_API_KEY_HERE",
-    authDomain: "dailybible-uk.firebaseapp.com",
-    projectId: "dailybible-uk",
-    storageBucket: "dailybible-uk.appspot.com",
-    messagingSenderId: "813854124317",
-    appId: "1:813854124317:web:8662908a8a6be7b8c8d8e8"
+  apiKey: "AIzaSyDCuBvNfOKXIvQuOtGYrvSHQYyZcpt9LT0",
+  authDomain: "kims-88433.firebaseapp.com",
+  projectId: "kims-88433",
+  storageBucket: "kims-88433.firebasestorage.app",
+  messagingSenderId: "842717872672",
+  appId: "1:842717872672:web:f37e14c7c1fb024c0f3245",
+  measurementId: "G-8YPXQN7Z3M"
 };
 
 // 2. Initialize Firebase
