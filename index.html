@@ -260,7 +260,7 @@
                         <div id="cardToCapture" style="background: #ffffff; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;">
                             <article class="card" style="box-shadow: none; border: none; padding: 0;">
                                 <h3 data-i18n="daily_bible" style="color: #B08968; margin-bottom: 15px;">📜 오늘의 말씀</h3>
-                                <p id="today-word" style="font-size: 1.3rem; font-weight: 700; color: #333; line-height: 1.6;">Loading...</p>
+                                <p id="dailyVerseText" style="font-size: 1.3rem; font-weight: 700; color: #333; line-height: 1.6;">Loading...</p>
                                 <small id="today-ref" style="display: block; margin-top: 10px; color: #888;"></small>
                                 <p style="margin-top: 20px; font-size: 0.8rem; color: #bbb; letter-spacing: 1px;">- British Daily Bible UK -</p>
                             </article>
@@ -328,19 +328,22 @@
             });
         }
 
-        // --- Daily Rotating Content Logic (No DB required) ---
+        // --- [매일 바뀌는 콘텐츠 (KST 자정 기준 세트)] ---
         const dailyContents = [
             {
+                verseHtml: "내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라<br>I can do all things through Christ who strengthens me.<br><br><b>빌립보서 4:13 / Philippians 4:13</b>",
                 prayer: "주님, 오늘 하루도 나의 지혜가 아닌 주님의 능력을 의지하게 하소서. 불안한 마음을 평안으로 채워주시길 기도합니다. 아멘.",
                 evangelism: "💡 오늘의 전도 미션: 오늘 만나는 첫 사람에게 먼저 밝게 웃으며 인사하고, 따뜻한 칭찬 한마디를 건네보세요."
             },
             {
-                prayer: "사랑의 하나님, 내 입술의 모든 말과 마음의 묵상이 주님께 열납되기를 원합니다. 오늘 하루도 사랑을 실천하게 하소서. 아멘.",
-                evangelism: "💡 오늘의 전도 미션: 오랫동안 연락하지 못했던 지인이나 가족에게 안부 메시지와 함께 축복의 말을 전해보세요."
+                verseHtml: "두려워하지 말라 내가 너와 함께 함이라 놀라지 말라 나는 네 하나님이 됨이라<br>So do not fear, for I am with you; do not be dismayed, for I am your God.<br><br><b>이사야 41:10 / Isaiah 41:10</b>",
+                prayer: "사랑의 하나님, 어떤 상황 속에서도 주님이 함께하심을 믿고 담대하게 나아가게 하소서. 아멘.",
+                evangelism: "💡 오늘의 전도 미션: 힘들어하는 지인이나 가족에게 따뜻한 안부 메시지와 함께 응원을 전해보세요."
             },
             {
-                prayer: "빛이 되시는 주님, 어두운 세상 속에서 제가 빛과 소금의 역할을 다하게 하소서. 작은 일에도 감사하는 하루가 되게 하소서. 아멘.",
-                evangelism: "💡 오늘의 전도 미션: 직장이나 학교에서 누군가 도움이 필요할 때, 먼저 다가가 작은 도움의 손길을 내밀어보세요."
+                verseHtml: "항상 기뻐하라 쉬지 말고 기도하라 범사에 감사하라<br>Rejoice always, pray continually, give thanks in all circumstances.<br><br><b>데살로니가전서 5:16-18 / 1 Thess 5:16-18</b>",
+                prayer: "빛이 되시는 주님, 작은 일에도 감사하며 기도로 주님과 소통하는 하루가 되게 하소서. 아멘.",
+                evangelism: "💡 오늘의 전도 미션: 오늘 하루 동안 누군가에게 대가 없이 작은 친절을 베풀어보세요."
             }
         ];
 
@@ -373,16 +376,22 @@
                 badge.innerText = `🔥 ${streakCount}일째 동행 중`;
             }
 
-            const today = new Date().getDate(); 
-            const todayIndex = today % dailyContents.length;
+            // --- [KST 자정 기준 콘텐츠 로드] ---
+            const now = new Date();
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const kst = new Date(utc + (9 * 3600000));
+            const todayDate = kst.getDate();
+            const todayIndex = todayDate % dailyContents.length;
 
+            const verseElement = document.getElementById('dailyVerseText');
             const prayerElement = document.getElementById('dailyPrayer');
             const evangelismElement = document.getElementById('dailyEvangelism');
             const routineElement = document.getElementById('dailyRoutine');
 
-            if(prayerElement) prayerElement.innerText = dailyContents[todayIndex].prayer;
-            if(evangelismElement) evangelismElement.innerText = dailyContents[todayIndex].evangelism;
-            if(routineElement) routineElement.innerText = "오늘의 감정 상태를 선택해 주세요. / Please select your mood.";
+            if (verseElement) verseElement.innerHTML = dailyContents[todayIndex].verseHtml;
+            if (prayerElement) prayerElement.innerText = dailyContents[todayIndex].prayer;
+            if (evangelismElement) evangelismElement.innerText = dailyContents[todayIndex].evangelism;
+            if (routineElement) routineElement.innerText = "오늘의 감정 상태를 선택해 주세요. / Please select your mood.";
 
             document.getElementById('btnAnxious')?.addEventListener('click', () => {
                 if(routineElement) routineElement.innerText = routineData.anxious;
