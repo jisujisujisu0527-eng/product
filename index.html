@@ -268,6 +268,19 @@
                     <h3 id="prayer-board-title" style="border-bottom: 2px solid #E67E22; padding-bottom: 15px; margin-bottom: 30px; color: #34495E; font-family: 'EB Garamond', serif; font-size: 1.8rem;" data-i18n="prayer_board_title">🙏 최신 기도 제목</h3>
                     <div id="disqus_thread"></div>
                 </section>
+
+                <!-- New AI Bible Commentary Section -->
+                <section class="card" style="margin-top: 40px; padding: 40px 20px; background: #fdf5e6; border: 1px solid #e0d7c6;">
+                    <h3 class="classic-serif" style="font-size: 1.8rem; margin-bottom: 20px; color: #34495E;"><i class="fas fa-magic"></i> AI Bible Commentary</h3>
+                    <p style="margin-bottom: 20px; color: #666;">Enter a verse to receive a deep, theological insight from our AI spiritual assistant.</p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <input type="text" id="aiVerseInput" class="input-box" placeholder="Example: John 3:16" style="flex: 1; min-width: 200px;">
+                        <button id="aiExplainBtn" class="primary-btn">Get AI Insight</button>
+                    </div>
+                    <div id="aiResultBox" style="margin-top: 20px; font-family: 'EB Garamond', serif; font-size: 1.2rem; color: #5d4037; line-height: 1.6; min-height: 40px; white-space: pre-wrap;">
+                        <!-- Results will appear here -->
+                    </div>
+                </section>
             </div>
         </main>
 
@@ -299,6 +312,38 @@
                     .catch(err => console.log('Service Worker registration failed:', err));
             });
         }
+
+        // Logic for AI Bible Commentary Section
+        document.getElementById('aiExplainBtn').addEventListener('click', async () => {
+            const verse = document.getElementById("aiVerseInput").value;
+            const resultBox = document.getElementById("aiResultBox");
+
+            if (!verse) {
+                alert("Please enter a Bible verse!");
+                return;
+            }
+
+            resultBox.innerText = "AI spiritual assistant is meditating on the verse... ⏳";
+
+            try {
+                const response = await fetch('/api/explain', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ verse: verse })
+                });
+
+                const data = await response.json();
+
+                if (data.explanation) {
+                    resultBox.innerText = data.explanation;
+                } else {
+                    resultBox.innerText = "Error: " + (data.error || "An unknown issue occurred.");
+                }
+            } catch (error) {
+                console.error(error);
+                resultBox.innerText = "Connection failed. Please check your environment variables and nodejs_compat flag in Cloudflare.";
+            }
+        });
     </script>
 </body>
 </html>
