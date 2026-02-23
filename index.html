@@ -220,21 +220,21 @@
                     <h2 id="prayer-stats-title" data-i18n="prayer_chain_title" class="classic-serif" style="color: #333; margin-bottom: 10px;">🙏 기도의 등불을 밝힙니다</h2>
                     
                     <div style="display: flex; justify-content: center; gap: 40px; margin: 30px 0; flex-wrap: wrap;">
-                        <!-- 오늘 참여자 (ID: prayer-count-display) -->
+                        <!-- 오늘 참여자 (ID: dailyCountText) -->
                         <div class="stat-item">
                             <p style="color: #E67E22; font-weight: bold; margin-bottom: 5px;">오늘 함께한 성도</p>
-                            <span id="prayer-count-display" style="font-size: 3.5rem; font-weight: 900; color: #E67E22; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">0</span>
+                            <span id="dailyCountText" style="font-size: 3.5rem; font-weight: 900; color: #E67E22; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">0</span>
                             <span style="color: #E67E22; font-weight: bold;">명</span>
                         </div>
-                        <!-- 전체 누적 -->
+                        <!-- 전체 누적 (ID: yearlyCountText) -->
                         <div class="stat-item" style="border-left: 1px solid #ffe4b5; padding-left: 40px;">
                             <p style="color: #888; font-weight: bold; margin-bottom: 5px;">누적 기도 향연</p>
-                            <span id="prayer-counter" style="font-size: 3.5rem; font-weight: 900; color: #ff4500; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">0</span>
+                            <span id="yearlyCountText" style="font-size: 3.5rem; font-weight: 900; color: #ff4500; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">0</span>
                             <span style="color: #ff4500; font-weight: bold;">회</span>
                         </div>
                     </div>
 
-                    <button id="prayer-btn" type="button" class="primary-btn" aria-label="Join Prayer Chain" style="padding: 18px 45px; font-size: 1.2rem; font-weight: bold; background-color: #ff4500; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,69,0,0.3); transition: transform 0.2s; touch-action: manipulation; -webkit-tap-highlight-color: transparent;">
+                    <button id="prayBtn" type="button" class="primary-btn" aria-label="Join Prayer Chain" style="padding: 18px 45px; font-size: 1.2rem; font-weight: bold; background-color: #ff4500; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,69,0,0.3); transition: transform 0.2s; touch-action: manipulation; -webkit-tap-highlight-color: transparent;">
                         <span data-i18n="btn_i_prayed_global">지금 기도 올리기 & 참여하기 🔥</span>
                     </button>
                 </section>
@@ -447,6 +447,60 @@
                 });
             });
         }
+
+        // --- [실시간 글로벌 기도 체인 로직] ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            const prayBtn = document.getElementById('prayBtn');
+            const dailyText = document.getElementById('dailyCountText');
+            const yearlyText = document.getElementById('yearlyCountText');
+
+            // 한국 시간 기준으로 오늘 날짜 문자열 만들기
+            const getTodayStr = () => new Date().toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' });
+
+            // 1. 초기 데이터 로드
+            try {
+                const res = await fetch('/api/prayer');
+                const data = await res.json();
+                if (dailyText) dailyText.innerText = data.daily.toLocaleString();
+                if (yearlyText) yearlyText.innerText = data.yearly.toLocaleString();
+            } catch (error) {
+                console.error("데이터 로드 실패:", error);
+            }
+
+            // 2. 버튼 클릭 이벤트
+            if (prayBtn) {
+                prayBtn.addEventListener('click', async () => {
+                    const today = getTodayStr();
+                    const lastClicked = localStorage.getItem('lastPrayerDate');
+
+                    if (lastClicked === today) {
+                        alert('오늘은 이미 기도 체인에 참여하셨습니다. 내일 다시 참여해주세요! 🙏');
+                        return;
+                    }
+
+                    const originalText = prayBtn.innerHTML;
+                    prayBtn.innerText = "참여 기록 중... ⏳";
+                    prayBtn.disabled = true;
+
+                    try {
+                        const res = await fetch('/api/prayer', { method: 'POST' });
+                        const data = await res.json();
+
+                        if (dailyText) dailyText.innerText = data.daily.toLocaleString();
+                        if (yearlyText) yearlyText.innerText = data.yearly.toLocaleString();
+
+                        localStorage.setItem('lastPrayerDate', today);
+                        
+                        alert('오늘의 기도 체인에 성공적으로 참여하셨습니다! 🙏');
+                        prayBtn.innerHTML = "참여 완료 (내일 다시 참여 가능)";
+                    } catch (error) {
+                        alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                        prayBtn.innerHTML = originalText;
+                        prayBtn.disabled = false;
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
