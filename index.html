@@ -256,11 +256,19 @@
                     </div>
 
                     <div class="bible-app grid-3">
-                        <article class="card"><h3 data-i18n="daily_bible">📜 오늘의 말씀</h3><p id="today-word">Loading...</p><small id="today-ref"></small></article>
+                        <!-- Daily Bible Verse Card (Capturable Area) -->
+                        <div id="cardToCapture" style="background: #ffffff; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;">
+                            <article class="card" style="box-shadow: none; border: none; padding: 0;">
+                                <h3 data-i18n="daily_bible" style="color: #B08968; margin-bottom: 15px;">📜 오늘의 말씀</h3>
+                                <p id="today-word" style="font-size: 1.3rem; font-weight: 700; color: #333; line-height: 1.6;">Loading...</p>
+                                <small id="today-ref" style="display: block; margin-top: 10px; color: #888;"></small>
+                                <p style="margin-top: 20px; font-size: 0.8rem; color: #bbb; letter-spacing: 1px;">- British Daily Bible UK -</p>
+                            </article>
+                        </div>
                         <article class="card"><h3 data-i18n="daily_prayer">🙏 오늘의 기도</h3><p id="dailyPrayer">Loading...</p></article>
                         <article class="card"><h3 data-i18n="daily_mission">📢 오늘의 전도</h3><p id="dailyEvangelism">Loading...</p></article>
                     </div>
-                    <button onclick="downloadVerseCard(event)" class="primary-btn" style="margin-top: 20px; background: #B08968;"><i class="fas fa-download" aria-hidden="true"></i> Save Card</button>
+                    <button id="saveCardBtn" class="primary-btn" style="margin-top: 20px; background: #4CAF50;"><i class="fas fa-download" aria-hidden="true"></i> SAVE CARD (이미지 저장)</button>
                 </section>
 
                 <!-- Prayer Board (Disqus) -->
@@ -307,6 +315,7 @@
     <!-- Logic Scripts -->
     <script type="module" src="firebase-config.js" defer></script>
     <script type="module" src="firebase-firestore-service.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script type="module" src="app-features.js?v=2.2" defer></script>
     <script type="module" src="main.js" defer></script>
 
@@ -400,6 +409,44 @@
                     : "An error occurred while connecting to Paul AI. Please try again later.";
             }
         });
+
+        // --- [SAVE CARD 이미지 저장 기능] ---
+        const saveBtn = document.getElementById('saveCardBtn');
+        const cardArea = document.getElementById('cardToCapture');
+
+        if (saveBtn && cardArea) {
+            saveBtn.addEventListener('click', () => {
+                const originalText = saveBtn.innerHTML;
+                saveBtn.innerText = "이미지 생성 중... ⏳";
+                saveBtn.disabled = true;
+
+                html2canvas(cardArea, {
+                    scale: 2,
+                    backgroundColor: "#ffffff",
+                    useCORS: true
+                }).then(canvas => {
+                    const imageUri = canvas.toDataURL("image/png");
+                    const link = document.createElement("a");
+                    
+                    const date = new Date();
+                    const dateStr = `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}`;
+                    link.download = `daily-verse-${dateStr}.png`;
+                    
+                    link.href = imageUri;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.disabled = false;
+                }).catch(err => {
+                    console.error("이미지 저장 실패:", err);
+                    alert("이미지 저장 중 오류가 발생했습니다.");
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.disabled = false;
+                });
+            });
+        }
     </script>
 </body>
 </html>
