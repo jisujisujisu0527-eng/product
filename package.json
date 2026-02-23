@@ -1,8 +1,8 @@
 {
   "name": "british-daily-bible",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Daily Bible & Spiritual Guidance Platform",
-  "main": "main.js",
+  "private": true,
   "engines": {
     "node": ">=20.0.0"
   },
@@ -12,6 +12,6 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
-    "firebase": "^10.0.0"
+    "firebase": "^10.13.0"
   }
 }
