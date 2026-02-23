@@ -2,33 +2,33 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function onRequestPost(context) {
   try {
-    // 1. 구절과 언어 설정 받아오기 (기본값: 영어)
     const { verse, lang = "en" } = await context.request.json();
 
     if (!verse) {
-      return new Response(JSON.stringify({ 
-        error: "Please enter a bible verse. / 성경 구절을 입력해주세요." 
-      }), { 
+      return new Response(JSON.stringify({ error: "성경 구절을 입력해주세요." }), { 
         status: 400, 
         headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } 
       });
     }
 
-    // 2. Gemini API 초기화
-    const genAI = new GoogleGenerativeAI(context.env.GOOGLE_GENERATIVE_AI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    // 3. 다국어 프롬프트 분기 처리 (신학과 교회사적 배경 강조)
-    let prompt = "";
-    if (lang === "ko") {
-      prompt = `당신은 깊이 있는 신학과 교회사 지식을 갖춘 친절한 성경 해설가 'Paul AI'입니다. 
-      다음 구절의 역사적 배경과 핵심 의미를 3~4문장으로 알기 쉽게 한국어로 설명해주세요: "${verse}"`;
-    } else {
-      prompt = `You are 'Paul AI', a friendly Bible commentator with deep knowledge of theology and church history. 
-      Please explain the historical background and core meaning of the following verse in 3-4 sentences in English: "${verse}"`;
+    // 🚨 [체크 포인트 1] API 키가 서버에 잘 들어왔는지 확인
+    const apiKey = context.env.GOOGLE_GENERATIVE_AI_API_KEY;
+    if (!apiKey) {
+      return new Response(JSON.stringify({ 
+        error: "🚨 에러: Cloudflare 환경 변수에 API 키가 없습니다! 설정을 다시 확인해주세요. (Production 환경 변수 확인 필수)" 
+      }), { 
+        status: 500, 
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } 
+      });
     }
 
-    // 4. AI 답변 생성
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const prompt = lang === "ko" 
+      ? `당신은 깊이 있는 신학과 교회사 지식을 갖춘 친절한 성경 해설가 'Paul AI'입니다. 다음 구절의 역사적 배경과 핵심 의미를 3~4문장으로 알기 쉽게 한국어로 설명해주세요: "${verse}"`
+      : `You are 'Paul AI', a friendly Bible commentator with deep knowledge of theology and church history. Please explain the historical background and core meaning of the following verse in 3-4 sentences in English: "${verse}"`;
+
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
@@ -39,10 +39,11 @@ export async function onRequestPost(context) {
         "Access-Control-Allow-Origin": "*" 
       },
     });
+    
   } catch (error) {
-    console.error("AI Error:", error);
+    // 🚨 [체크 포인트 2] 서버 내부에서 터진 진짜 에러 메시지를 화면에 보냄
     return new Response(JSON.stringify({ 
-      error: "Failed to connect to Paul AI. / AI 연결에 실패했습니다." 
+      error: `🚨 서버 에러 상세 원인: ${error.message}` 
     }), { 
       status: 500, 
       headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } 
