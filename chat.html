@@ -79,7 +79,7 @@
     <script type="module" src="ai-service.js"></script>
     <script type="module" src="main.js" defer></script>
     <script>
-        // Gemini AI를 사용한 해설 보기 함수
+        // Cloudflare API를 사용한 해설 보기 함수
         async function getExplanation() {
             const verseInput = document.getElementById("verseInput");
             const resultBox = document.getElementById("resultBox");
@@ -90,19 +90,27 @@
             }
 
             const verse = verseInput.value;
-            resultBox.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Paul AI (Gemini) is reflecting on the scripture... ⏳';
+            resultBox.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Paul AI is reflecting on the scripture... ⏳';
 
             try {
-                if (window.getBibleCommentary) {
-                    const text = await window.getBibleCommentary(verse);
-                    resultBox.innerHTML = `<div style="padding: 15px; background: white; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
-                        ${text.replace(/\n/g, '<br>')}
-                    </div>`;
+                // Cloudflare Pages Function API 호출
+                const response = await fetch('/api/explain', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ verse: verse })
+                });
+
+                const data = await response.json();
+
+                if(data.error) {
+                    resultBox.innerText = data.error;
                 } else {
-                    resultBox.innerText = "AI Service is not ready yet.";
+                    resultBox.innerHTML = `<div style="padding: 15px; background: white; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+                        ${data.explanation.replace(/\n/g, '<br>')}
+                    </div>`;
                 }
             } catch (error) {
-                console.error("Gemini Interaction Error:", error);
+                console.error("API Interaction Error:", error);
                 resultBox.innerText = "An error occurred while connecting to Paul AI. Please try again later.";
             }
         }
