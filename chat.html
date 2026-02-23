@@ -37,6 +37,18 @@
             <p style="color: #666; max-width: 700px; margin: 20px auto;">Seek wisdom and comfort through a bible-based conversation. Paul AI is here to help you reflect on scripture and find encouragement in every situation.</p>
         </div>
 
+        <!-- AI Bible Explanation Tool Section -->
+        <section class="card" style="max-width: 800px; margin: 0 auto 40px; padding: 30px; background: #fdf5e6; border: 1px solid #e0d7c6;">
+            <h2 class="classic-serif" style="font-size: 1.5rem; margin-bottom: 15px;"><i class="fas fa-scroll"></i> AI Bible Verse Commentary</h2>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="verseInput" class="input-box" placeholder="Example: John 3:16" style="flex: 1;">
+                <button onclick="getExplanation()" class="primary-btn" style="white-space: nowrap;">Get Insight</button>
+            </div>
+            <div id="resultBox" style="margin-top: 20px; font-family: 'EB Garamond', serif; font-size: 1.2rem; color: #5d4037; line-height: 1.6; min-height: 40px;">
+                <!-- Result will appear here -->
+            </div>
+        </section>
+
         <div class="card" style="height: 600px; display: flex; flex-direction: column; max-width: 800px; margin: 0 auto;">
             <div id="chat-box" style="flex: 1; overflow-y: auto; padding: 20px; background: #fdfbf7; border-radius: 10px; border: 1px solid #eee;">
                 <div class="message ai" style="margin-bottom: 15px;">

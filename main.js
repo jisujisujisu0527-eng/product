@@ -262,6 +262,43 @@ async function handleJoinPrayer(event) {
     }
 }
 
+/**
+ * AI 성경 구절 해설 호출 함수
+ */
+window.getExplanation = async function() {
+    const verseInput = document.getElementById("verseInput");
+    const resultBox = document.getElementById("resultBox");
+    
+    if (!verseInput || !verseInput.value.trim()) {
+        if (resultBox) resultBox.innerText = "Please enter a Bible verse.";
+        return;
+    }
+
+    const verse = verseInput.value;
+    resultBox.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Paul AI is reflecting on the scripture... ⏳';
+
+    try {
+        // Firebase Functions 초기화 (이미 main.js 상단 로직에서 초기화되었을 것으로 가정하거나 여기서 직접 가져옴)
+        // 만약 모듈 시스템이라면 import가 필요하지만, window 객체에 바인딩하여 HTML에서 호출 가능하게 함
+        const { getFunctions, httpsCallable } = await import('https://www.gstatic.com/firebasejs/9.15.0/firebase-functions-compat.js');
+        const functions = firebase.app().functions('us-central1');
+        const explainVerseAI = httpsCallable(functions, 'explainBibleVerse');
+
+        const result = await explainVerseAI({ verse: verse });
+        
+        if(result.data.error) {
+            resultBox.innerText = result.data.error;
+        } else {
+            resultBox.innerHTML = `<div style="padding: 15px; background: white; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+                ${result.data.explanation.replace(/\n/g, '<br>')}
+            </div>`;
+        }
+    } catch (error) {
+        console.error("AI Function Error:", error);
+        resultBox.innerText = "An error occurred while connecting to Paul AI. Please try again later.";
+    }
+}
+
 function initDisqus() {
     if (window.DISQUS) return;
     const d = document, s = d.createElement('script');
