@@ -245,20 +245,20 @@
                     </div>
                     <h1 id="hero-title" data-i18n="main_title" class="classic-serif">Daily Spiritual Rest</h1>
                     <div class="mood-container">
-                        <button onclick="getVerseByMood('anxious')" class="mood-btn" aria-label="Verse for Anxious mood">😰 Anxious</button>
-                        <button onclick="getVerseByMood('grateful')" class="mood-btn" aria-label="Verse for Grateful mood">🙏 Grateful</button>
-                        <button onclick="getVerseByMood('joyful')" class="mood-btn" aria-label="Verse for Joyful mood">✨ Joyful</button>
+                        <button id="btnAnxious" class="mood-btn" aria-label="Verse for Anxious mood">😰 Anxious</button>
+                        <button id="btnGrateful" class="mood-btn" aria-label="Verse for Grateful mood">🙏 Grateful</button>
+                        <button id="btnJoyful" class="mood-btn" aria-label="Verse for Joyful mood">✨ Joyful</button>
                     </div>
 
-                    <!-- Daily Routine Content (Added) -->
-                    <div id="daily-content" aria-live="polite" style="margin: 20px 0; padding: 20px; background: #fdf5e6; border-radius: 10px; font-family: 'EB Garamond', serif; font-size: 1.2rem; color: #5d4037; border-left: 5px solid #b08968;">
+                    <!-- Daily Routine Content (Updated ID) -->
+                    <div id="dailyRoutine" aria-live="polite" style="margin: 20px 0; padding: 20px; background: #fdf5e6; border-radius: 10px; font-family: 'EB Garamond', serif; font-size: 1.2rem; color: #5d4037; border-left: 5px solid #b08968;">
                         Loading daily routine...
                     </div>
 
                     <div class="bible-app grid-3">
                         <article class="card"><h3 data-i18n="daily_bible">📜 오늘의 말씀</h3><p id="today-word">Loading...</p><small id="today-ref"></small></article>
-                        <article class="card"><h3 data-i18n="daily_prayer">🙏 오늘의 기도</h3><p id="today-prayer">Loading...</p></article>
-                        <article class="card"><h3 data-i18n="daily_mission">📢 오늘의 전도</h3><p id="today-mission">Loading...</p></article>
+                        <article class="card"><h3 data-i18n="daily_prayer">🙏 오늘의 기도</h3><p id="dailyPrayer">Loading...</p></article>
+                        <article class="card"><h3 data-i18n="daily_mission">📢 오늘의 전도</h3><p id="dailyEvangelism">Loading...</p></article>
                     </div>
                     <button onclick="downloadVerseCard(event)" class="primary-btn" style="margin-top: 20px; background: #B08968;"><i class="fas fa-download" aria-hidden="true"></i> Save Card</button>
                 </section>
@@ -319,7 +319,52 @@
             });
         }
 
-        // New fetch-based AI Commentary Logic
+        // --- Daily Rotating Content Logic (No DB required) ---
+        const dailyContents = [
+            {
+                prayer: "주님, 오늘 하루도 나의 지혜가 아닌 주님의 능력을 의지하게 하소서. 불안한 마음을 평안으로 채워주시길 기도합니다. 아멘.",
+                evangelism: "💡 오늘의 전도 미션: 오늘 만나는 첫 사람에게 먼저 밝게 웃으며 인사하고, 따뜻한 칭찬 한마디를 건네보세요."
+            },
+            {
+                prayer: "사랑의 하나님, 내 입술의 모든 말과 마음의 묵상이 주님께 열납되기를 원합니다. 오늘 하루도 사랑을 실천하게 하소서. 아멘.",
+                evangelism: "💡 오늘의 전도 미션: 오랫동안 연락하지 못했던 지인이나 가족에게 안부 메시지와 함께 축복의 말을 전해보세요."
+            },
+            {
+                prayer: "빛이 되시는 주님, 어두운 세상 속에서 제가 빛과 소금의 역할을 다하게 하소서. 작은 일에도 감사하는 하루가 되게 하소서. 아멘.",
+                evangelism: "💡 오늘의 전도 미션: 직장이나 학교에서 누군가 도움이 필요할 때, 먼저 다가가 작은 도움의 손길을 내밀어보세요."
+            }
+        ];
+
+        const routineData = {
+            anxious: "걱정하지 마세요. 주님께서 당신의 우편에서 그늘이 되십니다. 깊은 호흡을 세 번 하고, 시편 121편을 묵상해 보세요.",
+            grateful: "감사는 기적을 낳습니다! 오늘 당신이 감사한 일 3가지를 노트에 적어보며 기쁨을 만끽하세요.",
+            joyful: "주님 안에서 기뻐하는 것이 우리의 힘입니다! 이 기쁨을 이웃에게 미소로 흘려보내는 하루를 보내세요."
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().getDate(); 
+            const todayIndex = today % dailyContents.length;
+
+            const prayerElement = document.getElementById('dailyPrayer');
+            const evangelismElement = document.getElementById('dailyEvangelism');
+            const routineElement = document.getElementById('dailyRoutine');
+
+            if(prayerElement) prayerElement.innerText = dailyContents[todayIndex].prayer;
+            if(evangelismElement) evangelismElement.innerText = dailyContents[todayIndex].evangelism;
+            if(routineElement) routineElement.innerText = "오늘의 감정 상태를 선택해 주세요. / Please select your mood.";
+
+            document.getElementById('btnAnxious')?.addEventListener('click', () => {
+                if(routineElement) routineElement.innerText = routineData.anxious;
+            });
+            document.getElementById('btnGrateful')?.addEventListener('click', () => {
+                if(routineElement) routineElement.innerText = routineData.grateful;
+            });
+            document.getElementById('btnJoyful')?.addEventListener('click', () => {
+                if(routineElement) routineElement.innerText = routineData.joyful;
+            });
+        });
+
+        // AI Bible Commentary Logic
         document.getElementById('getInsightBtn').addEventListener('click', async () => {
             const verse = document.getElementById('verseInput').value;
             const lang = document.getElementById('langSelect').value;
@@ -330,13 +375,11 @@
                 return;
             }
 
-            // 로딩 메시지
             resultBox.innerText = lang === "ko" 
                 ? "Paul AI가 구절을 묵상하며 분석 중입니다... ⏳" 
                 : "Paul AI is reflecting on the verse... ⏳";
 
             try {
-                // Cloudflare API로 직접 요청
                 const response = await fetch('/api/explain', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
