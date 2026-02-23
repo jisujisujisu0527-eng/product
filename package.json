@@ -1,0 +1,14 @@
+{
+  "name": "british-daily-bible",
+  "version": "2.2.0",
+  "description": "Daily Bible & Spiritual Guidance Platform",
+  "main": "main.js",
+  "scripts": {
+    "build": "echo 'Building static site...'",
+    "start": "npx serve ."
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "firebase": "^10.0.0"
+  }
+}
