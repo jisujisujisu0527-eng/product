@@ -269,16 +269,15 @@
                     <div id="disqus_thread"></div>
                 </section>
 
-                <!-- New AI Bible Commentary Section -->
+                <!-- AI Bible Commentary Section -->
                 <section class="card" style="margin-top: 40px; padding: 40px 20px; background: #fdf5e6; border: 1px solid #e0d7c6;">
                     <h3 class="classic-serif" style="font-size: 1.8rem; margin-bottom: 20px; color: #34495E;"><i class="fas fa-magic"></i> AI Bible Commentary</h3>
-                    <p style="margin-bottom: 20px; color: #666;">Enter a verse to receive a deep, theological insight from our AI spiritual assistant.</p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <input type="text" id="aiVerseInput" class="input-box" placeholder="Example: John 3:16" style="flex: 1; min-width: 200px;">
-                        <button id="aiExplainBtn" class="primary-btn">Get AI Insight</button>
+                    <div class="ai-section">
+                        <input type="text" id="verseInput" class="input-box" placeholder="예: 시편 23:1" style="width: 100%; max-width: 400px; margin-bottom: 10px;">
+                        <button id="getAiBtn" class="primary-btn">AI 해설 듣기</button>
                     </div>
-                    <div id="aiResultBox" style="margin-top: 20px; font-family: 'EB Garamond', serif; font-size: 1.2rem; color: #5d4037; line-height: 1.6; min-height: 40px; white-space: pre-wrap;">
-                        <!-- Results will appear here -->
+                    <div id="resultBox" style="margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background-color: #fcfcfc; line-height: 1.6; color: #333; min-height: 50px;">
+                        해설 결과가 여기에 표시됩니다.
                     </div>
                 </section>
             </div>
@@ -313,19 +312,20 @@
             });
         }
 
-        // Logic for AI Bible Commentary Section
-        document.getElementById('aiExplainBtn').addEventListener('click', async () => {
-            const verse = document.getElementById("aiVerseInput").value;
-            const resultBox = document.getElementById("aiResultBox");
+        // AI Bible Commentary Logic
+        document.getElementById('getAiBtn').addEventListener('click', async () => {
+            const verse = document.getElementById("verseInput").value;
+            const resultBox = document.getElementById("resultBox");
 
             if (!verse) {
-                alert("Please enter a Bible verse!");
+                alert("구절을 입력해 주세요!");
                 return;
             }
 
-            resultBox.innerText = "AI spiritual assistant is meditating on the verse... ⏳";
+            resultBox.innerText = "AI가 구절을 묵상 중입니다... ⏳";
 
             try {
+                // Cloudflare Functions API 경로 호출
                 const response = await fetch('/api/explain', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -337,11 +337,11 @@
                 if (data.explanation) {
                     resultBox.innerText = data.explanation;
                 } else {
-                    resultBox.innerText = "Error: " + (data.error || "An unknown issue occurred.");
+                    resultBox.innerText = "오류: " + (data.error || "알 수 없는 오류");
                 }
             } catch (error) {
                 console.error(error);
-                resultBox.innerText = "Connection failed. Please check your environment variables and nodejs_compat flag in Cloudflare.";
+                resultBox.innerText = "서버와 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.";
             }
         });
     </script>
