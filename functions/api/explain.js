@@ -23,7 +23,7 @@ export async function onRequestPost(context) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const prompt = lang === "ko" 
       ? `당신은 깊이 있는 신학과 교회사 지식을 갖춘 친절한 성경 해설가 'Paul AI'입니다. 다음 구절의 역사적 배경과 핵심 의미를 3~4문장으로 알기 쉽게 한국어로 설명해주세요: "${verse}"`
