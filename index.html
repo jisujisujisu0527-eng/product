@@ -241,7 +241,7 @@
 
                 <section class="hero-section" aria-labelledby="hero-title">
                     <div id="streak-container" style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px; font-weight: 700; color: #E67E22; font-size: 1.1rem; background: #FFF5E6; padding: 10px 20px; border-radius: 30px; display: inline-flex; margin-left: auto; margin-right: auto;">
-                        <span id="streak-counter">🔥 로딩 중...</span>
+                        <span id="streakBadge">🔥 동행을 시작하세요</span>
                     </div>
                     <h1 id="hero-title" data-i18n="main_title" class="classic-serif">Daily Spiritual Rest</h1>
                     <div class="mood-container">
@@ -351,6 +351,28 @@
         };
 
         window.addEventListener('DOMContentLoaded', () => {
+            // --- [나만의 영적 동행일수 (Streak) 계산 기능] ---
+            const badge = document.getElementById('streakBadge');
+            if (badge) {
+                const getKSTDateStr = () => {
+                    const now = new Date();
+                    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+                    const kst = new Date(utc + (9 * 3600000));
+                    return `${kst.getFullYear()}-${kst.getMonth() + 1}-${kst.getDate()}`;
+                };
+
+                const todayStr = getKSTDateStr();
+                let lastVisit = localStorage.getItem('lastVisitDate_streak');
+                let streakCount = parseInt(localStorage.getItem('streakCount')) || 0;
+
+                if (lastVisit !== todayStr) {
+                    streakCount += 1;
+                    localStorage.setItem('streakCount', streakCount);
+                    localStorage.setItem('lastVisitDate_streak', todayStr);
+                }
+                badge.innerText = `🔥 ${streakCount}일째 동행 중`;
+            }
+
             const today = new Date().getDate(); 
             const todayIndex = today % dailyContents.length;
 
