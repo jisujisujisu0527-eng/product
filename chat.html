@@ -40,11 +40,17 @@
         <!-- AI Bible Explanation Tool Section -->
         <section class="card" style="max-width: 800px; margin: 0 auto 40px; padding: 30px; background: #fdf5e6; border: 1px solid #e0d7c6;">
             <h2 class="classic-serif" style="font-size: 1.5rem; margin-bottom: 15px;"><i class="fas fa-scroll"></i> AI Bible Verse Commentary</h2>
+            <div style="margin-bottom: 10px;">
+                <select id="langSelect" style="padding: 8px; border-radius: 8px; border: 1px solid #ddd; background: white; font-family: inherit;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+            </div>
             <div style="display: flex; gap: 10px;">
                 <input type="text" id="verseInput" class="input-box" placeholder="Example: John 3:16" style="flex: 1;">
-                <button onclick="getExplanation()" class="primary-btn" style="white-space: nowrap;">Get Insight</button>
+                <button id="getInsightBtn" class="primary-btn" style="white-space: nowrap;">Get Insight</button>
             </div>
-            <div id="resultBox" style="margin-top: 20px; font-family: 'EB Garamond', serif; font-size: 1.2rem; color: #5d4037; line-height: 1.6; min-height: 40px;">
+            <div id="resultBox" style="margin-top: 20px; font-family: 'EB Garamond', serif; font-size: 1.2rem; color: #5d4037; line-height: 1.6; min-height: 40px; white-space: pre-wrap;">
                 <!-- Result will appear here -->
             </div>
         </section>
@@ -79,41 +85,42 @@
     <script type="module" src="ai-service.js"></script>
     <script type="module" src="main.js" defer></script>
     <script>
-        // Cloudflare API를 사용한 해설 보기 함수
-        async function getExplanation() {
-            const verseInput = document.getElementById("verseInput");
-            const resultBox = document.getElementById("resultBox");
-            
-            if (!verseInput || !verseInput.value.trim()) {
-                if (resultBox) resultBox.innerText = "Please enter a Bible verse.";
+        // New fetch-based AI Commentary Logic (Synchronized)
+        document.getElementById('getInsightBtn').addEventListener('click', async () => {
+            const verse = document.getElementById('verseInput').value;
+            const lang = document.getElementById('langSelect').value;
+            const resultBox = document.getElementById('resultBox');
+
+            if (!verse) {
+                resultBox.innerText = lang === "ko" ? "성경 구절을 입력해주세요." : "Please enter a bible verse.";
                 return;
             }
 
-            const verse = verseInput.value;
-            resultBox.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Paul AI is reflecting on the scripture... ⏳';
+            resultBox.innerText = lang === "ko" 
+                ? "Paul AI가 구절을 묵상하며 분석 중입니다... ⏳" 
+                : "Paul AI is reflecting on the verse... ⏳";
 
             try {
-                // Cloudflare Pages Function API 호출
                 const response = await fetch('/api/explain', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ verse: verse })
+                    body: JSON.stringify({ verse: verse, lang: lang })
                 });
 
                 const data = await response.json();
 
-                if(data.error) {
-                    resultBox.innerText = data.error;
+                if (data.explanation) {
+                    resultBox.innerText = data.explanation;
                 } else {
-                    resultBox.innerHTML = `<div style="padding: 15px; background: white; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
-                        ${data.explanation.replace(/\n/g, '<br>')}
-                    </div>`;
+                    resultBox.innerText = "Error: " + (data.error || "Unknown issue");
                 }
             } catch (error) {
-                console.error("API Interaction Error:", error);
-                resultBox.innerText = "An error occurred while connecting to Paul AI. Please try again later.";
+                console.error("Fetch Error:", error);
+                resultBox.innerText = lang === "ko" 
+                    ? "Paul AI와 연결하는 중 오류가 발생했습니다. 나중에 다시 시도해주세요." 
+                    : "An error occurred while connecting to Paul AI. Please try again later.";
             }
-        }
+        });
 
         function sendMessage() {
             const input = document.getElementById('chat-input');
