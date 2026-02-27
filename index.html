@@ -217,25 +217,25 @@
             <div class="container">
                 <!-- Improved Global Prayer Chain Section -->
                 <section class="global-stats-board card" aria-labelledby="prayer-stats-title" style="margin-top: 40px; text-align: center; background: #fffaf0; border: 1px solid #ffe4b5; padding: 50px 20px; border-radius: 15px;">
-                    <h2 id="prayer-stats-title" data-i18n="prayer_chain_title" class="classic-serif" style="color: #333; margin-bottom: 10px;">🙏 기도의 등불을 밝힙니다</h2>
+                    <h2 id="prayer-stats-title" data-i18n="prayerChainTitle" class="classic-serif" style="color: #333; margin-bottom: 10px;">🙏 기도의 등불을 밝힙니다</h2>
                     
                     <div style="display: flex; justify-content: center; gap: 40px; margin: 30px 0; flex-wrap: wrap;">
                         <!-- 오늘 참여자 (ID: dailyCountText) -->
                         <div class="stat-item">
-                            <p style="color: #E67E22; font-weight: bold; margin-bottom: 5px;">오늘 함께한 성도</p>
+                            <p data-i18n="prayerToday" style="color: #E67E22; font-weight: bold; margin-bottom: 5px;">오늘 함께한 성도</p>
                             <span id="dailyCountText" style="font-size: 3.5rem; font-weight: 900; color: #E67E22; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">0</span>
                             <span style="color: #E67E22; font-weight: bold;">명</span>
                         </div>
                         <!-- 전체 누적 (ID: yearlyCountText) -->
                         <div class="stat-item" style="border-left: 1px solid #ffe4b5; padding-left: 40px;">
-                            <p style="color: #888; font-weight: bold; margin-bottom: 5px;">누적 기도 향연</p>
+                            <p data-i18n="prayerTotal" style="color: #888; font-weight: bold; margin-bottom: 5px;">누적 기도 향연</p>
                             <span id="yearlyCountText" style="font-size: 3.5rem; font-weight: 900; color: #ff4500; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">0</span>
                             <span style="color: #ff4500; font-weight: bold;">회</span>
                         </div>
                     </div>
 
-                    <button id="prayBtn" type="button" class="primary-btn" aria-label="Join Prayer Chain" style="padding: 18px 45px; font-size: 1.2rem; font-weight: bold; background-color: #ff4500; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,69,0,0.3); transition: transform 0.2s; touch-action: manipulation; -webkit-tap-highlight-color: transparent;">
-                        <span data-i18n="btn_i_prayed_global">지금 기도 올리기 & 참여하기 🔥</span>
+                    <button id="prayBtn" data-i18n="prayBtn" type="button" class="primary-btn" aria-label="Join Prayer Chain" style="padding: 18px 45px; font-size: 1.2rem; font-weight: bold; background-color: #ff4500; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,69,0,0.3); transition: transform 0.2s; touch-action: manipulation; -webkit-tap-highlight-color: transparent;">
+                        지금 기도 올리기 & 참여하기 🔥
                     </button>
                 </section>
 
@@ -243,7 +243,10 @@
                     <div id="streak-container" style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px; font-weight: 700; color: #E67E22; font-size: 1.1rem; background: #FFF5E6; padding: 10px 20px; border-radius: 30px; display: inline-flex; margin-left: auto; margin-right: auto;">
                         <span id="streakBadge">🔥 동행을 시작하세요</span>
                     </div>
-                    <h1 id="hero-title" data-i18n="main_title" class="classic-serif">Daily Spiritual Rest</h1>
+                    <h1 id="hero-title" data-i18n="mainTitle" class="classic-serif">영적 동반자 바울 AI</h1>
+                    <p data-i18n="mainSubtitle" style="margin-bottom: 30px; color: #666; font-size: 1.1rem; line-height: 1.6;">성경에 기반한 대화를 통해 지혜와 위로를 구하세요. 바울 AI는 당신이 말씀을 묵상하고 어떤 상황에서도 용기를 얻도록 돕습니다.</p>
+                    
+                    <h3 data-i18n="spiritualRestTitle" class="classic-serif" style="margin-top: 30px; color: #34495E;">오늘의 영적 안식</h3>
                     <div class="mood-container">
                         <button id="btnAnxious" class="mood-btn" aria-label="Verse for Anxious mood">😰 Anxious</button>
                         <button id="btnGrateful" class="mood-btn" aria-label="Verse for Grateful mood">🙏 Grateful</button>
@@ -328,84 +331,8 @@
             });
         }
 
-        // --- [매일 바뀌는 콘텐츠 (KST 자정 기준 세트)] ---
-        const dailyContents = [
-            {
-                verseHtml: "내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라<br>I can do all things through Christ who strengthens me.<br><br><b>빌립보서 4:13 / Philippians 4:13</b>",
-                prayer: "주님, 오늘 하루도 나의 지혜가 아닌 주님의 능력을 의지하게 하소서. 불안한 마음을 평안으로 채워주시길 기도합니다. 아멘.",
-                evangelism: "💡 오늘의 전도 미션: 오늘 만나는 첫 사람에게 먼저 밝게 웃으며 인사하고, 따뜻한 칭찬 한마디를 건네보세요."
-            },
-            {
-                verseHtml: "두려워하지 말라 내가 너와 함께 함이라 놀라지 말라 나는 네 하나님이 됨이라<br>So do not fear, for I am with you; do not be dismayed, for I am your God.<br><br><b>이사야 41:10 / Isaiah 41:10</b>",
-                prayer: "사랑의 하나님, 어떤 상황 속에서도 주님이 함께하심을 믿고 담대하게 나아가게 하소서. 아멘.",
-                evangelism: "💡 오늘의 전도 미션: 힘들어하는 지인이나 가족에게 따뜻한 안부 메시지와 함께 응원을 전해보세요."
-            },
-            {
-                verseHtml: "항상 기뻐하라 쉬지 말고 기도하라 범사에 감사하라<br>Rejoice always, pray continually, give thanks in all circumstances.<br><br><b>데살로니가전서 5:16-18 / 1 Thess 5:16-18</b>",
-                prayer: "빛이 되시는 주님, 작은 일에도 감사하며 기도로 주님과 소통하는 하루가 되게 하소서. 아멘.",
-                evangelism: "💡 오늘의 전도 미션: 오늘 하루 동안 누군가에게 대가 없이 작은 친절을 베풀어보세요."
-            }
-        ];
-
-        const routineData = {
-            anxious: "걱정하지 마세요. 주님께서 당신의 우편에서 그늘이 되십니다. 깊은 호흡을 세 번 하고, 시편 121편을 묵상해 보세요.",
-            grateful: "감사는 기적을 낳습니다! 오늘 당신이 감사한 일 3가지를 노트에 적어보며 기쁨을 만끽하세요.",
-            joyful: "주님 안에서 기뻐하는 것이 우리의 힘입니다! 이 기쁨을 이웃에게 미소로 흘려보내는 하루를 보내세요."
-        };
-
-        window.addEventListener('DOMContentLoaded', () => {
-            // --- [나만의 영적 동행일수 (Streak) 계산 기능] ---
-            const badge = document.getElementById('streakBadge');
-            if (badge) {
-                const getKSTDateStr = () => {
-                    const now = new Date();
-                    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-                    const kst = new Date(utc + (9 * 3600000));
-                    return `${kst.getFullYear()}-${kst.getMonth() + 1}-${kst.getDate()}`;
-                };
-
-                const todayStr = getKSTDateStr();
-                let lastVisit = localStorage.getItem('lastVisitDate_streak');
-                let streakCount = parseInt(localStorage.getItem('streakCount')) || 0;
-
-                if (lastVisit !== todayStr) {
-                    streakCount += 1;
-                    localStorage.setItem('streakCount', streakCount);
-                    localStorage.setItem('lastVisitDate_streak', todayStr);
-                }
-                badge.innerText = `🔥 ${streakCount}일째 동행 중`;
-            }
-
-            // --- [KST 자정 기준 콘텐츠 로드] ---
-            const now = new Date();
-            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const kst = new Date(utc + (9 * 3600000));
-            const todayDate = kst.getDate();
-            const todayIndex = todayDate % dailyContents.length;
-
-            const verseElement = document.getElementById('dailyVerseText');
-            const prayerElement = document.getElementById('dailyPrayer');
-            const evangelismElement = document.getElementById('dailyEvangelism');
-            const routineElement = document.getElementById('dailyRoutine');
-
-            if (verseElement) verseElement.innerHTML = dailyContents[todayIndex].verseHtml;
-            if (prayerElement) prayerElement.innerText = dailyContents[todayIndex].prayer;
-            if (evangelismElement) evangelismElement.innerText = dailyContents[todayIndex].evangelism;
-            if (routineElement) routineElement.innerText = "오늘의 감정 상태를 선택해 주세요. / Please select your mood.";
-
-            document.getElementById('btnAnxious')?.addEventListener('click', () => {
-                if(routineElement) routineElement.innerText = routineData.anxious;
-            });
-            document.getElementById('btnGrateful')?.addEventListener('click', () => {
-                if(routineElement) routineElement.innerText = routineData.grateful;
-            });
-            document.getElementById('btnJoyful')?.addEventListener('click', () => {
-                if(routineElement) routineElement.innerText = routineData.joyful;
-            });
-        });
-
         // AI Bible Commentary Logic
-        document.getElementById('getInsightBtn').addEventListener('click', async () => {
+        document.getElementById('getInsightBtn')?.addEventListener('click', async () => {
             const verse = document.getElementById('verseInput').value;
             const lang = document.getElementById('langSelect').value;
             const resultBox = document.getElementById('resultBox');
@@ -486,7 +413,12 @@
             const yearlyText = document.getElementById('yearlyCountText');
 
             // 한국 시간 기준으로 오늘 날짜 문자열 만들기
-            const getTodayStr = () => new Date().toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' });
+            const getTodayStr = () => {
+                const now = new Date();
+                const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+                const kst = new Date(utc + (9 * 3600000));
+                return `${kst.getFullYear()}-${kst.getMonth() + 1}-${kst.getDate()}`;
+            };
 
             // 1. 초기 데이터 로드
             try {
@@ -505,7 +437,9 @@
                     const lastClicked = localStorage.getItem('lastPrayerDate');
 
                     if (lastClicked === today) {
-                        alert('오늘은 이미 기도 체인에 참여하셨습니다. 내일 다시 참여해주세요! 🙏');
+                        const lang = localStorage.getItem('userLang') || 'ko';
+                        const msg = lang === 'ko' ? '오늘은 이미 기도 체인에 참여하셨습니다. 내일 다시 참여해주세요! 🙏' : 'You have already joined the prayer chain today. Please join again tomorrow! 🙏';
+                        alert(msg);
                         return;
                     }
 
@@ -522,8 +456,11 @@
 
                         localStorage.setItem('lastPrayerDate', today);
                         
-                        alert('오늘의 기도 체인에 성공적으로 참여하셨습니다! 🙏');
-                        prayBtn.innerHTML = "참여 완료 (내일 다시 참여 가능)";
+                        const lang = localStorage.getItem('userLang') || 'ko';
+                        const successMsg = lang === 'ko' ? '오늘의 기도 체인에 성공적으로 참여하셨습니다! 🙏' : 'Successfully joined today\'s prayer chain! 🙏';
+                        alert(successMsg);
+                        
+                        if (window.updateLanguage) window.updateLanguage(lang);
                     } catch (error) {
                         alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
                         prayBtn.innerHTML = originalText;
