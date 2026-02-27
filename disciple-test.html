@@ -42,15 +42,15 @@
 
     <main class="container" style="padding: 60px 0;">
         <section class="test-header card text-center" style="text-align: center; margin-bottom: 30px;">
-            <h1 data-i18n="test_header">AI 제자상 분석기</h1>
-            <p data-i18n="test_desc">성경 속 어떤 제자의 형상을 닮았는지 분석합니다.</p>
+            <h1 data-i18n="discipleTitle">AI 제자상 분석기</h1>
+            <p data-i18n="discipleSub">신앙 속 어떤 제자의 형상을 닮았는지 분석합니다.</p>
         </section>
 
         <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
             <!-- Upload Area -->
             <div id="upload-area" style="border: 2px dashed #B08968; padding: 50px 20px; border-radius: 15px; cursor: pointer; background: #fffcf9;" onclick="document.getElementById('file-input').click()">
                 <i class="fas fa-image fa-3x" style="color: #B08968; margin-bottom: 15px;"></i>
-                <p style="font-weight: 600; color: #34495E;" data-i18n="upload_text">클릭하여 얼굴 사진 업로드</p>
+                <p style="font-weight: 600; color: #34495E;" data-i18n="uploadBtn">클릭하여 얼굴 사진 업로드</p>
                 <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="handleFileUpload(event)">
             </div>
 
@@ -61,7 +61,7 @@
                     <i class="fas fa-spinner fa-spin fa-2x" style="color: #B08968;"></i>
                     <p data-i18n="analyzing" style="margin-top: 10px;">분석 중입니다...</p>
                 </div>
-                <button id="predict-btn" class="primary-btn" style="width: 100%; margin-top: 20px;" onclick="predict()" data-i18n="btn_analyze">제자상 분석하기</button>
+                <button id="predict-btn" class="primary-btn" style="width: 100%; margin-top: 20px;" onclick="predict()" data-i18n="aiBtn">제자상 분석하기</button>
             </div>
 
             <!-- Result Area -->

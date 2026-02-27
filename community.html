@@ -43,23 +43,23 @@
 
     <main id="main-content" class="container" style="padding: 60px 20px;">
         <div class="text-center mb-40">
-            <h1 class="classic-serif" style="font-size: 3rem;">Community of Faith</h1>
-            <p style="color: #666; max-width: 700px; margin: 20px auto;">We believe in the power of unity and shared prayer. Whether you are seeking partnership, intercession, or have a testimony to share, our community is here for you.</p>
+            <h1 class="classic-serif" style="font-size: 3rem;" data-i18n="commTitle">Community of Faith</h1>
+            <p style="color: #666; max-width: 700px; margin: 20px auto;" data-i18n="commSub">We believe in the power of unity and shared prayer. Join us to share, pray, and grow spiritually together.</p>
         </div>
 
         <div class="grid-2" style="margin-bottom: 60px;">
             <div class="card">
-                <h3>Our Vision</h3>
-                <p>British Daily Bible aims to bridge the gap between technology and traditional faith. We provide a space where believers can find daily nourishment through scripture and support through a global network of prayer.</p>
+                <h3 data-i18n="commVision">Our Vision</h3>
+                <p data-i18n="commVisionDesc">We aim to bridge the gap between technology and faith, providing a space where believers worldwide can fellowship through scripture.</p>
             </div>
             <div class="card">
-                <h3>Global Partnership</h3>
-                <p>We collaborate with churches, ministries, and spiritual organizations worldwide to bring the word of God to every screen. Our goal is to foster a digitally-connected body of Christ.</p>
+                <h3 data-i18n="commGlobal">Global Partnership</h3>
+                <p data-i18n="commGlobalDesc">We collaborate with churches and ministries globally to build a prayer-connected network of faith.</p>
             </div>
         </div>
 
         <div class="card" style="max-width: 700px; margin: 0 auto;">
-            <h2 style="text-align: center; margin-bottom: 25px;">🤝 Get in Touch</h2>
+            <h2 style="text-align: center; margin-bottom: 25px;" data-i18n="contactTitle">Get in Touch</h2>
             <p style="text-align: center; margin-bottom: 30px; color: #7F8C8D;">Your voice matters. Please use the form below to reach out to our team regarding partnerships, prayer requests, or personal testimonies.</p>
             <form action="https://formspree.io/f/mnjbvgdq" method="POST">
                 <div style="margin-bottom: 15px;">
@@ -83,7 +83,7 @@
                     <label style="display: block; margin-bottom: 5px; color: #34495E; font-weight: 600;">Message</label>
                     <textarea name="message" class="input-box" required placeholder="How can we help or pray for you?" style="height: 150px;"></textarea>
                 </div>
-                <button type="submit" class="primary-btn" style="width: 100%;">Send to Community Team</button>
+                <button type="submit" class="primary-btn" style="width: 100%;" data-i18n="btnSubmit">Send to Community Team</button>
             </form>
         </div>
     </main>
@@ -103,5 +103,6 @@
     <script src="translations.js"></script>
     <script type="module" src="firebase-config.js" defer></script>
     <script type="module" src="main.js" defer></script>
+    <script src="lang.js"></script>
 </body>
 </html>

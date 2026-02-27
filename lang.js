@@ -1,69 +1,92 @@
-// --- [1. 완벽하게 번역된 다국어 사전] ---
+// --- [1. 완벽하게 번역된 다국어 사전 (모든 페이지 통합)] ---
 const translations = {
   ko: {
-    // 상단 메뉴바 (모든 페이지 공통)
-    navHome: "홈",
-    navDisciples: "AI 제자상",
-    navCheck: "신앙 점검",
-    navCommunity: "커뮤니티",
-    navPaulAI: "바울 AI",
-    navBlog: "블로그",
+    // 1) 상단 메뉴바 공통
+    navHome: "홈", navDisciples: "AI 제자상", navCheck: "신앙 점검", 
+    navCommunity: "커뮤니티", navPaulAI: "바울 AI", navBlog: "블로그",
     
-    // 메인 페이지 & 기능들
+    // 2) 메인 홈 페이지
     mainTitle: "영적 동반자 바울 AI",
     mainSubtitle: "성경에 기반한 대화를 통해 지혜와 위로를 구하세요. 바울 AI는 당신이 말씀을 묵상하고 어떤 상황에서도 용기를 얻도록 돕습니다.",
-    aiTitle: "AI 성경 해설",
-    aiPlaceholder: "예: 마태복음 1장 1절",
-    aiBtn: "해설 보기",
     prayerChainTitle: "🙏 현재 함께하는 기도 체인",
-    prayerToday: "오늘 함께한 성도",
-    prayerTotal: "누적 기도 향연",
-    prayBtn: "지금 기도 올리기 & 참여하기",
-    prayBtnDone: "참여 완료 (내일 다시 참여 가능)",
-    spiritualRestTitle: "오늘의 영적 안식",
-    moodPrompt: "오늘의 감정 상태를 선택해 주세요.",
-    dailyVerseTitle: "📖 오늘의 말씀",
-    dailyPrayerTitle: "🙏 오늘의 기도",
-    dailyMissionTitle: "📢 오늘의 전도",
-    saveCardBtn: "📸 SAVE CARD",
-    streakPrefix: "🔥 ",
-    streakSuffix: "일째 동행 중"
+    prayerToday: "오늘 함께한 성도", prayerTotal: "누적 기도 향연",
+    prayBtn: "지금 기도 올리기 & 참여하기", prayBtnDone: "참여 완료 (내일 다시 참여 가능)",
+    spiritualRestTitle: "오늘의 영적 안식", moodPrompt: "오늘의 감정 상태를 선택해 주세요.",
+    dailyVerseTitle: "📖 오늘의 말씀", dailyPrayerTitle: "🙏 오늘의 기도", dailyMissionTitle: "📢 오늘의 전도",
+    saveCardBtn: "📸 말씀 카드 저장", streakPrefix: "🔥 ", streakSuffix: "일째 동행 중",
+    
+    // 3) AI 해설 & 바울 AI 챗봇 페이지
+    aiTitle: "AI 성경 해설", aiPlaceholder: "예: 마태복음 1장 1절", aiBtn: "해설 보기",
+    
+    // 4) 커뮤니티 페이지 (Community)
+    commTitle: "신앙 공동체", 
+    commSub: "우리는 하나 됨과 기도의 능력을 믿습니다. 함께 나누고 기도하며 영적 성장을 이뤄가세요.",
+    commVision: "우리의 비전", commVisionDesc: "기술과 신앙의 간극을 메우고, 전 세계 믿음의 동역자들이 성경을 통해 교제할 수 있는 공간을 제공합니다.",
+    commGlobal: "글로벌 파트너십", commGlobalDesc: "전 세계의 교회, 사역자들과 협력하여 기도로 연결된 신앙 네트워크를 구축합니다.",
+    contactTitle: "문의 및 동역하기", btnSubmit: "제출하기",
+    
+    // 5) 블로그 페이지 (Blog)
+    blogTitle: "영적 블로그", 
+    blogSub: "말씀 묵상, 성경 공부 가이드, 커뮤니티 소식으로 신앙의 깊이를 더하세요.",
+    
+    // 6) 신앙 점검 페이지 (Faith Check)
+    checkTitle: "주간 신앙 자가진단", 
+    checkSub: "매주 자신의 신앙 상태를 점검하고 하나님과의 관계를 돌아보세요.",
+    checkBtn: "신앙 점검 시작하기",
+    
+    // 7) AI 제자상 페이지 (Disciples)
+    discipleTitle: "AI 제자상 분석기", 
+    discipleSub: "신앙 속 어떤 제자의 형상을 닮았는지 분석합니다.",
+    uploadBtn: "클릭하여 얼굴 사진 업로드"
   },
   en: {
-    // Navigation Menu
-    navHome: "Home",
-    navDisciples: "AI Discipleship",
-    navCheck: "Faith Check",
-    navCommunity: "Community",
-    navPaulAI: "Paul AI",
-    navBlog: "Blog",
+    // 1) Navigation
+    navHome: "Home", navDisciples: "AI Discipleship", navCheck: "Faith Check", 
+    navCommunity: "Community", navPaulAI: "Paul AI", navBlog: "Blog",
 
-    // Main Page & Features
+    // 2) Main Home Page
     mainTitle: "Spiritual Companion Paul AI",
-    mainSubtitle: "Seek wisdom and comfort through a bible-based conversation. Paul AI is here to help you reflect on scripture and find encouragement in every situation.",
-    aiTitle: "AI Bible Verse Commentary",
-    aiPlaceholder: "e.g., Matthew 1:1",
-    aiBtn: "Get Insight",
+    mainSubtitle: "Seek wisdom and comfort through bible-based conversations. Paul AI helps you reflect on scripture and find encouragement in every situation.",
     prayerChainTitle: "🙏 United Prayer Chain",
-    prayerToday: "Praying Together Today",
-    prayerTotal: "Total Prayers Offered",
-    prayBtn: "Offer Prayer & Join",
-    prayBtnDone: "Joined (Come back tomorrow)",
-    spiritualRestTitle: "Today's Spiritual Rest",
-    moodPrompt: "Please select your mood.",
-    dailyVerseTitle: "📖 Today's Verse",
-    dailyPrayerTitle: "🙏 Today's Prayer",
-    dailyMissionTitle: "📢 Today's Mission",
-    saveCardBtn: "📸 SAVE CARD",
-    streakPrefix: "🔥 Day ",
-    streakSuffix: " of your spiritual journey"
+    prayerToday: "Praying Together Today", prayerTotal: "Total Prayers Offered",
+    prayBtn: "Offer Prayer & Join", prayBtnDone: "Joined (Come back tomorrow)",
+    spiritualRestTitle: "Today's Spiritual Rest", moodPrompt: "Please select your mood.",
+    dailyVerseTitle: "📖 Today's Verse", dailyPrayerTitle: "🙏 Today's Prayer", dailyMissionTitle: "📢 Today's Mission",
+    saveCardBtn: "📸 SAVE CARD", streakPrefix: "🔥 Day ", streakSuffix: " of your spiritual journey",
+
+    // 3) AI Commentary & Chatbot
+    aiTitle: "AI Bible Verse Commentary", aiPlaceholder: "e.g., Matthew 1:1", aiBtn: "Get Insight",
+
+    // 4) Community Page
+    commTitle: "Community of Faith", 
+    commSub: "We believe in the power of unity and shared prayer. Join us to share, pray, and grow spiritually together.",
+    commVision: "Our Vision", commVisionDesc: "We aim to bridge the gap between technology and faith, providing a space where believers worldwide can fellowship through scripture.",
+    commGlobal: "Global Partnership", commGlobalDesc: "We collaborate with churches and ministries globally to build a prayer-connected network of faith.",
+    contactTitle: "Get in Touch", btnSubmit: "Send Message",
+
+    // 5) Blog Page
+    blogTitle: "Spiritual Blog", 
+    blogSub: "Deepen your faith with our curated reflections, Bible study guides, and community testimonies.",
+
+    // 6) Faith Check Page
+    checkTitle: "Weekly Faith Self-Check", 
+    checkSub: "Examine your spiritual state weekly and reflect on your relationship with God.",
+    checkBtn: "Start Faith Check",
+
+    // 7) AI Discipleship Page
+    discipleTitle: "AI Discipleship Analyzer", 
+    discipleSub: "Analyze which biblical disciple's image reflects your faith journey.",
+    uploadBtn: "Click to upload face photo"
   }
 };
 
-// --- [2. 매일 바뀌는 콘텐츠 (다국어 분리)] ---
+// --- [2. 매일 바뀌는 콘텐츠 (말씀도 언어별로 분리!)] ---
 const dailyContents = [
   {
-    verseHtml: "내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라<br>I can do all things through Christ who strengthens me.<br><br><b>빌립보서 4:13 / Philippians 4:13</b>",
+    verse: {
+      ko: "내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라<br><br><b>빌립보서 4:13</b>",
+      en: "I can do all things through Christ who strengthens me.<br><br><b>Philippians 4:13</b>"
+    },
     prayer: {
       ko: "주님, 오늘 하루도 나의 지혜가 아닌 주님의 능력을 의지하게 하소서. 불안한 마음을 평안으로 채워주시길 기도합니다. 아멘.",
       en: "Lord, help me to rely on Your power today, not my own wisdom. I pray that You fill my anxious heart with peace. Amen."
@@ -81,63 +104,60 @@ const routineData = {
   joyful: { ko: "이 기쁨을 이웃에게 미소로 흘려보내는 하루를 보내세요.", en: "Share this joy with your neighbors today with a warm smile." }
 };
 
-// --- [3. 언어 변경 및 화면 적용 함수] ---
+// --- [3. 화면 적용 로직] ---
 function applyLanguage(lang) {
-  localStorage.setItem('userLang', lang); // 선택한 언어 저장
+  localStorage.setItem('userLang', lang); 
 
-  // 1. 모든 페이지의 일반 텍스트 변경
+  // 1. 일반 텍스트 변경 (data-i18n 태그 찾아서 적용)
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (translations[lang] && translations[lang][key]) {
-      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-        el.placeholder = translations[lang][key];
-      } else {
-        el.innerText = translations[lang][key];
-      }
+    if (translations[lang][key]) {
+      // innerHTML을 쓰면 글자 안에 <br> 등의 태그가 있어도 정상적으로 렌더링됩니다.
+      el.innerHTML = translations[lang][key]; 
     }
   });
 
-  // 2. 입력창(input) placeholder 변경
+  // 2. 입력창 placeholder 변경
   const verseInput = document.getElementById('verseInput');
   if (verseInput) verseInput.placeholder = translations[lang].aiPlaceholder;
 
-  // 3. 언어 선택 드롭다운(select) 상태 동기화 (모든 페이지의 셀렉트 박스를 똑같이 맞춤)
+  // 3. 셀렉트 박스 동기화
   document.querySelectorAll('.lang-selector').forEach(select => {
     select.value = lang;
   });
 
-  // 4. 데일리 콘텐츠 적용 (해당 요소가 있는 페이지에서만 작동)
+  // 4. 오늘의 콘텐츠 적용 (🔥 로딩 안되던 문제 해결!)
   const now = new Date();
   const kst = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (9 * 3600000));
   const todayIndex = kst.getDate() % dailyContents.length;
 
-  const prayerEl = document.getElementById('dailyPrayer');
-  const evangelismEl = document.getElementById('dailyEvangelism');
+  const verseEl = document.getElementById('dailyVerseText');   // 오늘의 말씀
+  const prayerEl = document.getElementById('dailyPrayer');     // 오늘의 기도
+  const evangelismEl = document.getElementById('dailyEvangelism'); // 오늘의 전도
+  
+  // 요소가 화면에 존재할 때만 언어에 맞춰서 데이터를 꽂아줌
+  if (verseEl) verseEl.innerHTML = dailyContents[todayIndex].verse[lang];
   if (prayerEl) prayerEl.innerText = dailyContents[todayIndex].prayer[lang];
   if (evangelismEl) evangelismEl.innerText = dailyContents[todayIndex].evangelism[lang];
 
-  // 5. 동행일수 (Streak)
+  // 5. 동행일수
   const streakBadge = document.getElementById('streakBadge');
   if (streakBadge) {
     let streakCount = parseInt(localStorage.getItem('streakCount')) || 1;
-    streakBadge.innerText = (translations[lang].streakPrefix || "") + streakCount + (translations[lang].streakSuffix || "");
+    streakBadge.innerText = translations[lang].streakPrefix + streakCount + translations[lang].streakSuffix;
   }
 }
 
-// --- [4. 페이지 로딩 시 자동 실행] ---
+// --- [4. 초기화] ---
 document.addEventListener('DOMContentLoaded', () => {
-  // 브라우저에 저장된 언어 불러오기 (없으면 한국어 기본)
   let savedLang = localStorage.getItem('userLang') || 'ko';
   applyLanguage(savedLang);
 
-  // 화면에 있는 모든 '언어 선택 박스'에 클릭 이벤트 연결
   document.querySelectorAll('.lang-selector').forEach(select => {
-    select.addEventListener('change', (e) => {
-      applyLanguage(e.target.value);
-    });
+    select.addEventListener('change', (e) => applyLanguage(e.target.value));
   });
 
-  // 감정 버튼 이벤트 (해당 페이지에만 작동)
+  // 감정 버튼 (해당 페이지에만 작동)
   const routineElement = document.getElementById('dailyRoutine');
   document.getElementById('btnAnxious')?.addEventListener('click', () => {
     if(routineElement) routineElement.innerText = routineData.anxious[localStorage.getItem('userLang') || 'ko'];
