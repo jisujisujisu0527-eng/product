@@ -4,6 +4,7 @@ const translations = {
     // 1) 상단 메뉴바 공통
     navHome: "홈", navDisciples: "AI 제자상", navCheck: "신앙 점검", 
     navCommunity: "커뮤니티", navPaulAI: "바울 AI", navBlog: "블로그",
+    site_logo: "영국 데일리 바이블",
     
     // 2) 메인 홈 페이지
     mainTitle: "영적 동반자 바울 AI",
@@ -13,7 +14,7 @@ const translations = {
     prayBtn: "지금 기도 올리기 & 참여하기", prayBtnDone: "참여 완료 (내일 다시 참여 가능)",
     spiritualRestTitle: "오늘의 영적 안식", moodPrompt: "오늘의 감정 상태를 선택해 주세요.",
     dailyVerseTitle: "📖 오늘의 말씀", dailyPrayerTitle: "🙏 오늘의 기도", dailyMissionTitle: "📢 오늘의 전도",
-    saveCardBtn: "📸 말씀 카드 저장", streakPrefix: "🔥 ", streakSuffix: "일째 동행 중",
+    saveCardBtn: "📸 SAVE CARD", streakPrefix: "🔥 ", streakSuffix: "일째 동행 중",
     
     // 3) AI 해설 & 바울 AI 챗봇 페이지
     aiTitle: "AI 성경 해설", aiPlaceholder: "예: 마태복음 1장 1절", aiBtn: "해설 보기",
@@ -37,12 +38,21 @@ const translations = {
     // 7) AI 제자상 페이지 (Disciples)
     discipleTitle: "AI 제자상 분석기", 
     discipleSub: "신앙 속 어떤 제자의 형상을 닮았는지 분석합니다.",
-    uploadBtn: "클릭하여 얼굴 사진 업로드"
+    uploadBtn: "클릭하여 얼굴 사진 업로드",
+
+    // 8) 방명록 (Comments)
+    cmtTitle: "💬 은혜 나누기 (익명 방명록)",
+    cmtBtn: "등록",
+    cmtLoading: "댓글을 불러오는 중입니다... ⏳",
+    cmtEmpty: "첫 번째 은혜의 나눔을 적어주세요!",
+    cmtNamePh: "닉네임 (선택)",
+    cmtTextPh: "따뜻한 나눔을 남겨주세요."
   },
   en: {
     // 1) Navigation
     navHome: "Home", navDisciples: "AI Discipleship", navCheck: "Faith Check", 
     navCommunity: "Community", navPaulAI: "Paul AI", navBlog: "Blog",
+    site_logo: "British Daily Bible",
 
     // 2) Main Home Page
     mainTitle: "Spiritual Companion Paul AI",
@@ -76,7 +86,15 @@ const translations = {
     // 7) AI Discipleship Page
     discipleTitle: "AI Discipleship Analyzer", 
     discipleSub: "Analyze which biblical disciple's image reflects your faith journey.",
-    uploadBtn: "Click to upload face photo"
+    uploadBtn: "Click to upload face photo",
+
+    // 8) Guestbook (Comments)
+    cmtTitle: "💬 Fellowship (Anonymous Guestbook)",
+    cmtBtn: "Post",
+    cmtLoading: "Loading comments... ⏳",
+    cmtEmpty: "Be the first to share your grace!",
+    cmtNamePh: "Name (Optional)",
+    cmtTextPh: "Leave a warm message here."
   }
 };
 
@@ -117,30 +135,36 @@ function applyLanguage(lang) {
     }
   });
 
-  // 2. 입력창 placeholder 변경
+  // 2. Placeholder(입력창 힌트 글씨) 번역
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (translations[lang][key]) el.placeholder = translations[lang][key];
+  });
+
+  // 3. 입력창 placeholder 변경 (기존 호환성 유지)
   const verseInput = document.getElementById('verseInput');
   if (verseInput) verseInput.placeholder = translations[lang].aiPlaceholder;
 
-  // 3. 셀렉트 박스 동기화
+  // 4. 셀렉트 박스 동기화
   document.querySelectorAll('.lang-selector').forEach(select => {
     select.value = lang;
   });
 
-  // 4. 오늘의 콘텐츠 적용 (🔥 로딩 안되던 문제 해결!)
+  // 5. 오늘의 콘텐츠 적용
   const now = new Date();
-  const kst = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (9 * 3600000));
+  const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+  const kst = new Date(utc + (9 * 3600000));
   const todayIndex = kst.getDate() % dailyContents.length;
 
   const verseEl = document.getElementById('dailyVerseText');   // 오늘의 말씀
   const prayerEl = document.getElementById('dailyPrayer');     // 오늘의 기도
   const evangelismEl = document.getElementById('dailyEvangelism'); // 오늘의 전도
   
-  // 요소가 화면에 존재할 때만 언어에 맞춰서 데이터를 꽂아줌
   if (verseEl) verseEl.innerHTML = dailyContents[todayIndex].verse[lang];
   if (prayerEl) prayerEl.innerText = dailyContents[todayIndex].prayer[lang];
   if (evangelismEl) evangelismEl.innerText = dailyContents[todayIndex].evangelism[lang];
 
-  // 5. 동행일수
+  // 6. 동행일수
   const streakBadge = document.getElementById('streakBadge');
   if (streakBadge) {
     let streakCount = parseInt(localStorage.getItem('streakCount')) || 1;

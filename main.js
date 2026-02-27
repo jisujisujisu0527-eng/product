@@ -67,18 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 500);
 
     // 기도 버튼 이벤트 바인딩 (안전 검사 강화)
-    const prayerBtn = document.getElementById('prayer-btn');
-    if (prayerBtn) {
-        prayerBtn.onclick = handleJoinPrayer;
-        prayerBtn.addEventListener('touchend', (e) => {
-            if (prayerBtn.disabled) return;
-            handleJoinPrayer(e);
-        }, { passive: false });
-    }
-
-    // Disqus 초기화
-    if (document.getElementById('disqus_thread')) initDisqus();
-});
 
 // 자정이 지날 경우를 대비해 1시간마다 자동 갱신 체크
 setInterval(() => {
@@ -271,14 +259,6 @@ window.getExplanation = async function() {
         console.error("AI Function Error:", error);
         resultBox.innerText = "An error occurred while connecting to Paul AI. Please try again later.";
     }
-}
-
-function initDisqus() {
-    if (window.DISQUS) return;
-    const d = document, s = d.createElement('script');
-    s.src = 'https://bible-sound2.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
 }
 
 window.getVerseByMood = function(mood) { 

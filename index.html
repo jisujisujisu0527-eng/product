@@ -292,10 +292,21 @@
                     <!-- AddToAny END -->
                 </section>
 
-                <!-- Prayer Board (Disqus) -->
-                <section id="prayer-board" class="card" aria-labelledby="prayer-board-title" style="margin-top: 40px; padding: 40px 20px;">
-                    <h3 id="prayer-board-title" style="border-bottom: 2px solid #E67E22; padding-bottom: 15px; margin-bottom: 30px; color: #34495E; font-family: 'EB Garamond', serif; font-size: 1.8rem;" data-i18n="prayer_board_title">🙏 최신 기도 제목</h3>
-                    <div id="disqus_thread"></div>
+                <!-- Anonymous Guestbook (Replaces Disqus) -->
+                <section id="guestbook" class="card" style="margin-top: 40px; padding: 40px 20px;">
+                    <div class="comments-wrapper" style="border-top: 1px solid #eaeaea; padding-top: 10px;">
+                        <h3 data-i18n="cmtTitle" style="color: #333; margin-bottom: 20px;">💬 은혜 나누기 (익명 방명록)</h3>
+                        
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                            <input type="text" id="cmtName" data-i18n-placeholder="cmtNamePh" placeholder="닉네임 (선택)" style="flex: 1; min-width: 150px; padding: 12px; border: 1px solid #ccc; border-radius: 8px;">
+                            <input type="text" id="cmtText" data-i18n-placeholder="cmtTextPh" placeholder="따뜻한 나눔을 남겨주세요." style="flex: 3; min-width: 200px; padding: 12px; border: 1px solid #ccc; border-radius: 8px;">
+                            <button id="submitCmtBtn" data-i18n="cmtBtn" style="flex: 1; min-width: 80px; background: #ea580c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; padding: 12px;">등록</button>
+                        </div>
+
+                        <div id="commentsList" style="background: #fafafa; padding: 20px; border-radius: 10px; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
+                            <p style="text-align: center; color: #888;" id="cmtLoadingText" data-i18n="cmtLoading">댓글을 불러오는 중입니다... ⏳</p>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- AI Bible Commentary Section -->
@@ -340,6 +351,92 @@
     <script type="module" src="app-features.js?v=2.2" defer></script>
     <script type="module" src="main.js" defer></script>
     <script src="lang.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const submitBtn = document.getElementById('submitCmtBtn');
+            const nameInput = document.getElementById('cmtName');
+            const textInput = document.getElementById('cmtText');
+            const commentsList = document.getElementById('commentsList');
+
+            // 1. 서버에서 댓글 목록 불러와서 화면에 그리는 함수
+            async function loadComments() {
+                try {
+                    const res = await fetch('/api/comments');
+                    const data = await res.json();
+                    
+                    commentsList.innerHTML = ''; // 로딩 텍스트 지우기
+
+                    if (data.length === 0) {
+                        const lang = localStorage.getItem('userLang') || 'ko';
+                        const emptyMsg = lang === 'en' ? "Be the first to share your grace!" : "첫 번째 은혜의 나눔을 적어주세요!";
+                        commentsList.innerHTML = `<p style="text-align:center; color:#888;" data-i18n="cmtEmpty">${emptyMsg}</p>`;
+                        return;
+                    }
+
+                    // 댓글 배열을 돌면서 예쁜 HTML 박스로 만들기
+                    data.forEach(cmt => {
+                        const div = document.createElement('div');
+                        div.style.cssText = "background: white; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);";
+                        div.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 5px; flex-wrap: wrap;">
+                                <strong style="color: #333;">👤 ${cmt.nickname}</strong>
+                                <span style="font-size: 0.85em; color: #999;">${cmt.date}</span>
+                            </div>
+                            <p style="margin: 0; color: #555; line-height: 1.5; word-break: break-all;">${cmt.text}</p>
+                        `;
+                        commentsList.appendChild(div);
+                    });
+                } catch (error) {
+                    commentsList.innerHTML = `<p style="text-align:center; color:red;">댓글을 불러오지 못했습니다.</p>`;
+                }
+            }
+
+            // 페이지 열리자마자 댓글 불러오기 실행
+            if (commentsList) loadComments();
+
+            // 2. 등록 버튼 클릭 시 서버로 전송
+            if (submitBtn) {
+                submitBtn.addEventListener('click', async () => {
+                    const text = textInput.value.trim();
+                    const nickname = nameInput.value.trim();
+
+                    if (!text) {
+                        const lang = localStorage.getItem('userLang') || 'ko';
+                        alert(lang === 'en' ? "Please enter your message!" : "댓글 내용을 입력해주세요!");
+                        return;
+                    }
+
+                    // 버튼 잠깐 비활성화 (연타 방지)
+                    submitBtn.disabled = true;
+                    const originalText = submitBtn.innerText;
+                    submitBtn.innerText = "⏳";
+
+                    try {
+                        const res = await fetch('/api/comments', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ nickname, text })
+                        });
+
+                        if (!res.ok) throw new Error("Post failed");
+
+                        // 전송 성공 시 입력창 비우고 새 목록 불러오기
+                        textInput.value = '';
+                        await loadComments(); 
+                    } catch (error) {
+                        const lang = localStorage.getItem('userLang') || 'ko';
+                        alert(lang === 'en' ? "Failed to post. Please try again." : "전송에 실패했습니다. 잠시 후 다시 시도해주세요.");
+                    } finally {
+                        // 버튼 원상복구
+                        submitBtn.disabled = false;
+                        const lang = localStorage.getItem('userLang') || 'ko';
+                        submitBtn.innerText = lang === 'en' ? "Post" : "등록"; 
+                    }
+                });
+            }
+        });
+    </script>
 
     <script>
         if ('serviceWorker' in navigator) {

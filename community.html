@@ -88,6 +88,25 @@
         </div>
     </main>
 
+    <!-- Anonymous Guestbook -->
+    <section class="container" style="padding: 0 20px 60px;">
+        <div class="card" style="max-width: 700px; margin: 0 auto; padding: 40px 20px;">
+            <div class="comments-wrapper">
+                <h3 data-i18n="cmtTitle" style="color: #333; margin-bottom: 20px;">💬 은혜 나누기 (익명 방명록)</h3>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <input type="text" id="cmtName" data-i18n-placeholder="cmtNamePh" placeholder="닉네임 (선택)" style="flex: 1; min-width: 150px; padding: 12px; border: 1px solid #ccc; border-radius: 8px;">
+                    <input type="text" id="cmtText" data-i18n-placeholder="cmtTextPh" placeholder="따뜻한 나눔을 남겨주세요." style="flex: 3; min-width: 200px; padding: 12px; border: 1px solid #ccc; border-radius: 8px;">
+                    <button id="submitCmtBtn" data-i18n="cmtBtn" style="flex: 1; min-width: 80px; background: #ea580c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; padding: 12px;">등록</button>
+                </div>
+
+                <div id="commentsList" style="background: #fafafa; padding: 20px; border-radius: 10px; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
+                    <p style="text-align: center; color: #888;" id="cmtLoadingText" data-i18n="cmtLoading">댓글을 불러오는 중입니다... ⏳</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer role="contentinfo" style="padding: 60px 0; text-align: center; border-top: 1px solid #eee;">
         <div class="container">
             <p>© 2026 British Daily Bible. Better together in Christ.</p>
@@ -104,5 +123,77 @@
     <script type="module" src="firebase-config.js" defer></script>
     <script type="module" src="main.js" defer></script>
     <script src="lang.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const submitBtn = document.getElementById('submitCmtBtn');
+            const nameInput = document.getElementById('cmtName');
+            const textInput = document.getElementById('cmtText');
+            const commentsList = document.getElementById('commentsList');
+
+            async function loadComments() {
+                try {
+                    const res = await fetch('/api/comments');
+                    const data = await res.json();
+                    if (commentsList) {
+                        commentsList.innerHTML = '';
+                        if (data.length === 0) {
+                            const lang = localStorage.getItem('userLang') || 'ko';
+                            const emptyMsg = lang === 'en' ? "Be the first to share your grace!" : "첫 번째 은혜의 나눔을 적어주세요!";
+                            commentsList.innerHTML = `<p style="text-align:center; color:#888;" data-i18n="cmtEmpty">${emptyMsg}</p>`;
+                            return;
+                        }
+                        data.forEach(cmt => {
+                            const div = document.createElement('div');
+                            div.style.cssText = "background: white; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);";
+                            div.innerHTML = `
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 5px; flex-wrap: wrap;">
+                                    <strong style="color: #333;">👤 ${cmt.nickname}</strong>
+                                    <span style="font-size: 0.85em; color: #999;">${cmt.date}</span>
+                                </div>
+                                <p style="margin: 0; color: #555; line-height: 1.5; word-break: break-all;">${cmt.text}</p>
+                            `;
+                            commentsList.appendChild(div);
+                        });
+                    }
+                } catch (error) {
+                    if (commentsList) commentsList.innerHTML = `<p style="text-align:center; color:red;">댓글을 불러오지 못했습니다.</p>`;
+                }
+            }
+
+            if (commentsList) loadComments();
+
+            if (submitBtn) {
+                submitBtn.addEventListener('click', async () => {
+                    const text = textInput.value.trim();
+                    const nickname = nameInput.value.trim();
+                    if (!text) {
+                        const lang = localStorage.getItem('userLang') || 'ko';
+                        alert(lang === 'en' ? "Please enter your message!" : "댓글 내용을 입력해주세요!");
+                        return;
+                    }
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = "⏳";
+                    try {
+                        const res = await fetch('/api/comments', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ nickname, text })
+                        });
+                        if (!res.ok) throw new Error("Post failed");
+                        textInput.value = '';
+                        await loadComments(); 
+                    } catch (error) {
+                        const lang = localStorage.getItem('userLang') || 'ko';
+                        alert(lang === 'en' ? "Failed to post. Please try again." : "전송에 실패했습니다. 잠시 후 다시 시도해주세요.");
+                    } finally {
+                        submitBtn.disabled = false;
+                        const lang = localStorage.getItem('userLang') || 'ko';
+                        submitBtn.innerText = lang === 'en' ? "Post" : "등록"; 
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
