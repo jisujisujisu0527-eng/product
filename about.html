@@ -17,12 +17,20 @@
     <header role="banner">
         <div class="container">
             <nav class="navbar">
-                <div class="nav-logo"><a href="/">British Daily Bible</a></div>
+                <div class="nav-logo"><a href="/" data-i18n="site_logo">British Daily Bible</a></div>
                 <ul class="nav-links">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/blog">Blog</a></li>
-                    <li><a href="/community">Community</a></li>
+                    <li><a href="/" data-i18n="navHome">Home</a></li>
+                    <li><a href="/disciple-test" data-i18n="navDisciples">AI Test</a></li>
+                    <li><a href="/faith-checkup" data-i18n="navCheck">Check</a></li>
+                    <li><a href="/blog" data-i18n="navBlog">Blog</a></li>
+                    <li><a href="/community" data-i18n="navCommunity">Community</a></li>
                 </ul>
+                <div class="lang-switcher">
+                    <select class="lang-selector" aria-label="Select Language" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
+                        <option value="ko">KO</option>
+                        <option value="en">EN</option>
+                    </select>
+                </div>
             </nav>
         </div>
     </header>
@@ -56,7 +64,8 @@
     </main>
 
     <footer style="padding: 40px 0; text-align: center; border-top: 1px solid #eee;">
-        <p>© 2026 British Daily Bible. Walking in faith, together.</p>
+        <p data-i18n="footer_rights">© 2026 British Daily Bible. Walking in faith, together.</p>
     </footer>
+    <script src="lang.js"></script>
 </body>
 </html>

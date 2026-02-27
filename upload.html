@@ -8,7 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
     <style>
         body { font-family: sans-serif; padding: 50px; text-align: center; background: #f4f7f6; }
-        .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto; }
+        .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto; position: relative; }
         h1 { color: #34495E; }
         p { color: #7F8C8D; line-height: 1.6; }
         #uploadBtn {
@@ -18,10 +18,17 @@
         }
         #uploadBtn:hover { background: #2980B9; }
         #uploadBtn:disabled { background: #BDC3C7; cursor: not-allowed; }
+        .lang-switcher { position: absolute; top: 10px; right: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="lang-switcher">
+            <select class="lang-selector" style="padding: 5px; border-radius: 5px; border: 1px solid #ddd; background: white;">
+                <option value="ko">KO</option>
+                <option value="en">EN</option>
+            </select>
+        </div>
         <h1>📅 30일치 데이터 벌크 업로드</h1>
         <p>
             ChatGPT로 생성한 JSON 데이터를 Firebase Firestore에 한 번에 업로드합니다.<br>
@@ -32,10 +39,11 @@
         <button id="uploadBtn">데이터 업로드 시작</button>
         
         <div style="margin-top: 40px;">
-            <a href="index.html" style="color: #3498DB; text-decoration: none;">← 메인 페이지로 돌아가기</a>
+            <a href="/" data-i18n="navHome" style="color: #3498DB; text-decoration: none;">← 메인 페이지로 돌아가기</a>
         </div>
     </div>
 
     <script src="admin-upload.js"></script>
+    <script src="lang.js"></script>
 </body>
 </html>

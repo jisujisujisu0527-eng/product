@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="nav_blog">블로그 상세 | Daily Bible Verse</title>
+    <title data-i18n="navBlog">블로그 상세 | Daily Bible Verse</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -32,25 +32,20 @@
         <div class="container">
             <nav class="navbar">
                 <div class="nav-logo">
-                    <a href="index.html" data-i18n="site_logo">British Daily Bible</a>
+                    <a href="/" data-i18n="site_logo">British Daily Bible</a>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="index.html" data-i18n="nav_home">Home</a></li>
-                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Disciple</a></li>
-                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Faith Check</a></li>
-                    <li><a href="faith-dashboard.html" data-i18n="nav_dashboard">Dashboard</a></li>
-                    <li><a href="community.html" data-i18n="nav_community">Community</a></li>
-                    <li><a href="chat.html" data-i18n="nav_chat">Apostle Chat</a></li>
+                    <li><a href="/" data-i18n="navHome">Home</a></li>
+                    <li><a href="/disciple-test" data-i18n="navDisciples">AI Test</a></li>
+                    <li><a href="/faith-checkup" data-i18n="navCheck">Check</a></li>
+                    <li><a href="/community" data-i18n="navCommunity">Community</a></li>
+                    <li><a href="/chat" data-i18n="navPaulAI">Paul AI</a></li>
+                    <li><a href="/blog" data-i18n="navBlog">Blog</a></li>
                 </ul>
                 <div class="lang-switcher">
-                    <div id="streak-badge" style="display:none; margin-right: 15px; font-size: 0.8rem; font-weight: bold; color: #E65100;">
-                        <i class="fas fa-fire"></i> <span id="streak-count">0</span>
-                    </div>
-                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 5px 10px; border-radius: 15px; background: var(--bg-light); border: 1px solid var(--accent-color); color: var(--primary-color); font-family: inherit;">
-                        <option value="en">EN</option>
+                    <select class="lang-selector" id="lang-select" style="padding: 5px 10px; border-radius: 15px; background: white; border: 1px solid #ddd; color: #333; font-family: inherit;">
                         <option value="ko">KO</option>
-                        <option value="fr">FR</option>
-                        <option value="es">ES</option>
+                        <option value="en">EN</option>
                     </select>
                 </div>
             </nav>
@@ -59,10 +54,10 @@
 
     <main>
         <div class="container blog-detail-container">
-            <div id="post-content-area"><p data-i18n="loading">Loading...</p></div>
+            <div id="post-content-area"><p>Loading...</p></div>
             <div class="action-bar">
-                <a href="blog.html" class="back-btn" id="back-btn-text">
-                    <i class="fas fa-arrow-left"></i> <span data-i18n="nav_blog">Back to List</span>
+                <a href="/blog" class="back-btn" id="back-btn-text">
+                    <i class="fas fa-arrow-left"></i> <span data-i18n="navBlog">Back to List</span>
                 </a>
             </div>
         </div>
@@ -73,9 +68,9 @@
             <div class="footer-content">
                 <p data-i18n="footer_rights">© 2026 British Daily Bible. All rights reserved.</p>
                 <nav class="footer-nav">
-                    <a href="privacy.html" data-i18n="nav_privacy">Privacy</a>
-                    <a href="terms.html" data-i18n="nav_terms">Terms</a>
-                    <a href="about.html" data-i18n="nav_about">About</a>
+                    <a href="/privacy">Privacy</a>
+                    <a href="/terms">Terms</a>
+                    <a href="/about">About</a>
                 </nav>
             </div>
         </div>
@@ -85,12 +80,14 @@
     <script src="blog-data.js"></script>
     <script type="module" src="firebase-firestore-service.js"></script>
     <script type="module" src="main.js" defer></script>
+    <script src="lang.js"></script>
     <script>
         function loadPost() {
             const urlParams = new URLSearchParams(window.location.search);
             const postId = parseInt(urlParams.get('id'));
             const post = blogPosts.find(p => p.id === postId);
             const container = document.getElementById('post-content-area');
+            const currentLang = localStorage.getItem('userLang') || 'ko';
             
             if (post) {
                 const data = post[currentLang] || post['en'];
@@ -102,8 +99,13 @@
             }
         }
 
-        window.addEventListener('languageChanged', loadPost);
-        document.addEventListener('DOMContentLoaded', loadPost);
+        window.addEventListener('DOMContentLoaded', loadPost);
+        // lang.js might need a way to notify content change if needed, but for now simple reload or event listener
+        document.querySelectorAll('.lang-selector').forEach(select => {
+            select.addEventListener('change', () => {
+                setTimeout(loadPost, 100); // small delay to let localStorage update
+            });
+        });
     </script>
 </body>
 </html>

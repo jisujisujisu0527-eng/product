@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="nav_checkup">Faith Check | British Daily Bible</title>
+    <title data-i18n="navCheck">Faith Check | British Daily Bible</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -12,18 +12,19 @@
     <header>
         <div class="container">
             <nav class="navbar">
-                <div class="nav-logo"><a href="index.html" data-i18n="site_logo">British Daily Bible</a></div>
+                <div class="nav-logo"><a href="/" data-i18n="site_logo">British Daily Bible</a></div>
                 <ul class="nav-links">
-                    <li><a href="index.html" data-i18n="nav_home">Home</a></li>
-                    <li><a href="disciple-test.html" data-i18n="nav_test">AI Test</a></li>
-                    <li><a href="faith-checkup.html" data-i18n="nav_checkup">Check</a></li>
-                    <li><a href="community.html" data-i18n="nav_community">Community</a></li>
-                    <li><a href="chat.html" data-i18n="nav_chat">Paul AI</a></li>
-                    <li><a href="blog.html" data-i18n="nav_blog">Blog</a></li>
+                    <li><a href="/" data-i18n="navHome">Home</a></li>
+                    <li><a href="/disciple-test" data-i18n="navDisciples">AI Test</a></li>
+                    <li><a href="/faith-checkup" class="active" data-i18n="navCheck">Check</a></li>
+                    <li><a href="/community" data-i18n="navCommunity">Community</a></li>
+                    <li><a href="/chat" data-i18n="navPaulAI">Paul AI</a></li>
+                    <li><a href="/blog" data-i18n="navBlog">Blog</a></li>
                 </ul>
                 <div class="lang-switcher">
-                    <select id="lang-select" onchange="applyLanguage(this.value)" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
-                        <option value="en">EN</option><option value="ko">KO</option>
+                    <select class="lang-selector" aria-label="Select Language" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
+                        <option value="ko">KO</option>
+                        <option value="en">EN</option>
                     </select>
                 </div>
             </nav>
@@ -31,19 +32,20 @@
     </header>
 
     <main class="container" style="padding: 60px 0;">
-        <h1 data-i18n="checkup_title" style="text-align: center; margin-bottom: 40px;">📋 주간 신앙 자가진단</h1>
+        <h1 data-i18n="navCheck" style="text-align: center; margin-bottom: 40px;">📋 주간 신앙 자가진단</h1>
         <div class="card" style="max-width: 800px; margin: 0 auto;">
             <p style="text-align: center; color: #7F8C8D; margin-bottom: 30px;">매주 자신의 신앙 상태를 점검하고 하나님과의 관계를 돌아보세요.</p>
             <!-- 자가진단 로직 준비 중 -->
             <div style="text-align: center; padding: 40px;">
                 <i class="fas fa-tools fa-3x" style="color: #B08968; margin-bottom: 20px;"></i>
                 <p>신앙 점검 기능은 현재 고도화 작업 중입니다.</p>
-                <button class="primary-btn" onclick="location.href='index.html'" style="margin-top: 20px;">홈으로 돌아가기</button>
+                <button class="primary-btn" onclick="location.href='/'" style="margin-top: 20px;">홈으로 돌아가기</button>
             </div>
         </div>
     </main>
 
     <script src="translations.js"></script>
     <script src="main.js" defer></script>
+    <script src="lang.js"></script>
 </body>
 </html>

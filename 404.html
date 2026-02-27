@@ -6,19 +6,27 @@
     <title>페이지를 찾을 수 없습니다 - British Daily Bible</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        body { background: #FDFBF7; display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center; font-family: 'EB Garamond', serif; }
+        body { background: #FDFBF7; display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center; font-family: 'EB Garamond', serif; flex-direction: column; }
         .error-container { padding: 40px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         h1 { color: #B08968; font-size: 4rem; margin-bottom: 10px; }
         p { color: #5d4037; font-size: 1.2rem; margin-bottom: 30px; }
         .home-btn { background: #B08968; color: white; padding: 12px 30px; text-decoration: none; border-radius: 50px; font-weight: bold; transition: background 0.3s; }
         .home-btn:hover { background: #8d6e63; }
+        .lang-switcher { position: absolute; top: 20px; right: 20px; }
     </style>
 </head>
 <body>
+    <div class="lang-switcher">
+        <select class="lang-selector" style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd; background: white;">
+            <option value="ko">KO</option>
+            <option value="en">EN</option>
+        </select>
+    </div>
     <div class="error-container">
         <h1>404</h1>
         <p>죄송합니다. 요청하신 페이지를 찾을 수 없습니다.<br>주소가 정확한지 확인해 주세요.</p>
-        <a href="/" class="home-btn">메인 페이지로 돌아가기</a>
+        <a href="/" class="home-btn" data-i18n="navHome">메인 페이지로 돌아가기</a>
     </div>
+    <script src="lang.js"></script>
 </body>
 </html>
