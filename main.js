@@ -82,34 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 자정이 지날 경우를 대비해 1시간마다 자동 갱신 체크
 setInterval(() => {
-    loadDailyContent();
+    if (window.updateLanguage) window.updateLanguage(localStorage.getItem('user-lang') || 'ko');
 }, 1000 * 60 * 60);
-
-/**
- * 전역 언어 적용 함수
- */
-window.applyLanguage = function(lang) {
-    currentLang = lang;
-    localStorage.setItem('user-lang', lang);
-    document.documentElement.lang = lang;
-    
-    const select = document.getElementById('lang-select');
-    if (select) select.value = lang;
-
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (window.translate) {
-            const translatedText = window.translate(key, lang);
-            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                el.placeholder = translatedText;
-            } else {
-                el.textContent = translatedText;
-            }
-        }
-    });
-
-    loadDailyContent();
-};
 
 /**
  * 일일 콘텐츠 로드 (방어적 프로그래밍 적용)
